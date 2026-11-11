@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ça s'est passé un…</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#000;--pn:#101014;--ln:#2a2d35;--fg:#f8f8f2;--kw:#ff79c6;--st:#ffb86c;--fn:#50fa7b;--cl:#8be9fd;--nm:#bd93f9;--vr:#8be9fd;--cm:#6272a4;--op:#bd93f9;--er:#ff5555}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:#000;color:var(--fg);font-family:"JetBrains Mono","Fira Code",Menlo,Consolas,"DejaVu Sans Mono","Courier New",monospace;font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5}
+
+.frame{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6272a4;font-size:.9em}
+
+.pad{padding:16px 14px 24px}
+.pad::before{content:"#!/usr/bin/env python3\A # -*- coding: utf-8 -*-";white-space:pre;display:block;color:var(--cm);font-size:.8rem;margin:0 auto 14px;max-width:760px}
+a{color:var(--cl)}
+.home,.accueil{display:inline-block;margin:0 0 14px;padding:3px 12px;color:var(--cl);background:var(--pn);border:1px solid var(--ln);border-radius:4px;text-decoration:none;font:inherit}
+.home::before,.accueil::before{content:"import ";color:var(--kw)}
+.home:hover,.accueil:hover{border-color:var(--cl)}
+.home svg{display:none}
+h1,h2{color:var(--fn);line-height:1.25;font-weight:700}
+h1{margin:6px 0 10px;font-size:clamp(1.4rem,6vw,2rem)}
+h2{margin:0 0 10px;font-size:1.2rem}
+h1::before{content:"# ";color:var(--cm)}h2::before{content:"## ";color:var(--cm)}
+.sub,.subtitle,.hint,.bulle{color:var(--cm);font-weight:400}
+.sub::before,.subtitle::before,.hint::before,.bulle::before{content:"# "}
+label:not(.row){display:block;color:var(--vr);margin-bottom:4px}
+label:not(.row)::after{content:" =";color:var(--op)}
+input:not([type=range]):not([type=checkbox]),select{font:inherit;color:var(--st);background:var(--pn);border:1px solid var(--ln);border-radius:4px;padding:8px 10px;width:100%}
+input::placeholder{color:#5a6270}
+:focus-visible{outline:2px solid var(--op);outline-offset:2px}
+button,.btn,.chip,.tab{font:inherit;color:var(--op);background:var(--pn);border:1px solid var(--op);border-radius:4px;padding:8px 14px;cursor:pointer}
+button:hover:not(:disabled){background:#1c1f2b}
+button:disabled{color:#555;border-color:var(--ln);cursor:default}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:6px;padding:16px}
+
+nav,header,main{max-width:760px;margin:0 auto}
+header{margin-bottom:1.2rem}
+main{display:grid;gap:1.1rem}
+.date{display:inline-block;color:var(--st);font-size:1.3rem}.date::before,.date::after{content:'"'}
+.card{position:relative;border-left:3px solid var(--c)}
+.fr{--c:#bd93f9}.eu{--c:#ff79c6}.wo{--c:#8be9fd}
+.tag{display:block;margin-bottom:.4rem;color:var(--c);font-weight:700}
+.year{margin:0;color:var(--nm);font-size:1.8rem;font-weight:700}
+.year::before{content:"year = ";color:var(--vr);font-size:1rem;font-weight:400}
+.txt{margin:.4rem 0 .8rem;color:var(--st)}
+.src{margin:0;color:var(--cm);font-size:.85rem}.src::before{content:"# "}.src a{color:var(--cl)}
+.msg{border:1px dashed var(--ln);border-radius:6px;padding:1rem;color:var(--cm)}
+button{display:block;margin:1.5rem auto 0}
+
+</style>
+</head>
+<body>
+<div class="frame"><div class="win"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="file">dat.py</span></div><div class="pad">
+<nav><a class="home" href="index.html">🏠 Accueil</a></nav>
+<header>
+  <h1>Ça s’est passé un</h1>
+  <div class="date" id="date"></div>
+</header>
+<main id="main"><div class="msg">Chargement des événements…</div></main>
+<button id="again" hidden>Autres événements !</button>
+
+</div></div></div>
+<script>
+const now = new Date();
+const j = now.getDate();
+const jour = (j === 1 ? "1er" : j) + " " + now.toLocaleDateString("fr-FR", {month:"long"});
+document.getElementById("date").textContent = jour;
+
+const RX_FR = /\b(France|français(e|es)?|Paris|parisien(ne)?s?|Napoléon|Bastille|Versailles|Marseille|Lyon|Bordeaux|Strasbourg|Gaulle|Vichy|Clovis|Charlemagne|Jeanne d'Arc|Louis (IX|XI|XIII|XIV|XV|XVI|XVIII)|Charles (VII|X)|Henri (II|III|IV)|François Ier|Mitterrand|Pompidou|Chirac|Sarkozy|Hollande|Macron|Résistance)\b/i;
+const RX_EU = /\b(Europe|européen(ne)?s?|Allemagne|allemand(e|es)?|Berlin|Royaume-Uni|Angleterre|anglais(e|es)?|britannique|Londres|Écosse|Irlande|irlandais|Italie|italien(ne)?s?|Rome|Espagne|espagnol(e|es)?|Madrid|Barcelone|Portugal|portugais|Lisbonne|Belgique|belge|Bruxelles|Pays-Bas|néerlandais|Amsterdam|Suisse|suisse|Autriche|autrichien|Vienne|Pologne|polonais|Varsovie|Ukraine|ukrainien|Grèce|grec|Athènes|Suède|suédois|Norvège|norvégien|Danemark|danois|Finlande|finlandais|Islande|Hongrie|hongrois|Tchécoslovaquie|tchèque|Prague|Roumanie|Bulgarie|Serbie|Yougoslavie|Croatie|Slovénie|Slovaquie|Luxembourg|Reich|nazi|Saint-Empire|Empire romain|Union européenne|OTAN|Moscou|URSS|soviétique|Russie|russe)\b/i;
+
+function seeded(n){let s=n;return()=>{s=(s*9301+49297)%233280;return s/233280}}
+function pick(list, rnd, avoid){
+  const pool = list.filter(e => !avoid.has(e.text));
+  const src = pool.length ? pool : list;
+  return src[Math.floor(rnd()*src.length)];
+}
+function esc(t){const d=document.createElement("div");d.textContent=t;return d.innerHTML}
+
+function card(cls, label, ev){
+  if(!ev) return `<section class="card ${cls}"><span class="tag">${label}</span><p class="txt">Aucun événement trouvé pour cette catégorie aujourd’hui.</p></section>`;
+  const page = ev.pages && ev.pages[0];
+  const url = page && page.content_urls && page.content_urls.desktop && page.content_urls.desktop.page;
+  const link = url ? `<a href="${url}" target="_blank" rel="noopener">${esc(page.titles && page.titles.normalized || "Wikipédia")}</a>` : "Wikipédia";
+  return `<section class="card ${cls}"><span class="tag">${label}</span>
+    <p class="year">${ev.year}</p><p class="txt">${esc(ev.text)}</p>
+    <p class="src">Source : ${link} (Wikipédia)</p></section>`;
+}
+
+let events = [], round = 0;
+function render(){
+  const seed = now.getFullYear()*10000 + (now.getMonth()+1)*100 + now.getDate() + round*7919;
+  const rnd = seeded(seed);
+  const fr = events.filter(e => RX_FR.test(e.text));
+  const eu = events.filter(e => !RX_FR.test(e.text) && RX_EU.test(e.text));
+  const wo = events.filter(e => !RX_FR.test(e.text) && !RX_EU.test(e.text));
+  const used = new Set();
+  const a = pick(fr, rnd, used); if(a) used.add(a.text);
+  const b = pick(eu, rnd, used); if(b) used.add(b.text);
+  const c = pick(wo, rnd, used);
+  document.getElementById("main").innerHTML =
+    card("fr","🇫🇷 En France",a) + card("eu","🇪🇺 En Europe",b) + card("wo","🌍 Dans le monde",c);
+}
+
+(async function(){
+  const mm = String(now.getMonth()+1).padStart(2,"0"), dd = String(now.getDate()).padStart(2,"0");
+  const url = `https://fr.wikipedia.org/api/rest_v1/feed/onthisday/events/${mm}/${dd}`;
+  try{
+    const r = await fetch(url);
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    const data = await r.json();
+    events = (data.events || []).filter(e => e.text && e.year);
+    if(!events.length) throw new Error("liste vide");
+    render();
+    const btn = document.getElementById("again");
+    btn.hidden = false;
+    btn.onclick = () => { round++; render(); };
+  }catch(err){
+    document.getElementById("main").innerHTML =
+      `<div class="msg">Oups ! Impossible de charger les événements (${esc(err.message)}).<br>Vérifiez la connexion internet, puis rechargez la page.</div>`;
+  }
+})();
+</script>
+</body>
+</html>

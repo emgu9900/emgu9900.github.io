@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Photo au hasard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{
+  --kw:#ff79c6;--str:#f1fa8c;--fn:#50fa7b;--cy:#8be9fd;--pu:#bd93f9;--or:#ffb86c;--cm:#6272a4;--tx:#f8f8f2;
+  --red:#ff5555;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#000}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;min-height:100vh;background:#000;color:var(--tx);
+  font-family:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,Menlo,monospace;
+  font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5;
+}
+.wrap{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--cm);font-size:.9em}
+.plus-link{
+  flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  color:var(--fn);border:1px solid var(--cm);border-radius:8px;font-size:1.4rem;font-weight:700;line-height:1;text-decoration:none;
+}
+.plus-link:hover{background:#1c1f2b;border-color:var(--fn)}
+.plus-link:focus-visible,a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--cy);outline-offset:-2px}
+.code{padding:10px 0 16px;counter-reset:l}
+.row{
+  display:flex;align-items:baseline;gap:14px;margin:0;padding:3px 14px;
+  font:inherit;font-weight:400;color:var(--tx);text-decoration:none;overflow-wrap:anywhere;
+}
+.row::before{counter-increment:l;content:counter(l);flex:none;width:2ch;text-align:right;color:#4b5263;user-select:none}
+.src{min-width:0}
+.kw{color:var(--kw)}.fn{color:var(--fn)}.cy{color:var(--cy)}.pu{color:var(--pu)}.or{color:var(--or)}
+.cm{color:var(--cm);font-style:italic}.s{color:var(--str)}
+a.lnk{color:var(--fn);text-decoration:underline}
+a.lnk:hover{background:#1c1f2b}
+
+.pad{max-width:560px;margin:0 auto;padding:4px 14px 20px}
+.v{color:var(--cy)}
+#st.err{color:var(--red)}
+.stage{position:relative;border:1px solid #2a2d35;border-radius:8px;overflow:hidden;background:#000;aspect-ratio:3/2;display:flex;align-items:center;justify-content:center}
+.stage img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .4s}
+.stage img.on{opacity:1}
+#wait{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--cm);font-style:italic}
+#wait.hide{display:none}
+button.row,a.row.btn{
+  width:100%;background:none;border:0;border-left:3px solid transparent;text-align:left;cursor:pointer;
+  padding-top:8px;padding-bottom:8px;touch-action:manipulation;
+}
+button.row:hover,button.row:focus-visible,a.row.btn:hover,a.row.btn:focus-visible{background:#1c1f2b;border-left-color:var(--fn)}
+.hide{display:none!important}
+@media (prefers-reduced-motion:reduce){.stage img{transition:none}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="win">
+    <div class="bar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="file">foto.py</span>
+      <a class="plus-link" href="index.html" aria-label="Retour à l’accueil" title="Accueil">←</a>
+    </div>
+    <div class="code">
+      <div class="row"><span class="src"><span class="kw">import</span> <span class="cy">random</span></span></div>
+      <div class="row"><span class="src"><span class="kw">from</span> <span class="cy">index</span> <span class="kw">import</span> <a class="lnk" href="index.html">accueil</a></span></div>
+      <div class="row"><span class="src">&nbsp;</span></div>
+      <div class="row"><span class="src cm"># Photo au hasard prise sur le net</span></div>
+      <div class="row"><span class="src"><span class="v">statut</span> = <span class="s">"<span id="st">chargement…</span>"</span></span></div>
+    </div>
+    <div class="pad">
+      <div class="stage">
+        <img id="pic" alt="Photo au hasard">
+        <span id="wait">chargement…</span>
+      </div>
+    </div>
+    <div class="code" style="padding-top:0">
+      <button class="row" id="next" type="button"><span class="src"><span class="fn">&gt;&gt;&gt;</span> <span class="fn">autre_photo</span>()</span></button>
+      <button class="row" id="auto" type="button"><span class="src"><span class="fn">&gt;&gt;&gt;</span> <span class="fn">auto</span>(<span class="or">3</span>)</span></button>
+      <button class="row hide" id="stop" type="button"><span class="src"><span class="fn">&gt;&gt;&gt;</span> <span class="fn">arret</span>()</span></button>
+      <a class="row btn hide" id="open" href="#" target="_blank" rel="noopener noreferrer"><span class="src"><span class="fn">&gt;&gt;&gt;</span> <span class="fn">ouvrir</span>()</span></a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var pic=document.getElementById("pic"), st=document.getElementById("st"), wait=document.getElementById("wait");
+  var next=document.getElementById("next"), open=document.getElementById("open");
+  var autoBtn=document.getElementById("auto"), stopBtn=document.getElementById("stop");
+  var tries=0, cur=0, timer=null, running=false, DELAY=3000;
+
+  function clearTimer(){ if(timer){ clearTimeout(timer); timer=null; } }
+  function schedule(){
+    clearTimer();
+    if(running) timer=setTimeout(function(){ timer=null; tries=0; load(); },DELAY);
+  }
+  function setAuto(on){
+    running=on;
+    autoBtn.classList.toggle("hide",on);
+    stopBtn.classList.toggle("hide",!on);
+    clearTimer();
+  }
+
+  function say(t,err){ st.textContent=t; st.className=err?"err":""; }
+
+  function load(){
+    var id=++cur;
+    var seed=Math.random().toString(36).slice(2,10);
+    var w=1200, h=800;
+    var url="https://picsum.photos/seed/"+seed+"/"+w+"/"+h;
+    pic.classList.remove("on");
+    wait.classList.remove("hide"); wait.textContent="chargement…";
+    open.classList.add("hide");
+    say("chargement…");
+    var im=new Image();
+    im.onload=function(){
+      if(id!==cur) return;
+      pic.src=url; pic.classList.add("on");
+      wait.classList.add("hide");
+      open.href=url; open.classList.remove("hide");
+      say(running?"auto, seed="+seed:"seed="+seed);
+      tries=0;
+      schedule();
+    };
+    im.onerror=function(){
+      if(id!==cur) return;
+      if(++tries<3){ load(); return; }
+      tries=0;
+      setAuto(false);
+      wait.textContent="image indisponible";
+      say("échec du chargement (connexion ?)",true);
+    };
+    im.src=url;
+  }
+
+  next.addEventListener("click",function(){ clearTimer(); tries=0; load(); });
+  autoBtn.addEventListener("click",function(){ setAuto(true); tries=0; load(); });
+  stopBtn.addEventListener("click",function(){ setAuto(false); say("arrêté"); });
+  load();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculateur de dipôle</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#000;--pn:#101014;--ln:#2a2d35;--fg:#f8f8f2;--kw:#ff79c6;--st:#ffb86c;--fn:#50fa7b;--cl:#8be9fd;--nm:#bd93f9;--vr:#8be9fd;--cm:#6272a4;--op:#bd93f9;--er:#ff5555}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:#000;color:var(--fg);font-family:"JetBrains Mono","Fira Code",Menlo,Consolas,"DejaVu Sans Mono","Courier New",monospace;font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5}
+
+.frame{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6272a4;font-size:.9em}
+
+.pad{padding:16px 14px 24px}
+.pad::before{content:"#!/usr/bin/env python3\A # -*- coding: utf-8 -*-";white-space:pre;display:block;color:var(--cm);font-size:.8rem;margin:0 auto 14px;max-width:640px}
+a{color:var(--cl)}
+.home,.accueil{display:inline-block;margin:0 0 14px;padding:3px 12px;color:var(--cl);background:var(--pn);border:1px solid var(--ln);border-radius:4px;text-decoration:none;font:inherit}
+.home::before,.accueil::before{content:"import ";color:var(--kw)}
+.home:hover,.accueil:hover{border-color:var(--cl)}
+.home svg{display:none}
+h1,h2{color:var(--fn);line-height:1.25;font-weight:700}
+h1{margin:6px 0 10px;font-size:clamp(1.4rem,6vw,2rem)}
+h2{margin:0 0 10px;font-size:1.2rem}
+h1::before{content:"# ";color:var(--cm)}h2::before{content:"## ";color:var(--cm)}
+.sub,.subtitle,.hint,.bulle{color:var(--cm);font-weight:400}
+.sub::before,.subtitle::before,.hint::before,.bulle::before{content:"# "}
+label:not(.row){display:block;color:var(--vr);margin-bottom:4px}
+label:not(.row)::after{content:" =";color:var(--op)}
+input:not([type=range]):not([type=checkbox]),select{font:inherit;color:var(--st);background:var(--pn);border:1px solid var(--ln);border-radius:4px;padding:8px 10px;width:100%}
+input::placeholder{color:#5a6270}
+:focus-visible{outline:2px solid var(--op);outline-offset:2px}
+button,.btn,.chip,.tab{font:inherit;color:var(--op);background:var(--pn);border:1px solid var(--op);border-radius:4px;padding:8px 14px;cursor:pointer}
+button:hover:not(:disabled){background:#1c1f2b}
+button:disabled{color:#555;border-color:var(--ln);cursor:default}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:6px;padding:16px}
+
+.wrap{max-width:640px;margin:0 auto}
+.sub{margin:0 0 16px}
+.card{margin-bottom:18px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:420px){.row{grid-template-columns:1fr}}
+.hint{font-size:.8rem;margin:4px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.chip{padding:4px 10px;font-size:.9rem}
+.err{display:none;margin-top:12px;padding:8px 12px;color:var(--er);border:1px solid var(--er);border-radius:4px;background:#1a0d0d}
+.big{border:1px solid var(--op);border-radius:6px;padding:12px;text-align:center;margin-bottom:16px}
+.big .t{color:var(--cm)}.big .t::before{content:"# "}
+.big .n{color:var(--nm);font-size:clamp(2rem,10vw,3rem);font-weight:700;line-height:1.2}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.box{border:1px solid var(--ln);border-left:3px solid var(--c);border-radius:4px;padding:6px 10px}
+.b1{--c:#8be9fd}.b2{--c:#bd93f9}.b3{--c:#f1fa8c}.b4{--c:#ff79c6}.b5{--c:#ffb86c}.box.note{--c:#6272a4}
+.box.wide{grid-column:1/-1}
+.box .t{font-size:.8rem;color:var(--vr)}.box .v{font-size:1.15rem;color:var(--nm)}.box .v.small{font-size:.9rem;color:var(--fg)}
+svg{width:100%;height:auto;display:block}
+svg text{font-family:inherit}
+svg [stroke="#1b1b1b"]{stroke:#f8f8f2}
+svg text[fill="#1b1b1b"]{fill:#f8f8f2}
+svg path[fill="none"]{stroke:#1b1b1b}
+svg #aLo,svg #aRo{stroke:#000}
+svg #lblArm{stroke:none}
+.tips{margin:0;padding-left:20px}.tips li{margin-bottom:6px}.tips b{color:var(--fn)}
+
+</style>
+</head>
+<body>
+<div class="frame"><div class="win"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="file">dip.py</span></div><div class="pad">
+<div class="wrap">
+  <a class="home" href="index.html">Accueil</a>
+
+  <h1>Calculateur de dipôle</h1>
+  <p class="sub">Dipôle demi-onde en V inversé. Angle de 90 ° en haut du mât, ficelles dans le prolongement des brins.</p>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label for="freq">Fréquence (MHz)</label>
+        <input id="freq" type="text" inputmode="decimal" value="14.2" autocomplete="off">
+      </div>
+      <div>
+        <label for="k">Coefficient de raccourcissement</label>
+        <input id="k" type="text" inputmode="decimal" value="0.95" autocomplete="off">
+      </div>
+    </div>
+    <p class="hint">Le coefficient vaut souvent entre 0,93 et 0,98. La valeur 0,95 est un bon point de départ.</p>
+
+    <div style="margin-top:12px">
+      <label for="h">Hauteur du mât (m)</label>
+      <input id="h" type="text" inputmode="decimal" value="10" autocomplete="off">
+      <p class="hint">Hauteur du sommet du mât, là où les deux brins se rejoignent.</p>
+    </div>
+
+    <div class="chips" id="chips">
+      <button type="button" class="chip" data-f="3.65">80 m</button>
+      <button type="button" class="chip" data-f="7.1">40 m</button>
+      <button type="button" class="chip" data-f="14.2">20 m</button>
+      <button type="button" class="chip" data-f="27.185">CB</button>
+      <button type="button" class="chip" data-f="28.5">10 m</button>
+      <button type="button" class="chip" data-f="145">2 m</button>
+      <button type="button" class="chip" data-f="446.1">PMR446</button>
+      <button type="button" class="chip" data-f="869.525">Meshtastic 868</button>
+      <button type="button" class="chip" data-f="433.875">Meshtastic 433</button>
+    </div>
+    <div class="err" id="err" role="alert"></div>
+  </div>
+
+  <div class="card">
+    <div class="big">
+      <div class="t">Longueur totale du fil</div>
+      <div class="n" id="total">-</div>
+    </div>
+
+    <svg viewBox="0 0 400 230" role="img" aria-label="Schéma d’un dipôle en V inversé avec ses ficelles et ses ancrages">
+      <rect x="10" y="175" width="380" height="14" rx="5" fill="#5ee0a0" stroke="#1b1b1b" stroke-width="4"/>
+      <line x1="200" y1="45" x2="200" y2="175" stroke="#1b1b1b" stroke-width="7" stroke-linecap="round"/>
+
+      <line id="fiL" x1="150" y1="95" x2="70" y2="175" stroke="#1b1b1b" stroke-width="3" stroke-dasharray="7 5"/>
+      <line id="fiR" x1="250" y1="95" x2="330" y2="175" stroke="#1b1b1b" stroke-width="3" stroke-dasharray="7 5"/>
+
+      <line id="aLo" x1="200" y1="45" x2="150" y2="95" stroke="#1b1b1b" stroke-width="15" stroke-linecap="round"/>
+      <line id="aRo" x1="200" y1="45" x2="250" y2="95" stroke="#1b1b1b" stroke-width="15" stroke-linecap="round"/>
+      <line id="aLc" x1="200" y1="45" x2="150" y2="95" stroke="#ff4f5e" stroke-width="8" stroke-linecap="round"/>
+      <line id="aRc" x1="200" y1="45" x2="250" y2="95" stroke="#3bb5f2" stroke-width="8" stroke-linecap="round"/>
+
+      <path d="M62 188 L70 168 L78 188 z" fill="#ffd23f" stroke="#1b1b1b" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M322 188 L330 168 L338 188 z" fill="#ffd23f" stroke="#1b1b1b" stroke-width="3.5" stroke-linejoin="round"/>
+
+      <circle cx="200" cy="45" r="19" fill="#ffd23f" stroke="#1b1b1b" stroke-width="4"/>
+      <circle cx="193" cy="41" r="3" fill="#1b1b1b"/>
+      <circle cx="207" cy="41" r="3" fill="#1b1b1b"/>
+      <path d="M192 50 Q200 58 208 50" fill="none" stroke="#1b1b1b" stroke-width="3" stroke-linecap="round"/>
+
+      <text x="200" y="14" text-anchor="middle" font-family="Bangers, Impact, sans-serif" font-size="17" fill="#1b1b1b">90 °</text>
+
+      <text id="lblArm" x="120" y="62" text-anchor="end" font-family="Bangers, Impact, sans-serif" font-size="18" fill="#ff4f5e" stroke="#1b1b1b" stroke-width="0.8" paint-order="stroke">-</text>
+      <text id="lblFic" x="300" y="130" text-anchor="start" font-family="Bangers, Impact, sans-serif" font-size="18" fill="#1b1b1b">-</text>
+
+      <line x1="70" y1="204" x2="330" y2="204" stroke="#1b1b1b" stroke-width="3"/>
+      <line x1="70" y1="198" x2="70" y2="210" stroke="#1b1b1b" stroke-width="3"/>
+      <line x1="330" y1="198" x2="330" y2="210" stroke="#1b1b1b" stroke-width="3"/>
+      <text id="lblSpan" x="200" y="224" text-anchor="middle" font-family="Bangers, Impact, sans-serif" font-size="18" fill="#1b1b1b">-</text>
+    </svg>
+
+    <div class="grid" style="margin-top:14px">
+      <div class="box b1"><div class="t">Chaque brin</div><div class="v" id="arm">-</div></div>
+      <div class="box b2"><div class="t">Longueur d’onde</div><div class="v" id="wl">-</div></div>
+      <div class="box b3"><div class="t">Bout du brin, hauteur au sol</div><div class="v" id="tipH">-</div></div>
+      <div class="box b4"><div class="t">Chaque ficelle, bout du brin au sol</div><div class="v" id="fic">-</div></div>
+      <div class="box b5 wide"><div class="t">Écartement entre les deux ancrages</div><div class="v" id="spanV">-</div></div>
+      <div class="box note wide"><div class="t">À savoir</div><div class="v small" id="advice">-</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Pour bien régler</h2>
+    <ul class="tips">
+      <li><b>Coupez un peu long.</b> Raccourcir est facile. Rallonger est impossible.</li>
+      <li><b>Ficelles :</b> ajoutez de la marge pour les nœuds et pour le réglage.</li>
+      <li><b>Mesurez le ROS</b> avec un ROS-mètre ou un analyseur d’antenne, puis ajustez les deux brins de la même façon.</li>
+      <li><b>Hauteur et environnement</b> changent aussi la résonance. Le résultat reste une estimation.</li>
+      <li><b>Formule :</b> longueur totale = 299,792 / fréquence ÷ 2 × coefficient.</li>
+    </ul>
+  </div>
+</div>
+
+</div></div></div>
+<script>
+(function () {
+  var C = 299.792458;
+  var S = Math.SQRT1_2;           /* cos 45 ° : brins à 45 ° du sol */
+  var f = document.getElementById('freq');
+  var k = document.getElementById('k');
+  var h = document.getElementById('h');
+  var err = document.getElementById('err');
+  var ids = ['total','arm','wl','tipH','fic','spanV','advice','lblArm','lblFic','lblSpan'];
+  var el = {};
+  ids.forEach(function (i) { el[i] = document.getElementById(i); });
+  function $(i) { return document.getElementById(i); }
+
+  function num(s) { return parseFloat(String(s).replace(',', '.').replace(/\s/g, '')); }
+  function fmt(x, d) { return x.toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function m(x) { return x >= 10 ? fmt(x, 2) + ' m' : x >= 1 ? fmt(x, 3) + ' m' : fmt(x * 100, 1) + ' cm'; }
+  function fail(msg) {
+    err.textContent = msg;
+    err.style.display = 'block';
+    ids.forEach(function (i) { el[i].textContent = '-'; });
+  }
+
+  function calc() {
+    var fv = num(f.value), kv = num(k.value), hv = num(h.value);
+    if (!isFinite(fv) || fv < 0.1 || fv > 3000) {
+      return fail('Entrez une fréquence entre 0,1 et 3000 MHz.');
+    }
+    if (!isFinite(kv) || kv < 0.8 || kv > 1) {
+      return fail('Entrez un coefficient entre 0,80 et 1,00.');
+    }
+    if (!isFinite(hv) || hv < 0.5 || hv > 200) {
+      return fail('Entrez une hauteur de mât entre 0,5 et 200 m.');
+    }
+
+    var wl = C / fv;
+    var total = (wl / 2) * kv;
+    var arm = total / 2;
+    var drop = arm * S;             /* descente verticale du brin */
+    var tip = hv - drop;            /* hauteur du bout du brin */
+    if (tip <= 0) {
+      return fail('Mât trop court. Avec ces brins, il faut plus de ' + m(drop) + ' de hauteur.');
+    }
+    err.style.display = 'none';
+
+    var fic = tip * Math.SQRT2;     /* ficelle dans le prolongement, à 45 ° */
+    var span = 2 * hv;              /* ancrages à une distance égale à la hauteur du mât */
+
+    el.total.textContent = m(total);
+    el.arm.textContent = m(arm);
+    el.wl.textContent = m(wl);
+    el.tipH.textContent = m(tip);
+    el.fic.textContent = m(fic);
+    el.spanV.textContent = m(span);
+
+    var msg = 'Angle de 90 ° en haut du mât. Chaque ancrage est à ' + m(hv) + ' du pied du mât.';
+    if (tip < 2) msg += ' Attention : les bouts des brins sont très près du sol. Ils peuvent être touchés en émission.';
+    el.advice.textContent = msg;
+
+    /* schéma : la ligne apex-ancrage mesure 130 px de côté */
+    var t = Math.min(130, (arm / (hv * Math.SQRT2)) * 130);
+    var tx = 200 - t, ty = 45 + t, rx = 200 + t;
+    ['aLo','aLc'].forEach(function (i) { $(i).setAttribute('x2', tx); $(i).setAttribute('y2', ty); });
+    ['aRo','aRc'].forEach(function (i) { $(i).setAttribute('x2', rx); $(i).setAttribute('y2', ty); });
+    $('fiL').setAttribute('x1', tx); $('fiL').setAttribute('y1', ty);
+    $('fiR').setAttribute('x1', rx); $('fiR').setAttribute('y1', ty);
+
+    var ta = t / 2;
+    el.lblArm.setAttribute('x', 200 - ta - 12);
+    el.lblArm.setAttribute('y', 45 + ta - 4);
+    el.lblArm.textContent = m(arm);
+    var tf = (t + 130) / 2;
+    el.lblFic.setAttribute('x', 200 + tf + 10);
+    el.lblFic.setAttribute('y', 45 + tf - 2);
+    el.lblFic.textContent = m(fic);
+    el.lblSpan.textContent = m(span);
+  }
+
+  f.addEventListener('input', calc);
+  k.addEventListener('input', calc);
+  h.addEventListener('input', calc);
+  document.getElementById('chips').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-f]');
+    if (!b) return;
+    f.value = b.getAttribute('data-f');
+    calc();
+  });
+  calc();
+})();
+</script>
+</body>
+</html>

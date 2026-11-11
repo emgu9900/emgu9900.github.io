@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sondages présidentielle 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{
+  --kw:#ff79c6;--str:#f1fa8c;--fn:#50fa7b;--cy:#8be9fd;--pu:#bd93f9;--or:#ffb86c;--cm:#6272a4;--tx:#f8f8f2;
+  --red:#ff5555;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#000}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;min-height:100vh;background:#000;color:var(--tx);
+  font-family:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,Menlo,monospace;
+  font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5;
+}
+.wrap{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--cm);font-size:.9em}
+.plus-link{
+  flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  color:var(--fn);border:1px solid var(--cm);border-radius:8px;font-size:1.4rem;font-weight:700;line-height:1;text-decoration:none;
+}
+.plus-link:hover{background:#1c1f2b;border-color:var(--fn)}
+.plus-link:focus-visible,a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--cy);outline-offset:-2px}
+.code{padding:10px 0 16px;counter-reset:l}
+.row{
+  display:flex;align-items:baseline;gap:14px;margin:0;padding:3px 14px;
+  font:inherit;font-weight:400;color:var(--tx);text-decoration:none;overflow-wrap:anywhere;
+}
+.row::before{counter-increment:l;content:counter(l);flex:none;width:2ch;text-align:right;color:#4b5263;user-select:none}
+.src{min-width:0}
+.kw{color:var(--kw)}.fn{color:var(--fn)}.cy{color:var(--cy)}.pu{color:var(--pu)}.or{color:var(--or)}
+.cm{color:var(--cm);font-style:italic}.s{color:var(--str)}
+a.lnk{color:var(--fn);text-decoration:underline}
+a.lnk:hover{background:#1c1f2b}
+
+/* Éléments réutilisables pour les pages suivantes */
+.big .src{font-size:1.7em;line-height:1.35}
+.v{color:var(--cy)}.n{color:var(--pu)}
+button.row{
+  width:100%;background:none;border:0;border-left:3px solid transparent;text-align:left;cursor:pointer;
+  padding-top:8px;padding-bottom:8px;touch-action:manipulation;
+}
+button.row:hover,button.row:focus-visible{background:#1c1f2b;border-left-color:var(--fn)}
+.hide{display:none!important}
+
+/* Page sondage */
+#st.err{color:var(--red)}
+.pad{padding:4px 14px 20px}
+.tw{overflow-x:auto;border:1px solid #2a2d35;border-radius:8px;background:#000}
+table{border-collapse:collapse;width:100%;font-size:.85em}
+th,td{padding:6px 10px;text-align:left;white-space:nowrap;border-bottom:1px solid #2a2d35}
+th{color:var(--cy);position:sticky;top:0;background:#16161a}
+td{color:var(--tx)}
+tr.today td{color:var(--str)}
+td a{color:var(--fn)}
+select{
+  font:inherit;color:var(--or);background:#101014;border:1px solid #2a2d35;border-radius:6px;
+  padding:6px 8px;max-width:100%;min-width:0;
+}
+.sel{flex:1;min-width:0}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main class="win">
+    <div class="bar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="file">sondage.py</span>
+      <a class="plus-link" href="index.html" aria-label="Retour à l’accueil" title="Accueil">←</a>
+    </div>
+    <div class="code">
+      <div class="row"><span class="src"><span class="kw">from</span> <span class="cy">index</span> <span class="kw">import</span> <a class="lnk" href="index.html">accueil</a></span></div>
+      <div class="row"><span class="src">&nbsp;</span></div>
+      <div class="row"><span class="src cm"># Sondages : intentions de vote, présidentielle 2027</span></div>
+      <div class="row"><span class="src"><span class="v">source</span> = <span class="s">"data.gouv.fr (Repère 2027)"</span></span></div>
+      <div class="row"><span class="src"><span class="v">statut</span> = <span class="s">"<span id="st">chargement…</span>"</span></span></div>
+      <div class="row"><span class="src"><span class="v">derniere_date</span> = <span class="s">"<span id="last">-</span>"</span></span></div>
+      <div class="row"><span class="src"><span class="v">du_jour</span> = <span class="n" id="today">0</span></span></div>
+      <div class="row"><span class="src"><span class="v">fichier</span> = <select id="sel" class="sel" aria-label="Fichier de données"></select></span></div>
+    </div>
+    <div class="pad">
+      <div class="tw"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+    </div>
+    <div class="code" style="padding-top:0">
+      <button class="row" id="refresh" type="button"><span class="src"><span class="fn">&gt;&gt;&gt;</span> <span class="fn">actualiser</span>()</span></button>
+      <button class="row" id="latest" type="button"><span class="src"><span class="fn">&gt;&gt;&gt;</span> <span class="fn">derniers</span>(<span class="n">30</span>)</span></button>
+      <button class="row" id="all" type="button"><span class="src"><span class="fn">&gt;&gt;&gt;</span> <span class="fn">tout</span>()</span></button>
+      <div class="row"><span class="src">&nbsp;</span></div>
+      <div class="row"><span class="src cm"># Un sondage mesure un rapport de force à une date donnée. Ce n’est pas une prévision.</span></div>
+      <div class="row"><span class="src cm"># Sources officielles :</span></div>
+      <div class="row"><span class="src"><a class="lnk" href="https://www.commission-des-sondages.fr/" target="_blank" rel="noopener noreferrer">commission-des-sondages.fr</a></span></div>
+      <div class="row"><span class="src"><a class="lnk" href="https://www.data.gouv.fr/datasets/presidentielle-2027-sondages-candidatures-et-projection-departementale" target="_blank" rel="noopener noreferrer">data.gouv.fr, jeu de données</a></span></div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  var SLUG = "presidentielle-2027-sondages-candidatures-et-projection-departementale";
+  var API = "https://www.data.gouv.fr/api/1/datasets/" + SLUG + "/";
+  var MAX = 30, TIMEOUT = 20000;
+  var st = document.getElementById("st"), elLast = document.getElementById("last"), elToday = document.getElementById("today");
+  var sel = document.getElementById("sel"), th = document.getElementById("th"), tb = document.getElementById("tb");
+  var files = [], head = [], rows = [], dateCol = -1, mode = "derniers", token = 0;
+
+  function say(t, err){ st.textContent = t; st.className = err ? "err" : ""; }
+
+  function get(url){
+    return new Promise(function(ok, ko){
+      var t = setTimeout(function(){ ko(new Error("délai dépassé")); }, TIMEOUT);
+      fetch(url).then(function(r){
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.text();
+      }).then(function(x){ clearTimeout(t); ok(x); }, function(e){ clearTimeout(t); ko(e); });
+    });
+  }
+
+  /* CSV : guillemets, séparateur , ou ; */
+  function parseCSV(txt){
+    txt = txt.replace(/^\uFEFF/, "");
+    var first = txt.split(/\r?\n/)[0] || "";
+    var d = (first.split(";").length > first.split(",").length) ? ";" : ",";
+    var out = [], row = [], cell = "", q = false, i, c;
+    for (i = 0; i < txt.length; i++){
+      c = txt[i];
+      if (q){
+        if (c === '"'){ if (txt[i+1] === '"'){ cell += '"'; i++; } else q = false; }
+        else cell += c;
+      } else if (c === '"') q = true;
+      else if (c === d){ row.push(cell); cell = ""; }
+      else if (c === "\n" || c === "\r"){
+        if (c === "\r" && txt[i+1] === "\n") i++;
+        row.push(cell); cell = "";
+        if (row.length > 1 || row[0] !== "") out.push(row);
+        row = [];
+      } else cell += c;
+    }
+    if (cell !== "" || row.length){ row.push(cell); out.push(row); }
+    return out;
+  }
+
+  function parseDate(s){
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
+    if (m) return Date.UTC(+m[1], +m[2]-1, +m[3]);
+    m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(s);
+    if (m) return Date.UTC(+m[3], +m[2]-1, +m[1]);
+    return NaN;
+  }
+  function fmtDate(ms){
+    var d = new Date(ms);
+    return ("0"+d.getUTCDate()).slice(-2) + "/" + ("0"+(d.getUTCMonth()+1)).slice(-2) + "/" + d.getUTCFullYear();
+  }
+
+  function findDateCol(){
+    var tests = [/fin/i, /date/i, /terrain|publi|jour/i], t, j, k, ok, n;
+    for (t = 0; t < tests.length; t++){
+      for (j = 0; j < head.length; j++){
+        if (!tests[t].test(head[j])) continue;
+        ok = 0; n = 0;
+        for (k = 0; k < rows.length; k++){ n++; if (!isNaN(parseDate(rows[k][j] || ""))) ok++; }
+        if (n && ok / n >= 0.5) return j;
+      }
+    }
+    return -1;
+  }
+
+  /* Ordre d'affichage : colonne(s) de lien, puis la date, puis le reste */
+  function colOrder(){
+    var links = [], rest = [], j, k, n, ok;
+    for (j = 0; j < head.length; j++){
+      n = 0; ok = 0;
+      for (k = 0; k < rows.length; k++){
+        if (rows[k][j]){ n++; if (/^https?:\/\//.test(rows[k][j])) ok++; }
+      }
+      if (n && ok / n >= 0.5) links.push(j);
+    }
+    for (j = 0; j < head.length; j++){
+      if (links.indexOf(j) < 0 && j !== dateCol) rest.push(j);
+    }
+    return links.concat(dateCol >= 0 && links.indexOf(dateCol) < 0 ? [dateCol] : [], rest);
+  }
+
+  function render(){
+    var list = rows, today = Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    var nToday = 0, lastMs = NaN;
+    if (dateCol >= 0){
+      list = rows.slice().sort(function(a, b){
+        var x = parseDate(a[dateCol] || ""), y = parseDate(b[dateCol] || "");
+        if (isNaN(x)) x = -Infinity; if (isNaN(y)) y = -Infinity;
+        return y - x;
+      });
+      var top = parseDate(list[0] && list[0][dateCol] || "");
+      if (!isNaN(top)) lastMs = top;
+      list.forEach(function(r){ if (parseDate(r[dateCol] || "") === today) nToday++; });
+    }
+    elLast.textContent = isNaN(lastMs) ? "inconnue" : fmtDate(lastMs);
+    elToday.textContent = dateCol >= 0 ? nToday : "?";
+    var shown = mode === "tout" ? list : list.slice(0, MAX);
+
+    th.textContent = ""; tb.textContent = "";
+    var tr = document.createElement("tr");
+    var order = colOrder();
+    order.forEach(function(j){ var c = document.createElement("th"); c.textContent = head[j]; tr.appendChild(c); });
+    th.appendChild(tr);
+    shown.forEach(function(r){
+      var tr2 = document.createElement("tr");
+      if (dateCol >= 0 && parseDate(r[dateCol] || "") === today) tr2.className = "today";
+      order.forEach(function(j){
+        var td = document.createElement("td"), v = r[j] || "";
+        if (/^https?:\/\//.test(v)){
+          var a = document.createElement("a");
+          a.href = v; a.textContent = "lien"; a.target = "_blank"; a.rel = "noopener noreferrer";
+          td.appendChild(a);
+        } else td.textContent = v;
+        tr2.appendChild(td);
+      });
+      tb.appendChild(tr2);
+    });
+    say(rows.length + " lignes, " + shown.length + " affichées" + (dateCol < 0 ? " (colonne date non trouvée, ordre du fichier)" : ""));
+  }
+
+  function loadFile(){
+    var f = files[sel.selectedIndex], id = ++token;
+    if (!f) return;
+    say("chargement du fichier…");
+    get(f.latest || f.url).catch(function(){
+      if (f.url && f.url !== f.latest) return get(f.url);
+      throw new Error("fichier inaccessible");
+    }).then(function(txt){
+      if (id !== token) return;
+      var t = parseCSV(txt);
+      if (t.length < 2) throw new Error("fichier vide");
+      head = t[0]; rows = t.slice(1);
+      dateCol = findDateCol();
+      render();
+    }).catch(function(e){
+      if (id !== token) return;
+      say("échec : " + e.message + " (voir les sources officielles)", true);
+    });
+  }
+
+  function load(){
+    say("chargement…");
+    get(API).then(function(txt){
+      var j = JSON.parse(txt);
+      files = (j.resources || []).filter(function(r){ return /csv/i.test(r.format || ""); });
+      if (!files.length) throw new Error("aucun fichier CSV trouvé");
+      sel.textContent = "";
+      var best = 0, found = false;
+      files.forEach(function(r, i){
+        var o = document.createElement("option");
+        o.textContent = r.title || ("fichier " + (i+1));
+        sel.appendChild(o);
+        if (!found && /enqu|sondage/i.test(r.title || "") && !/volution|projection|candidat/i.test(r.title || "")){ best = i; found = true; }
+      });
+      sel.selectedIndex = best;
+      loadFile();
+    }).catch(function(e){
+      say("échec : " + e.message + " (connexion ?)", true);
+    });
+  }
+
+  sel.addEventListener("change", loadFile);
+  document.getElementById("refresh").addEventListener("click", load);
+  document.getElementById("latest").addEventListener("click", function(){ mode = "derniers"; if (rows.length) render(); });
+  document.getElementById("all").addEventListener("click", function(){ mode = "tout"; if (rows.length) render(); });
+  load();
+})();
+</script>
+</body>
+</html>

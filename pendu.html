@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Pendu</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#000;--pn:#101014;--ln:#2a2d35;--fg:#f8f8f2;--kw:#ff79c6;--st:#ffb86c;--fn:#50fa7b;--cl:#8be9fd;--nm:#bd93f9;--vr:#8be9fd;--cm:#6272a4;--op:#bd93f9;--er:#ff5555}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:#000;color:var(--fg);font-family:"JetBrains Mono","Fira Code",Menlo,Consolas,"DejaVu Sans Mono","Courier New",monospace;font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5}
+
+.frame{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6272a4;font-size:.9em}
+
+.pad{padding:16px 14px 24px}
+.pad::before{content:"#!/usr/bin/env python3\A # -*- coding: utf-8 -*-";white-space:pre;display:block;color:var(--cm);font-size:.8rem;margin:0 auto 14px;max-width:960px}
+a{color:var(--cl)}
+.home,.accueil{display:inline-block;margin:0 0 14px;padding:3px 12px;color:var(--cl);background:var(--pn);border:1px solid var(--ln);border-radius:4px;text-decoration:none;font:inherit}
+.home::before,.accueil::before{content:"import ";color:var(--kw)}
+.home:hover,.accueil:hover{border-color:var(--cl)}
+.home svg{display:none}
+h1,h2{color:var(--fn);line-height:1.25;font-weight:700}
+h1{margin:6px 0 10px;font-size:clamp(1.4rem,6vw,2rem)}
+h2{margin:0 0 10px;font-size:1.2rem}
+h1::before{content:"# ";color:var(--cm)}h2::before{content:"## ";color:var(--cm)}
+.sub,.subtitle,.hint,.bulle{color:var(--cm);font-weight:400}
+.sub::before,.subtitle::before,.hint::before,.bulle::before{content:"# "}
+label:not(.row){display:block;color:var(--vr);margin-bottom:4px}
+label:not(.row)::after{content:" =";color:var(--op)}
+input:not([type=range]):not([type=checkbox]),select{font:inherit;color:var(--st);background:var(--pn);border:1px solid var(--ln);border-radius:4px;padding:8px 10px;width:100%}
+input::placeholder{color:#5a6270}
+:focus-visible{outline:2px solid var(--op);outline-offset:2px}
+button,.btn,.chip,.tab{font:inherit;color:var(--op);background:var(--pn);border:1px solid var(--op);border-radius:4px;padding:8px 14px;cursor:pointer}
+button:hover:not(:disabled){background:#1c1f2b}
+button:disabled{color:#555;border-color:var(--ln);cursor:default}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:6px;padding:16px}
+
+header{max-width:960px;margin:0 auto 14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header h1{margin:0}header .home{margin:0;padding:3px 12px;color:var(--cl);border-color:var(--ln)}
+main{max-width:960px;margin:0 auto;display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:20px}
+@media(max-width:700px){main{grid-template-columns:1fr}}
+.stage{background:#000;border:1px solid var(--ln);border-radius:6px;padding:6px}
+svg{width:100%;height:auto;display:block}
+.line{fill:none;stroke:#1B1B3A;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+#svg>.line,#rope{stroke:#f8f8f2}
+.limb-o{stroke:#000;stroke-width:17;stroke-linecap:round;fill:none}
+.limb-i{stroke:#FFD93D;stroke-width:8;stroke-linecap:round;fill:none}
+.part{display:none}.part.show{display:inline}
+.frown,.eyesx{display:none}
+.dead .eyes,.dead .smile{display:none}
+.dead .frown,.dead .eyesx{display:inline}
+.man{transform-box:fill-box;transform-origin:center bottom}
+svg.win .man{animation:hop .5s ease-in-out infinite alternate}
+@keyframes hop{to{transform:translateY(-12px) rotate(3deg)}}
+@media(prefers-reduced-motion:reduce){svg.win .man{animation:none}}
+.panel{display:flex;flex-direction:column;gap:14px;min-width:0}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.theme{color:var(--st);font-weight:700}
+.lives{max-width:100%}
+.word{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:64px;padding:6px 0}
+.slot{width:2.2rem;height:3rem;text-align:center;line-height:2.8rem;font-size:1.6rem;font-weight:700;color:var(--nm);background:#000;border:1px solid var(--ln);border-bottom:2px solid var(--op);border-radius:4px}
+.slot.miss{color:var(--er)}
+.hintbox{min-height:2.6em;color:var(--cm);border:1px dashed var(--ln);border-radius:4px;padding:8px 12px}
+.msg{min-height:2.2rem;text-align:center;font-weight:700}.msg.win{color:var(--cl)}.msg.lose{color:var(--er)}
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:8px}
+.key{padding:4px 0;font-weight:700;color:var(--fg);border-color:var(--ln)}
+.key.ok{color:var(--cl);border-color:var(--cl);background:#0e2019}
+.key.ko{color:var(--er);border-color:var(--er);background:#1f0e0e}
+.key:disabled{cursor:default;opacity:.75}
+.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.score{color:var(--cm)}
+
+</style>
+</head>
+<body>
+<div class="frame"><div class="win"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="file">pendu.py</span></div><div class="pad">
+<header>
+  <a class="btn home" href="index.html">🏠 Accueil</a>
+  <h1>Le Pendu</h1>
+</header>
+
+<main>
+  <div class="stage">
+    <svg id="svg" viewBox="0 0 300 330" role="img" aria-label="Dessin du pendu">
+      <ellipse cx="150" cy="305" rx="125" ry="20" fill="#5BD16F" stroke="#1B1B3A" stroke-width="5"/>
+      <rect x="45" y="40" width="26" height="268" rx="8" fill="#C98A4B" stroke="#1B1B3A" stroke-width="5"/>
+      <rect x="45" y="30" width="170" height="24" rx="8" fill="#C98A4B" stroke="#1B1B3A" stroke-width="5"/>
+      <path class="line" d="M71 90 L110 54"/>
+      <path id="rope" class="line" d="M200 54 V88"/>
+      <g class="man" id="man">
+        <g class="part" id="p8"><ellipse cx="170" cy="257" rx="15" ry="8" fill="#FF5A5F" stroke="#1B1B3A" stroke-width="4"/></g>
+        <g class="part" id="p9"><ellipse cx="230" cy="257" rx="15" ry="8" fill="#FF5A5F" stroke="#1B1B3A" stroke-width="4"/></g>
+        <g class="part" id="p6"><path class="limb-o" d="M192 196 L176 252"/><path class="limb-i" d="M192 196 L176 252"/></g>
+        <g class="part" id="p7"><path class="limb-o" d="M208 196 L224 252"/><path class="limb-i" d="M208 196 L224 252"/></g>
+        <g class="part" id="p2"><path class="limb-o" d="M188 152 L158 186"/><path class="limb-i" d="M188 152 L158 186"/></g>
+        <g class="part" id="p3"><path class="limb-o" d="M212 152 L242 186"/><path class="limb-i" d="M212 152 L242 186"/></g>
+        <g class="part" id="p4"><circle cx="156" cy="189" r="11" fill="#FFD93D" stroke="#1B1B3A" stroke-width="4"/></g>
+        <g class="part" id="p5"><circle cx="244" cy="189" r="11" fill="#FFD93D" stroke="#1B1B3A" stroke-width="4"/></g>
+        <g class="part" id="p1"><rect x="182" y="138" width="36" height="62" rx="16" fill="#FF5A5F" stroke="#1B1B3A" stroke-width="5"/></g>
+        <g class="part" id="p0">
+          <circle cx="200" cy="112" r="27" fill="#FFD93D" stroke="#1B1B3A" stroke-width="5"/>
+          <g class="eyes"><circle cx="190" cy="108" r="4.5" fill="#1B1B3A"/><circle cx="210" cy="108" r="4.5" fill="#1B1B3A"/></g>
+          <g class="eyesx" stroke="#1B1B3A" stroke-width="3.5" stroke-linecap="round"><path d="M185 103 l10 10 M195 103 l-10 10 M205 103 l10 10 M215 103 l-10 10"/></g>
+          <path class="smile line" style="stroke-width:3.5" d="M188 120 Q200 132 212 120"/>
+          <path class="frown line" style="stroke-width:3.5" d="M189 128 Q200 116 211 128"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <section class="panel">
+    <div class="top">
+      <div class="theme" id="theme">Thème</div>
+      <div class="lives" id="lives" aria-live="polite"></div>
+    </div>
+    <div class="word" id="word" aria-label="Mot à deviner"></div>
+    <div class="hintbox" id="hint" aria-live="polite">Besoin d'aide ? Clique sur Indice.</div>
+    <div class="msg" id="msg" aria-live="assertive"></div>
+    <div class="keys" id="keys"></div>
+    <div class="actions">
+      <button class="btn" id="hintBtn" type="button">💡 Indice</button>
+      <button class="btn" id="newBtn" type="button">🔄 Nouvelle partie</button>
+      <span class="score" id="score"></span>
+    </div>
+  </section>
+</main>
+
+</div></div></div>
+<script>
+const MAX_ERRORS = 10; // tête, corps, 2 bras, 2 mains, 2 jambes, 2 pieds
+const HINT_COST = 0; // nombre d'erreurs ajoutées quand on prend l'indice (0 = gratuit)
+
+// Format : MOT:indice ; MOT:indice ...
+const THEMES = {
+  "🦒 Animaux": "GIRAFE:Elle a un très long cou;PINGOUIN:Oiseau noir et blanc qui ne vole pas;HERISSON:Petit animal couvert de piquants;CROCODILE:Reptile à grandes dents qui vit près des fleuves",
+  "🍓 Fruits": "FRAMBOISE:Petit fruit rouge et fragile;ABRICOT:Fruit orange avec un gros noyau;ANANAS:Fruit tropical à la couronne piquante;PASTEQUE:Gros fruit vert dehors, rouge dedans",
+  "🥕 Légumes": "CAROTTE:Légume orange que les lapins adorent;BROCOLI:Petit arbre vert à manger;COURGETTE:Légume vert allongé de l'été;POIREAU:Légume blanc et vert, base de la soupe",
+  "🌍 Pays": "PORTUGAL:Pays de Lisbonne;CANADA:Pays de la feuille d'érable;JAPON:Pays du soleil levant;BRESIL:Pays du carnaval de Rio",
+  "👩‍🚒 Métiers": "BOULANGER:Il fait le pain;POMPIER:Il éteint les incendies;PLOMBIER:Il répare les fuites d'eau;INFIRMIER:Il soigne les patients à l'hôpital",
+  "⚽ Sports": "NATATION:On y nage dans un bassin;BASKET:Il faut marquer dans un panier;ESCRIME:On s'y bat à l'épée;VOLLEY:Un ballon à envoyer par-dessus un filet",
+  "🎸 Instruments": "GUITARE:Elle a six cordes;TROMPETTE:Instrument à vent en cuivre;VIOLON:Instrument à cordes avec un archet;ACCORDEON:On l'étire et on le comprime",
+  "🐬 Mer": "DAUPHIN:Mammifère marin très joueur;HIPPOCAMPE:Poisson à tête de cheval;MEDUSE:Elle pique et flotte, sans os;CORAIL:Il forme des récifs colorés",
+  "🚀 Espace": "PLANETE:La Terre en est une;COMETE:Boule de glace avec une longue queue;ASTRONAUTE:Il voyage dans l'espace;GALAXIE:La Voie lactée en est une",
+  "🍳 Cuisine": "CASSEROLE:On y fait bouillir de l'eau;FOURCHETTE:Elle a des dents mais ne mord pas;SPATULE:Pour retourner les crêpes;PASSOIRE:Elle égoutte les pâtes",
+  "🛋️ Maison": "CANAPE:On s'y assoit à plusieurs;ARMOIRE:On y range les vêtements;FENETRE:Elle laisse entrer la lumière;ESCALIER:Il permet de monter à l'étage",
+  "🚲 Transports": "BICYCLETTE:Deux roues et des pédales;HELICOPTERE:Il vole avec une hélice sur le toit;TRAMWAY:Il roule sur des rails en ville;TROTTINETTE:On pose un pied et on pousse de l'autre",
+  "🧦 Vêtements": "CHAUSSETTE:Elle perd toujours sa jumelle;MANTEAU:On le met quand il fait froid;ECHARPE:On l'enroule autour du cou;CASQUETTE:Elle a une visière",
+  "🌋 Nature": "MONTAGNE:Très haute, parfois enneigée;VOLCAN:Il crache de la lave;CASCADE:Une chute d'eau;FORET:Plein d'arbres serrés",
+  "🎉 Fêtes": "ANNIVERSAIRE:On souffle les bougies;CITROUILLE:Symbole d'Halloween;GUIRLANDE:On l'accroche pour décorer;CONFETTI:Petits papiers colorés qu'on lance",
+  "🐉 Contes": "SORCIERE:Elle vole sur un balai;DRAGON:Il crache du feu;LICORNE:Cheval magique avec une corne;PIRATE:Il cherche un trésor sur un bateau",
+  "🎒 École": "CARTABLE:On y met ses cahiers;TROUSSE:Elle contient les stylos;TABLEAU:Le maître y écrit à la craie;CRAYON:Il faut le tailler",
+  "💻 Informatique": "CLAVIER:Il a plein de touches;SOURIS:On la déplace sur le tapis;IMPRIMANTE:Elle sort des feuilles de papier;ECRAN:On y regarde les images",
+  "⛈️ Météo": "TONNERRE:Il gronde après l'éclair;BROUILLARD:On n'y voit pas à dix mètres;VERGLAS:Fine couche de glace sur la route;TEMPETE:Vent très violent",
+  "🍰 Gourmandises": "CREPE:On la fait sauter à la Chandeleur;MACARON:Petit gâteau rond et coloré;TIRAMISU:Dessert italien au café;BEIGNET:Pâte frite et sucrée"
+};
+
+const ALL = Object.entries(THEMES).map(([theme, s]) => ({
+  theme,
+  words: s.split(";").map(e => { const [w, h] = e.split(":"); return { w, h }; })
+}));
+
+const el = id => document.getElementById(id);
+let current, found, wrong, over, hintUsed, lastWord = "", wins = 0, losses = 0;
+
+function newGame() {
+  let t, e;
+  do {
+    t = ALL[Math.floor(Math.random() * ALL.length)];
+    e = t.words[Math.floor(Math.random() * t.words.length)];
+  } while (e.w === lastWord);
+  lastWord = e.w;
+  current = { theme: t.theme, word: e.w, hint: e.h };
+  found = new Set(); wrong = 0; over = false; hintUsed = false;
+  el("theme").textContent = "Thème : " + current.theme;
+  el("hint").textContent = "Besoin d'aide ? Clique sur Indice.";
+  el("msg").textContent = ""; el("msg").className = "msg";
+  el("hintBtn").disabled = false;
+  const keys = el("keys"); keys.innerHTML = "";
+  for (const l of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
+    const b = document.createElement("button");
+    b.className = "key"; b.type = "button"; b.textContent = l; b.id = "k" + l;
+    b.setAttribute("aria-label", "Lettre " + l);
+    b.addEventListener("click", () => guess(l));
+    keys.appendChild(b);
+  }
+  render();
+}
+
+function guess(l) {
+  if (over || found.has(l) || document.getElementById("k" + l).disabled) return;
+  const k = el("k" + l); k.disabled = true;
+  if (current.word.includes(l)) { found.add(l); k.classList.add("ok"); }
+  else { wrong++; k.classList.add("ko"); }
+  render();
+  checkEnd();
+}
+
+function checkEnd() {
+  const won = [...current.word].every(c => found.has(c));
+  if (won) { over = true; wins++; end("Bravo ! Il est sauvé !", "win"); }
+  else if (wrong >= MAX_ERRORS) { over = true; losses++; end("Perdu ! Le mot était " + current.word + ".", "lose"); }
+}
+
+function end(text, cls) {
+  el("msg").textContent = text; el("msg").className = "msg " + cls;
+  el("hintBtn").disabled = true;
+  document.querySelectorAll(".key").forEach(k => k.disabled = true);
+  render();
+}
+
+function render() {
+  const won = over && [...current.word].every(c => found.has(c));
+  const lost = over && !won;
+  el("word").innerHTML = [...current.word].map(c => {
+    const show = found.has(c) || lost;
+    return `<span class="slot${lost && !found.has(c) ? " miss" : ""}">${show ? c : ""}</span>`;
+  }).join("");
+  const left = Math.max(0, MAX_ERRORS - wrong);
+  el("lives").textContent = "❤️".repeat(left) + "🖤".repeat(MAX_ERRORS - left);
+  el("lives").setAttribute("aria-label", left + " vies restantes");
+  for (let i = 0; i < MAX_ERRORS; i++) el("p" + i).classList.toggle("show", won || i < wrong);
+  el("rope").style.display = won ? "none" : "inline";
+  el("svg").classList.toggle("win", won);
+  el("svg").classList.toggle("dead", lost);
+  el("score").textContent = "Victoires : " + wins + "   Défaites : " + losses;
+}
+
+el("hintBtn").addEventListener("click", () => {
+  if (over || hintUsed) return;
+  hintUsed = true;
+  el("hint").textContent = "Indice : " + current.hint;
+  el("hintBtn").disabled = true;
+  if (HINT_COST > 0) { wrong += HINT_COST; render(); checkEnd(); }
+});
+el("newBtn").addEventListener("click", newGame);
+document.addEventListener("keydown", e => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (/^[a-zA-Z]$/.test(e.key)) guess(e.key.toUpperCase());
+});
+
+newGame();
+</script>
+</body>
+</html>

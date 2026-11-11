@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Analyse documentaire des violences policières, du blocus lycéen de 2026 et des mécanismes collectifs, historiques et institutionnels.">
+<title>Blocus lycéen 2026 — Violences, foule et responsabilités</title>
+<style>
+:root{
+  --bg:#f4f6f8;--paper:#fff;--ink:#17212b;--muted:#526171;
+  --line:#d9e0e7;--accent:#173f5f;--accent2:#dceaf4;
+  --warn:#fff4d6;--warnline:#e6c66d;--soft:#edf2f6;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(135deg,#102d45,#235778);color:white;padding:58px 22px 48px}
+.hero,.container{max-width:1050px;margin:auto}
+.kicker{text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;font-weight:700;opacity:.82}
+h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;margin:.6rem 0 1rem}
+header p{max-width:760px;font-size:1.12rem;color:#e5edf3}
+.meta{font-size:.9rem;opacity:.8}
+nav{background:#fff;border-bottom:1px solid var(--line);padding:12px 22px;position:sticky;top:0;z-index:5}
+nav .container{display:flex;gap:10px;overflow:auto;white-space:nowrap}
+nav a{font-size:.88rem;color:var(--accent);text-decoration:none;padding:6px 9px;border-radius:6px}
+nav a:hover{background:var(--accent2)}
+main{max-width:1050px;margin:28px auto;padding:0 18px}
+section,.panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px;margin:0 0 20px;box-shadow:0 3px 14px rgba(20,40,60,.04)}
+h2{font-size:1.55rem;line-height:1.25;margin:0 0 14px;color:#153b58}
+h3{font-size:1.12rem;margin:22px 0 8px;color:#203f56}
+p{margin:10px 0}
+.lead{font-size:1.08rem;color:#33485a}
+.callout{background:var(--warn);border:1px solid var(--warnline);padding:16px 18px;border-radius:10px;margin:16px 0}
+.note{background:var(--soft);border-left:4px solid #7894aa;padding:13px 16px;margin:15px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:16px}
+.card strong{display:block;color:#173f5f;margin-bottom:5px}
+.tag{display:inline-block;border-radius:99px;background:#e8eef3;color:#29485f;padding:3px 9px;font-size:.78rem;font-weight:700;margin:2px}
+ul,ol{padding-left:1.3rem}
+li{margin:5px 0}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.94rem}
+th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
+th{background:#edf2f6}
+a{color:#145b88}
+a:hover{color:#0b3858}
+.flow{display:grid;gap:8px;max-width:650px;margin:18px auto}
+.flow div{background:#edf3f7;border:1px solid #d3dfe8;border-radius:9px;padding:12px;text-align:center;font-weight:600}
+.flow b{text-align:center;color:#6c8294}
+small,.small{font-size:.88rem;color:var(--muted)}
+footer{max-width:1050px;margin:0 auto;padding:10px 22px 45px;color:var(--muted);font-size:.9rem}
+#top{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));width:46px;height:46px;border:0;border-radius:50%;background:var(--accent);color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(20,40,60,.3);opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s,background .2s;z-index:10}
+#top.show{opacity:1;visibility:visible}
+#top:hover{background:#0b3858}
+#top:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+.pill{flex:none;font:inherit;font-size:.88rem;font-weight:700;color:var(--accent);background:#fff;border:1px solid var(--accent);border-radius:99px;padding:5px 13px;cursor:pointer}
+.pill:hover{background:var(--accent2)}
+.pill.on{background:var(--accent);color:#fff}
+.pill:disabled{opacity:.45;cursor:not-allowed}
+a.pill{text-decoration:none;display:inline-block}
+.pill:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+.sep{flex:none;width:1px;background:var(--line);margin:2px 4px}
+#resume{max-width:1050px;margin:20px auto 0;padding:0 18px}
+#resume .panel{background:var(--accent2);border-color:#b9d3e4;margin:0}
+#resume h2{font-size:1.25rem;margin-bottom:8px}
+@media(max-width:650px){section,.panel{padding:19px}nav{position:static}table{display:block;overflow-x:auto}}
+@media print{body{background:white;font-size:11pt}nav,#top,#resume{display:none}section,.panel{box-shadow:none;break-inside:avoid;margin-bottom:12px}header{background:#173f5f!important;print-color-adjust:exact}a{color:#123f60;text-decoration:none}}
+</style>
+</head>
+<body>
+<header>
+ <div class="hero">
+  <div class="kicker">Étude documentaire · France</div>
+  <h1>Blocus lycéen de 2026 : violences, foule et responsabilités</h1>
+  <p>Analyse des mécanismes psychologiques, policiers, historiques, juridiques et politiques à partir du mouvement lycéen, avec des comparaisons avec les Gilets jaunes, Sainte-Soline, les tribunes de football et la police française sous Vichy.</p>
+  <div class="meta">Périmètre annoncé : situation examinée au 10 novembre 2026 · Version de travail</div>
+ </div>
+</header>
+<nav><div class="container">
+ <a class="pill" id="accueil" href="index.html" title="Retour à l’accueil">&#8592; Accueil</a><button class="pill" id="ecouter" type="button" aria-pressed="false">&#9654; Écouter</button><button class="pill" id="resumebtn" type="button" aria-pressed="false">Résumé</button><span class="sep"></span>
+ <a href="#methode">Méthode</a><a href="#blocus">Blocus 2026</a><a href="#foules">Foules</a><a href="#gj">Gilets jaunes</a><a href="#sainte">Sainte-Soline</a><a href="#vichy">Vichy</a><a href="#psy">Psychologie</a><a href="#responsabilites">Responsabilités</a><a href="#sources">Sources</a>
+</div></nav>
+<div id="resume" hidden><div class="panel" id="resumetxt">
+<h2>Résumé</h2>
+<p>Cette page est une étude documentaire sur le blocus lycéen de 2026. C’est une version de travail, au 10 novembre 2026.</p>
+<p>Elle cherche à comprendre comment une confrontation entre des citoyens et les forces de l’ordre peut dégénérer, et comment les responsabilités se diluent.</p>
+<p>Elle pose trois précautions. Expliquer une violence ne la justifie pas. Appartenir à un groupe n’efface pas la responsabilité individuelle. La comparaison avec Vichy ne porte que sur les mécanismes de déresponsabilisation, jamais sur une équivalence.</p>
+<p>Les informations sont classées selon quatre niveaux : établi, documenté, contesté, analyse.</p>
+<p>La page reconstitue d’abord les faits du blocus. Elle compare ensuite avec les foules de football, les Gilets jaunes, Sainte-Soline et la police sous Vichy. Elle distingue la responsabilité de l’agent, du commandement et de l’institution. Elle examine aussi la frustration, l’escalade, la fabrication de l’ennemi, le rôle des images et les effets sur la démocratie.</p>
+<p>Elle précise que les chiffres et incidents de 2026 doivent être vérifiés sur les documents originaux. Ce n’est pas un bilan établi.</p>
+</div></div>
+<main>
+<section id="methode">
+ <h2>Introduction et méthode</h2>
+ <p class="lead">L'objectif est de comprendre comment une confrontation entre des citoyens et les forces de l'ordre peut évoluer vers des violences, comment les responsabilités peuvent se diluer et quel rôle jouent les institutions dans la prévention ou la persistance des dysfonctionnements.</p>
+ <div class="callout"><strong>Précaution essentielle.</strong> Expliquer une violence ne signifie pas la justifier. Comprendre un ordre ne signifie pas qu'il est légal. Appartenir à un groupe ne supprime pas la responsabilité individuelle. La comparaison avec Vichy porte uniquement sur des mécanismes administratifs et moraux de déresponsabilisation : elle ne signifie en aucun cas que les violences policières contemporaines seraient équivalentes aux persécutions et déportations nazies.</div>
+ <h3>Échelle de preuve utilisée</h3>
+ <div class="grid">
+  <div class="card"><span class="tag">Établi</span><strong>Fait corroboré</strong>Document officiel, décision juridictionnelle ou faits confirmés par plusieurs sources solides.</div>
+  <div class="card"><span class="tag">Documenté</span><strong>Éléments rapportés</strong>Images, témoignages recoupés ou enquête journalistique, sans décision définitive nécessairement.</div>
+  <div class="card"><span class="tag">Contesté</span><strong>Versions divergentes</strong>Éléments incomplets ou contradictoires qui nécessitent une enquête.</div>
+  <div class="card"><span class="tag">Analyse</span><strong>Interprétation</strong>Hypothèse psychologique, historique ou politique qui doit être confrontée aux faits.</div>
+ </div>
+ <p>Une garde à vue, une enquête ouverte, une mise en examen, une sanction disciplinaire et une condamnation définitive ne sont pas des notions interchangeables. Les chiffres doivent toujours être accompagnés de leur période, de leur périmètre et de leur source.</p>
+</section>
+
+<section id="blocus">
+ <h2>1. Le blocus lycéen de 2026 : établir les faits</h2>
+ <p>Le mouvement lycéen constitue le point de départ. Avant toute interprétation, il faut reconstituer la chronologie établissement par établissement et journée par journée : revendications, blocages, interventions, blessures, interpellations, plaintes et suites judiciaires.</p>
+ <h3>Questions à documenter</h3>
+ <ul>
+  <li>Quelles étaient les revendications initiales et comment ont-elles évolué ?</li>
+  <li>Quelles opérations de maintien de l'ordre ont été conduites, par quels services et sur quelles instructions ?</li>
+  <li>Combien de personnes ont été blessées, selon quelles définitions et par quelles sources ?</li>
+  <li>Quelles blessures sont attribuées à une intervention policière, et lesquelles restent à déterminer ?</li>
+  <li>Quelles enquêtes judiciaires ou administratives ont été ouvertes et quelles décisions ont été rendues ?</li>
+ </ul>
+ <div class="note"><strong>Limite documentaire :</strong> les chiffres et incidents précis cités dans les échanges précédents doivent être vérifiés sur les documents originaux avant publication. Cette page ne les présente pas comme un bilan consolidé ou comme des faits judiciairement établis.</div>
+</section>
+
+<section id="foules">
+ <h2>2. Psychologie des foules : comparaison avec les tribunes de football</h2>
+ <p>Les recherches sur les supporters et les foules montrent que les comportements collectifs ne sont pas seulement l'addition de comportements individuels. L'identité de groupe, les interactions avec les autorités et la perception d'un traitement injuste peuvent modifier la dynamique d'une situation.</p>
+ <h3>Mécanismes à examiner</h3>
+ <ul>
+  <li><strong>Identité collective :</strong> les personnes peuvent se percevoir comme membres d'un même groupe opposé à un autre.</li>
+  <li><strong>Contagion et imitation :</strong> un comportement peut être repris par d'autres, sans que tous partagent les mêmes intentions.</li>
+  <li><strong>Pression des pairs :</strong> certains individus peuvent suivre le groupe ou hésiter à s'en désolidariser.</li>
+  <li><strong>Perception de menace :</strong> un groupe peut interpréter une action comme hostile, parfois à tort ou de façon disproportionnée.</li>
+  <li><strong>Escalade interactionnelle :</strong> les réactions d'un camp peuvent renforcer les comportements défensifs ou hostiles de l'autre.</li>
+ </ul>
+ <p>Les travaux de Clifford Stott et Steve Reicher sur les foules et les supporters de football sont utiles pour analyser ces phénomènes. Ils ne prouvent toutefois pas que policiers ou lycéens réagissent tous de la même manière.</p>
+ <h3>Question centrale</h3>
+ <p><strong>Une stratégie d'intervention peut-elle, dans certaines circonstances, involontairement renforcer l'identité d'opposition et contribuer à l'escalade plutôt qu'à l'apaisement ?</strong> La réponse doit être recherchée dans les consignes, les séquences vidéo complètes, les témoignages et les évaluations indépendantes.</p>
+</section>
+
+<section id="gj">
+ <h2>3. Les Gilets jaunes : répétition, blessures et banalisation</h2>
+ <p>Les manifestations des Gilets jaunes (à partir de novembre 2018) permettent d'étudier la durée des mobilisations, la répétition des affrontements, l'utilisation des armes intermédiaires, la fatigue opérationnelle et les mécanismes de contrôle.</p>
+ <h3>Axes de comparaison</h3>
+ <ul>
+  <li>Conditions d'emploi des lanceurs de balles de défense et des grenades.</li>
+  <li>Formation des agents, supervision, traçabilité des tirs et identification des auteurs.</li>
+  <li>Traitement des signalements, enquêtes administratives et judiciaires.</li>
+  <li>Évolution des doctrines de maintien de l'ordre après les blessures et les alertes.</li>
+  <li>Fatigue, stress et répétition des opérations, sans en faire une excuse à un acte illégal.</li>
+ </ul>
+ <div class="note">Les statistiques publiées à l'époque ne sont pas nécessairement comparables entre elles : les périodes, catégories de blessés et méthodes de comptage peuvent différer. Toute donnée chiffrée doit être reprise avec sa définition exacte.</div>
+</section>
+
+<section id="sainte">
+ <h2>4. Sainte-Soline : stratégie opérationnelle et responsabilité du commandement</h2>
+ <p>Les affrontements du 25 mars 2023 à Sainte-Soline constituent un cas d'étude pour examiner la préparation d'une opération, les choix tactiques, l'emploi des armes, les secours, le contrôle hiérarchique et les enquêtes après les faits.</p>
+ <h3>Trois niveaux de responsabilité</h3>
+ <table><thead><tr><th>Niveau</th><th>Questions à examiner</th></tr></thead><tbody>
+ <tr><td>Agent</td><td>Quel acte a été accompli ? Dans quelles circonstances ? Était-il nécessaire et proportionné ?</td></tr>
+ <tr><td>Commandement</td><td>Quelles consignes, quels objectifs, quels moyens et quel contrôle ont été décidés ?</td></tr>
+ <tr><td>Institution</td><td>Les procédures de prévention, de contrôle et de correction ont-elles fonctionné ?</td></tr>
+ </tbody></table>
+ <p>Les décisions et avis du Défenseur des droits doivent être distingués des décisions pénales : une constatation déontologique n'est pas une condamnation pénale. Les allégations relatives aux secours doivent également être examinées séparément et selon leur niveau de preuve.</p>
+</section>
+
+<section id="vichy">
+ <h2>5. Vichy : division des tâches et déresponsabilisation</h2>
+ <p>Sous le régime de Vichy, l'administration française et la police ont participé à la politique antisémite et aux arrestations qui ont conduit à la déportation de Juifs. La rafle du Vélodrome d'Hiver, les 16 et 17 juillet 1942, constitue un événement majeur de cette participation.</p>
+ <h3>Ce que l'histoire permet d'étudier</h3>
+ <ul>
+  <li>La division administrative des tâches et la chaîne de décision.</li>
+  <li>L'obéissance hiérarchique et les marges de choix des exécutants.</li>
+  <li>La banalisation des actes et le déplacement de responsabilité vers d'autres services.</li>
+  <li>Les choix politiques, les initiatives administratives, la collaboration volontaire, mais aussi les résistances et les actes de protection.</li>
+ </ul>
+ <div class="callout"><strong>Limite impérative du parallèle :</strong> la participation de l'État français à une politique de persécution et de déportation relève d'une réalité historique et criminelle radicalement différente des interventions policières dans une démocratie contemporaine. La comparaison porte uniquement sur la question générale de la responsabilité individuelle au sein d'une organisation.</div>
+</section>
+
+<section id="psy">
+ <h2>6. Frustration, agressivité et escalade</h2>
+ <p>La frustration ne conduit pas automatiquement à la violence. Elle peut devenir un facteur parmi d'autres, en interaction avec le stress, les normes du groupe, la perception de menace, la fatigue et les décisions opérationnelles.</p>
+ <div class="grid">
+  <div class="card"><strong>Chez les policiers</strong>Fatigue, stress, sentiment de menace, pression opérationnelle, cohésion du groupe et soutien hiérarchique.</div>
+  <div class="card"><strong>Chez les lycéens</strong>Sentiment d'injustice, peur, humiliation, colère, impression de ne pas être entendus et inquiétude face aux interventions.</div>
+ </div>
+ <h3>Modèle d'escalade à vérifier</h3>
+ <div class="flow">
+  <div>Tension initiale : revendication, frustration ou sentiment de menace</div><b>↓</b>
+  <div>Interprétation hostile des intentions de l'autre groupe</div><b>↓</b>
+  <div>Réactions collectives et pression des pairs</div><b>↓</b>
+  <div>Confrontation, blessures ou humiliations</div><b>↓</b>
+  <div>Défiance accrue et risque de nouvelles confrontations</div>
+ </div>
+ <p>Ce schéma est un modèle explicatif, pas une causalité automatique. Il faut établir, pour chaque événement, quelles étapes sont réellement documentées.</p>
+</section>
+
+<section id="ennemi">
+ <h2>7. Fabrication de l'ennemi et désengagement moral</h2>
+ <p>La catégorisation peut conduire à réduire une personne à son appartenance supposée : « casseur », « gauchiste », « policier », « ennemi de l'ordre public ». Le risque est d'attribuer à tout un groupe les actes de certains de ses membres.</p>
+ <ul>
+  <li><strong>Généralisation :</strong> imputer à tous les actes de quelques-uns.</li>
+  <li><strong>Déshumanisation :</strong> ne plus considérer l'autre comme une personne singulière.</li>
+  <li><strong>Justification morale :</strong> présenter un acte comme nécessaire à une cause supérieure.</li>
+  <li><strong>Déplacement de responsabilité :</strong> attribuer l'acte à l'ordre reçu ou au comportement du groupe adverse.</li>
+ </ul>
+ <p>Les travaux d'Albert Bandura sur le désengagement moral permettent d'étudier ces mécanismes. Ils ne permettent pas de diagnostiquer les motivations d'une personne sans éléments propres à son comportement.</p>
+</section>
+
+<section id="responsabilites">
+ <h2>8. Responsabilités individuelles, hiérarchiques et politiques</h2>
+ <h3>Responsabilité de l'agent</h3>
+ <p>Le Code de la sécurité intérieure encadre l'usage de la force. L'article R. 434-18 prévoit notamment qu'elle ne peut être employée que lorsqu'elle est nécessaire et proportionnée au but à atteindre ou à la gravité de la menace, sous réserve des règles particulières applicables à l'usage des armes.</p>
+ <h3>Responsabilité hiérarchique</h3>
+ <p>Il faut établir les ordres effectivement donnés, les consignes écrites ou orales, les moyens mis à disposition, le contrôle exercé et les réactions après les incidents. Un supérieur n'est pas automatiquement pénalement responsable de tout acte commis par un agent : les conditions juridiques de chaque responsabilité doivent être démontrées.</p>
+ <h3>Obéissance et ordre manifestement illégal</h3>
+ <p>L'article L. 121-10 du Code général de la fonction publique prévoit l'obéissance hiérarchique, avec une exception lorsque l'ordre est manifestement illégal et de nature à compromettre gravement un intérêt public.</p>
+ <h3>Responsabilité politique</h3>
+ <p>Pour établir un éventuel laisser-faire, il faut rechercher ce que les autorités savaient, à quel moment elles en ont été informées, quels pouvoirs d'action elles détenaient et quelles mesures elles ont prises ou omises. L'absence de condamnation publique d'un incident ne suffit pas à démontrer une volonté de laisser faire.</p>
+</section>
+
+<section id="medias">
+ <h2>9. Médias, images et construction de l'opinion</h2>
+ <ul>
+  <li>Une vidéo peut aider à établir une chronologie, mais une séquence partielle peut omettre le contexte.</li>
+  <li>Les images doivent être conservées dans leur format original, horodatées et recoupées avec d'autres sources.</li>
+  <li>Les déclarations officielles initiales doivent être comparées aux conclusions ultérieures des enquêtes.</li>
+  <li>La sélection des images et témoignages peut donner une vision partielle des événements.</li>
+ </ul>
+</section>
+
+<section id="democratie">
+ <h2>10. Conséquences démocratiques et sociales</h2>
+ <p>Les effets à examiner comprennent la confiance dans la police et la justice, le rapport des jeunes aux institutions, la liberté de manifestation, la sécurité des personnes et le risque de banalisation de la violence. Ces conséquences doivent être mesurées à partir d'enquêtes, de données d'opinion et de travaux scientifiques, et non simplement présumées.</p>
+</section>
+
+<section id="conclusion">
+ <h2>11. Conclusion : les questions décisives</h2>
+ <ol>
+  <li>Quelles violences sont objectivement établies et à quel degré de preuve ?</li>
+  <li>Quels mécanismes de groupe ont influencé les comportements ?</li>
+  <li>Quelle est la responsabilité des agents concernés ?</li>
+  <li>Quelles responsabilités peuvent être établies au niveau du commandement et de l'institution ?</li>
+  <li>Les autorités ont-elles pris des mesures adaptées après avoir été informées des incidents ?</li>
+  <li>Quelles réformes et garanties permettraient de prévenir leur répétition ?</li>
+ </ol>
+ <p class="lead"><strong>La question ne consiste pas seulement à savoir qui a porté un coup, lancé une grenade ou donné un ordre. Elle consiste aussi à déterminer qui savait, qui pouvait agir, qui devait contrôler et qui a effectivement assumé ses responsabilités.</strong></p>
+</section>
+
+<section id="sources">
+ <h2>12. Sources et bibliographie de référence</h2>
+ <p>Les liens ci-dessous donnent accès aux institutions, textes et ressources de référence. Pour une publication définitive, chaque chiffre ou événement précis doit être relié à la page exacte du rapport, de la décision ou de l'enquête qui l'établit.</p>
+ <h3>Institutions et droit</h3>
+ <ul>
+  <li><a href="https://www.defenseurdesdroits.fr/" target="_blank" rel="noopener">Défenseur des droits</a> — déontologie des forces de sécurité et décisions relatives aux opérations de maintien de l'ordre.</li>
+  <li><a href="https://www.assemblee-nationale.fr/" target="_blank" rel="noopener">Assemblée nationale</a> — rapports et commissions d'enquête, notamment sur le maintien de l'ordre.</li>
+  <li><a href="https://www.senat.fr/" target="_blank" rel="noopener">Sénat</a> — rapports parlementaires et travaux de contrôle.</li>
+  <li><a href="https://www.legifrance.gouv.fr/codes/texte_lc/LEGITEXT000025503132/" target="_blank" rel="noopener">Code de la sécurité intérieure</a> — règles déontologiques des forces de sécurité.</li>
+  <li><a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044427901" target="_blank" rel="noopener">Code général de la fonction publique, article L. 121-10</a> — obéissance hiérarchique et ordre manifestement illégal.</li>
+  <li><a href="https://www.cncdh.fr/" target="_blank" rel="noopener">Commission nationale consultative des droits de l'homme</a>.</li>
+  <li><a href="https://www.interieur.gouv.fr/" target="_blank" rel="noopener">Ministère de l'Intérieur</a> — bilans et communications officielles.</li>
+  <li><a href="https://www.justice.gouv.fr/" target="_blank" rel="noopener">Ministère de la Justice</a> — données judiciaires et statistiques.</li>
+ </ul>
+ <h3>Organisations indépendantes et presse</h3>
+ <ul>
+  <li><a href="https://www.amnesty.fr/" target="_blank" rel="noopener">Amnesty International France</a>.</li>
+  <li><a href="https://www.ldh-france.org/" target="_blank" rel="noopener">Ligue des droits de l'Homme</a>.</li>
+  <li><a href="https://www.mediapart.fr/" target="_blank" rel="noopener">Mediapart</a> — enquêtes et documentation journalistique.</li>
+  <li><a href="https://www.lemonde.fr/" target="_blank" rel="noopener">Le Monde</a> — chronologies et enquêtes à recouper avec les documents originaux.</li>
+ </ul>
+ <h3>Références scientifiques et historiques</h3>
+ <ul>
+  <li>Clifford Stott et Steve Reicher — recherches sur l'identité sociale, les foules et les interactions avec la police.</li>
+  <li>Albert Bandura — travaux sur le désengagement moral.</li>
+  <li>Stanley Milgram — recherches sur l'obéissance à l'autorité, à replacer dans leur contexte méthodologique.</li>
+  <li>Simon Kitson — travaux historiques sur la police française sous Vichy.</li>
+  <li><a href="https://www.memorialdelashoah.org/" target="_blank" rel="noopener">Mémorial de la Shoah</a> — ressources historiques sur les persécutions et les déportations.</li>
+ </ul>
+ <div class="callout"><strong>État documentaire :</strong> cette page constitue une synthèse structurée et un cadre d'analyse. Elle ne prétend pas être un audit exhaustif du blocus lycéen de 2026. Les chiffres, dates, blessures et conclusions d'enquête spécifiques à 2026 doivent être vérifiés sur leurs documents primaires avant toute diffusion comme faits établis.</div>
+</section>
+</main>
+<footer>
+ <p>Document de travail — Analyse factuelle, contradictoire et évolutive. Dernière date de référence indiquée : 10 novembre 2026.</p>
+ <p>Conseil : conserver les liens vers les documents originaux et noter pour chaque donnée sa date, son périmètre, sa définition et son statut judiciaire.</p>
+</footer>
+<button id="top" type="button" aria-label="Retour en haut de la page" title="Retour en haut">&#8593;</button>
+<script>
+(function(){
+  var b=document.getElementById("top");
+  function maj(){ b.classList.toggle("show",(window.pageYOffset||document.documentElement.scrollTop)>300); }
+  window.addEventListener("scroll",maj,{passive:true});
+  b.addEventListener("click",function(){ window.scrollTo({top:0,behavior:"smooth"}); });
+  maj();
+})();
+</script>
+<script>
+/* Lecture à voix haute avec la synthèse vocale du navigateur (aucun fichier audio) */
+(function(){
+  var be=document.getElementById("ecouter"), br=document.getElementById("resumebtn"), pan=document.getElementById("resume");
+  var tok=0, cur=null;
+  if(!("speechSynthesis" in window)){
+    [be,br].forEach(function(b){ b.disabled=true; b.title="Lecture vocale non disponible sur ce navigateur"; });
+    return;
+  }
+  function chunks(t){
+    var out=[];
+    t.replace(/[\u2193\u2191]/g," ").split(/\n+/).forEach(function(l){
+      l=l.replace(/\s+/g," ").trim(); if(!l) return;
+      l.split(/(?<=[.!?;:])\s+/).forEach(function(p){
+        while(p.length>220){ var i=p.lastIndexOf(" ",220); if(i<60) i=220; out.push(p.slice(0,i)); p=p.slice(i).trim(); }
+        if(p) out.push(p);
+      });
+    });
+    return out;
+  }
+  function label(){
+    be.classList.toggle("on",cur==="full"); be.setAttribute("aria-pressed",cur==="full");
+    be.innerHTML=cur==="full"?"&#9632; Arrêter":"&#9654; Écouter";
+    br.classList.toggle("on",cur==="sum"); br.setAttribute("aria-pressed",cur==="sum");
+    br.innerHTML=cur==="sum"?"&#9632; Arrêter":"Résumé";
+  }
+  function stop(){ tok++; cur=null; speechSynthesis.cancel(); label(); }
+  function say(list,which){
+    stop(); var my=tok; cur=which; label();
+    var v=speechSynthesis.getVoices().filter(function(x){ return /^fr/i.test(x.lang); })[0], i=0;
+    (function next(){
+      if(my!==tok) return;
+      if(i>=list.length){ cur=null; label(); return; }
+      var u=new SpeechSynthesisUtterance(list[i++]);
+      u.lang="fr-FR"; if(v) u.voice=v; u.rate=1;
+      u.onend=next; u.onerror=function(){ if(my===tok){ cur=null; label(); } };
+      speechSynthesis.speak(u);
+    })();
+  }
+  be.addEventListener("click",function(){
+    if(cur==="full") return stop();
+    var t=document.querySelector("header .hero").innerText+"\n"+document.querySelector("main").innerText;
+    say(chunks(t),"full");
+  });
+  br.addEventListener("click",function(){
+    if(cur==="sum"){ stop(); pan.hidden=true; return; }
+    pan.hidden=false;
+    say(chunks(document.getElementById("resumetxt").innerText.replace(/^Résumé\s*/,"Résumé. ")),"sum");
+  });
+  window.addEventListener("pagehide",stop);
+})();
+</script>
+</body>
+</html>

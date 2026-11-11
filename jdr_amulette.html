@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>jdr_amulette.py</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{
+  --kw:#ff79c6;--str:#f1fa8c;--fn:#50fa7b;--cy:#8be9fd;--pu:#bd93f9;--or:#ffb86c;--cm:#6272a4;--tx:#f8f8f2;
+  --red:#ff5555;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#000}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;min-height:100vh;background:#000;color:var(--tx);
+  font-family:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,Menlo,monospace;
+  font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5;
+}
+.wrap{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--cm);font-size:.9em}
+.plus-link{
+  flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  color:var(--fn);border:1px solid var(--cm);border-radius:8px;font-size:1.4rem;font-weight:700;line-height:1;text-decoration:none;
+}
+.plus-link:hover{background:#1c1f2b;border-color:var(--fn)}
+.plus-link:focus-visible,a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--cy);outline-offset:-2px}
+.code{padding:10px 0 16px;counter-reset:l}
+.row{
+  display:flex;align-items:baseline;gap:14px;margin:0;padding:3px 14px;
+  font:inherit;font-weight:400;color:var(--tx);text-decoration:none;overflow-wrap:anywhere;
+}
+.row::before{counter-increment:l;content:counter(l);flex:none;width:2ch;text-align:right;color:#4b5263;user-select:none}
+.src{min-width:0}
+.kw{color:var(--kw)}.fn{color:var(--fn)}.cy{color:var(--cy)}.pu{color:var(--pu)}.or{color:var(--or)}
+.cm{color:var(--cm);font-style:italic}.s{color:var(--str)}
+a.lnk{color:var(--fn);text-decoration:underline}
+a.lnk:hover{background:#1c1f2b}
+
+:root{--pn:#121216;--bd:#2a2d35}
+.pad{padding:4px 14px 16px}
+#st{display:flex;flex-direction:column;background:var(--pn);border:1px solid var(--bd);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.9em}
+#st span{white-space:pre-wrap}#st i{color:var(--tx);font-style:normal}#st .k{color:var(--cy)}.n{color:var(--pu);font-weight:400}
+#jr details{background:var(--pn);border:1px solid var(--bd);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.9em;color:var(--cm)}
+#jr summary{cursor:pointer}#jr p{margin:6px 0;color:var(--str)}#jr p::before{content:'"';color:var(--str)}#jr p::after{content:'",';color:var(--str)}
+#im{border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:10px;line-height:0}
+#im::before{content:"# affichage de la scène";display:block;line-height:1.6;padding:4px 10px;color:var(--cm);font-style:italic;font-size:.85em;border-bottom:1px solid var(--bd);background:#16161a}
+#im svg{width:100%;height:auto;display:block}
+#im svg *{pointer-events:none}#im .z,#im .z *{pointer-events:auto}
+.z{cursor:pointer;transition:filter .15s}.z:hover,.z:active{filter:brightness(1.5)}
+.lb{font:bold 11px "JetBrains Mono","Courier New",monospace;fill:#fff;stroke:#000;stroke-width:3px;paint-order:stroke;text-anchor:middle}
+.em{font-size:22px;text-anchor:middle}.bg{font-size:54px;text-anchor:middle}
+#tx{background:var(--pn);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;color:var(--str);white-space:pre-wrap}
+#tx::before{content:'print("""';display:block;color:var(--fn)}
+#tx::after{content:'""")';display:block;color:var(--fn)}
+#lg{color:var(--cm);font-style:italic;margin:8px 2px;min-height:1.5em}
+#lg:not(:empty)::before{content:"# "}
+#ch button{display:block;width:100%;text-align:left;margin:6px 0;padding:9px 12px;font:inherit;color:var(--tx);background:transparent;border:1px solid var(--bd);border-left:3px solid var(--bd);border-radius:8px;cursor:pointer;touch-action:manipulation}
+#ch button:hover,#ch button:focus-visible{background:#1c1f2b;border-color:var(--fn);color:var(--tx)}
+@media (prefers-reduced-motion:reduce){.z{transition:none}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="win">
+    <div class="bar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="file">jdr_amulette.py</span>
+      <a class="plus-link" href="index.html" aria-label="Retour à l’accueil" title="Accueil">←</a>
+    </div>
+    <div class="code">
+      <div class="row"><span class="src"><span class="kw">import</span> <span class="cy">random</span></span></div>
+      <div class="row"><span class="src"><span class="kw">from</span> <span class="cy">index</span> <span class="kw">import</span> <a class="lnk" href="index.html">accueil</a></span></div>
+      <div class="row"><span class="src">&nbsp;</span></div>
+      <div class="row"><span class="src cm"># L’Amulette d’Aube : la grande quête</span></div>
+    </div>
+    <div class="pad">
+      <div id="st"></div>
+      <div id="jr"></div>
+      <div id="im"></div>
+      <div id="tx"></div>
+      <div id="lg"></div>
+      <div id="ch"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const R=n=>Math.floor(Math.random()*n),d=n=>1+R(n),pick=a=>a[R(a.length)],$=i=>document.getElementById(i);
+let G;
+const CLS={g:["Guerrier","⚔️",2,0,1,24,[]],r:["Rôdeur","🏹",1,2,0,20,[]],m:["Mage","🔮",0,1,2,16,["potion"]],c:["Clerc","✝️",1,0,2,20,["potion"]]};
+const AL={nain:"fo",elfe:"ru",barde:"es",moine:"es",eclaireur:"ru",garde:"fo"};
+const AN={nain:"Brokk le nain",elfe:"Lyra l’elfe",barde:"Jorin le barde",moine:"frère Alder",eclaireur:"l’éclaireur Pip",garde:"le garde Tomas"};
+const MON={loup:["Meute de loups","🐺",9,4],araignee:["Araignée géante","🕷️",12,5],drake:["Dragonnet","🐉",16,6],crapaud:["Crapaud géant","🐸",12,5],golem:["Golem","🗿",18,6],brigand:["Brigands","🗡️",12,5],chef:["Chef brigand","🪓",18,6],squelette:["Squelettes","💀",12,5],spectre:["Spectre","👻",14,5],garde:["Garde noir","🛡️",16,6],boss:["Malgor","🧙",28,8]};
+const NM={fo:"Force",ru:"Ruse",es:"Esprit"};
+// choix : [libellé, icône, stat, difficulté, texte réussite, effets réussite, texte échec, effets échec, condition]
+const TR=[
+["Un marchand ambulant déballe ses étals au bord de la route.",[["Acheter une potion (5 or)","🧪","",0,"Vous repartez avec une potion.|Il ajoute un talisman « porte-bonheur » pour le même prix.|La potion est trouble, mais elle fonctionne.","or-5 it:potion|or-5 it:potion it:talisman|or-5 it:potion","","","or5"],["Marchander","💬","es",12,"Il cède : potion pour 1 or !|Il vous vend pour 1 or une carte griffonnée : « Les éclats brillent plus fort la nuit, près de l’eau et des pierres. »","or-1 it:potion|or-1 ix:carte","Il s’énerve et vous tourne le dos.|Il vous prend 2 pièces pour le dérangement.","|or-2"],["Passer votre chemin","👣","",0,"Vous poursuivez votre route.|Un enfant vous crie : « Méfiez-vous des feux dans les marais ! »",""]]],
+["Un voyageur blessé gît dans le fossé.",[["Le soigner","🩹","",0,"Il vous remercie et glisse quelques pièces dans votre main.|Avant de s’évanouir, il murmure : « Sous la tour, côté marais, une porte que Malgor a oubliée. »|Il vous offre un talisman : « Il m’a porté chance. »","ho+1 pv-1 or+3|ho+1 pv-1 ix:passage|ho+1 pv-1 it:talisman"],["Le dépouiller","💰","",0,"Vous prenez sa bourse. Il vous maudit.|Il s’éveille et vous mord la main avant de s’enfuir.","ho-2 or+8|ho-2 or+6 pv-2"],["L’ignorer","🚶","",0,"Vous passez sans un regard.|Plus loin, ses appels s’éteignent dans le vent.","ho-1|ho-1"]]],
+["Une meute de loups vous suit depuis l’aube.",[["Les affronter","⚔️","",0,"Les loups attaquent !|Le chef de meute bondit le premier !","fi:loup|fi:loup or+4"],["Les semer","🏃","ru",12,"Vous brouillez votre piste.|Vous les égarez dans un ruisseau.","","Ils vous rattrapent et mordent.|Ils vous encerclent : vous sacrifiez 3 pièces.","pv-4|or-3"],["Allumer un grand feu","🔥","es",11,"Les loups n’osent pas approcher.|Dans la lueur, vous lisez des runes gravées sur un rocher : « Le golem d’Orn s’endort au mot Aurore. »","|ix:mot","Le feu attire autre chose…|Les braises s’éteignent trop vite.","pv-2|pv-1"]]],
+["Un gué dangereux barre la route.",[["Traverser prudemment","🌊","ru",11,"Vous franchissez sans encombre.|Au fond de l’eau, une pièce brille : vous la ramassez.","|or+2","Vous glissez et perdez du matériel.|Un tourbillon vous retourne.","pv-3 or-3|pv-4"],["Chercher un autre passage","🧭","",0,"Le détour est long, mais sûr.|Le détour vous mène chez un pêcheur qui vous offre le repas.|Vous croisez des pillards qui vous ignorent.","|pv+2|"],["Tenir l’équipement à bout de bras","💪","fo",12,"Force et équilibre : vous passez.|Vous portez même un enfant perdu sur l’autre rive.","|ho+1","Le courant vous emporte un instant.|Vous perdez une botte.","pv-4|pv-2 or-2"]]],
+["Une auberge isolée allume ses lanternes.",[["Dormir (3 or)","🛏️","",0,"Vous dormez comme un loir.|Un rêve étrange vous montre la tour de Malgor et une porte du côté des marais.|Vous dormez mal, mais vous récupérez.","or-3 pv+5|or-3 pv+5 ix:passage|or-3 pv+3","","","or3"],["Jouer aux dés","🎲","es",11,"La chance vous sourit : 8 pièces !|Un vieux joueur perd 10 pièces et vous souffle : « Malgor tremble devant la lumière pure des éclats. »","or+8|or+10 ix:faille","Vous perdez 5 pièces.|On vous accuse de tricher.","or-5|or-3 ho-1"],["Écouter les rumeurs","👂","",0,"On parle d’éclats d’aube dispersés dans le royaume.|Un barde chante : « Malgor s’appelait Aldric, avant la nuit. »|Un ivrogne répète : « Le golem d’Orn s’éteint au mot Aurore. »","|ix:nom|ix:mot"]]],
+["Un mendiant aux yeux clairs vous tend la main.",[["Donner une pièce","🪙","",0,"Il referme la main : « On dit que Malgor s’appelait Aldric. Les pauvres de Valmar l’aimaient. »|Il rit et vous offre un bouton d’os : « Il protège des mauvais présages. »|Il vous bénit d’un geste distrait. Vous vous sentez plus léger.|Il murmure : « La lumière pure des éclats fait trembler l’ombre, voyageur. »","or-1 ho+1 ix:nom|or-1 ho+1 it:talisman|or-1 ho+2|or-1 ho+1 ix:faille","","","or1"],["Le repousser","✋","",0,"Il disparaît entre deux pas.|Il vous lance : « Même l’ombre a un nom, et tu ne l’apprendras pas. »|Il crache à vos pieds.","ho-1|ho-1|ho-1"],["L’interroger","❓","es",12,"Il murmure un secret sur la tour de Malgor.|« Les éclats brillent plus fort la nuit, près de l’eau et des pierres. »|« Sous la tour, côté marais, une porte oubliée. »","es+1|ix:carte|ix:passage","Il se tait et s’évanouit.|Il rit : « Les secrets se paient, voyageur. »","|"]]]];
+const RG={
+foret:{n:"Forêt des Murmures",ic:"🌲",th:"foret",ev:[
+["Des elfes sylvestres vous observent depuis les branches.",[["Les saluer en elfique","🧝","es",12,"Une archère descend vous rejoindre.","al:elfe ho+1","Ils éclatent de rire et disparaissent.",""],["Les menacer","🏹","",0,"Des flèches tombent à vos pieds.","ho-2 pv-3"],["Les ignorer","👣","",0,"Vous continuez.",""]]],
+["Une araignée géante a tissé sa toile en travers du sentier.",[["La combattre","⚔️","",0,"Elle se jette sur vous !","fi:araignee"],["Brûler la toile","🔥","ru",11,"La toile flambe : un cadavre y cachait 7 pièces.","or+7","Les flammes vous brûlent la main.","pv-3"],["Contourner","↩️","",0,"Le détour est long, mais sûr.","pv-1"]]],
+["Au cœur de la forêt, un arbre antique porte un éclat lumineux dans son écorce.",[["Dialoguer avec l’arbre","🌳","es",13,"L’arbre vous offre l’éclat.","re+1 ho+1","Les branches vous fouettent.","pv-3"],["Entailler l’écorce","🪓","fo",13,"Vous arrachez l’éclat.","re+1 ho-2","La hache rebondit et vous blesse.","pv-4"],["Chercher entre les racines","🔍","ru",12,"Un éclat gît dans la terre.","re+1","Rien, sinon de la boue.","","","carte"]]]]},
+mont:{n:"Monts Gris",ic:"⛰️",th:"mont",ev:[
+["Un éboulement obstrue le col.",[["Déblayer","💪","fo",12,"Vous dégagez un passage et trouvez 4 pièces.","or+4","Les pierres vous écrasent les doigts.","pv-3"],["Escalader la paroi","🧗","ru",12,"Vous passez par le haut.","","Vous glissez.","pv-4"],["Attendre un guide","⏳","",0,"Un berger finit par vous montrer un sentier.",""]]],
+["Un nain pris sous un rocher appelle à l’aide.",[["Soulever le rocher","💪","fo",11,"Le nain, reconnaissant, se joint à vous.","al:nain ho+1","Le rocher vous échappe.","pv-3"],["Le laisser là","🚶","",0,"Ses cris vous poursuivent longtemps.","ho-2"],["Fouiller ses poches","💰","",0,"Vous prenez 8 pièces.","or+8 ho-3"]]],
+["Un dragonnet couve un éclat doré au fond d’une grotte.",[["Le combattre","⚔️","",0,"Le dragonnet crache des flammes !","re+1 fi:drake"],["Voler l’éclat","🥷","ru",13,"Vous repartez sans bruit avec l’éclat.","re+1","Il se réveille !","re+1 fi:drake","","carte"],["Apaiser la bête","🎶","es",14,"Il vous laisse l’éclat.","re+1 ho+1","Il hurle et vous brûle.","pv-5"]]]]},
+marais:{n:"Marais Pâles",ic:"🐸",th:"marais",ev:[
+["Une sorcière des marais vous offre un breuvage fumant.",[["Le boire","🍵","es",10,"La potion vous fortifie.","pv+6 fo+1","Elle était amère : vous êtes malade.","pv-5"],["Marchander","💬","es",12,"Elle vous paie un service : 10 pièces.","or+10","Elle se vexe et vous lance un sort.","pv-3"],["Refuser","✋","",0,"Elle ricane.",""]]],
+["Des feux follets vous attirent hors du sentier.",[["Les suivre","✨","ru",12,"Ils mènent à un trésor : 8 pièces.","or+8","Vous vous enlisez.","pv-4"],["Rester sur le sentier","🧭","",0,"Vous gardez la tête froide.",""],["Les chasser","🔥","es",11,"Vous brisez leur sortilège.","es+1","Ils vous embrouillent l’esprit.","pv-2"]]],
+["Un crapaud géant garde un éclat dans sa gueule.",[["L’affronter","⚔️","",0,"Il bondit !","re+1 fi:crapaud"],["Lui faire lâcher l’éclat","💬","es",13,"Il recrache l’éclat, docile.","re+1","Sa langue vous gifle.","pv-3"],["L’endormir d’une berceuse","🎶","ru",13,"Il s’endort, vous prenez l’éclat.","re+1","Il se réveille furieux.","re+1 fi:crapaud","","carte"]]]]},
+ruines:{n:"Ruines d’Orn",ic:"🏛️",th:"ruines",ev:[
+["Un golem de pierre s’éveille au centre de la cour.",[["Le combattre","⚔️","",0,"Les pierres grondent !","fi:golem"],["Résoudre l’énigme gravée","📜","es",13,"Le golem se rendort. Un coffre s’ouvre : 10 pièces.","or+10","Il frappe !","pv-4","","mot"],["Se faufiler","🥷","ru",13,"Vous passez dans son dos.","","Il vous attrape.","pv-4"]]],
+["Des pillards fouillent déjà les ruines.",[["Les attaquer","⚔️","",0,"Ils dégainent !","ho+1 fi:brigand"],["Négocier un partage","🤝","es",12,"Vous partagez 6 pièces.","or+6","Ils ricanent.","pv-2"],["Vous joindre à eux","💰","",0,"Le butin est maigre mais bien réel.","ho-2 or+8"]]],
+["Une salle scellée abrite un piédestal où luit un éclat.",[["Déjouer le piège","🔧","ru",13,"Le mécanisme cède : vous prenez l’éclat.","re+1","Des fléchettes jaillissent.","pv-4","","carte"],["Forcer la porte","💪","fo",13,"La porte vole en éclats.","re+1 pv-1","Vous vous démettez l’épaule.","pv-4"],["Déchiffrer les runes","📜","es",13,"Les runes s’éteignent : l’éclat est à vous.","re+1","Les runes brûlent vos yeux.","pv-3"]]]]},
+ville:{n:"Cité de Valmar",ic:"🏰",th:"ville",ev:[
+["Dans la cité de Valmar, un capitaine recrute pour la patrouille.",[["Se porter volontaire","🛡️","fo",11,"Le capitaine vous confie un garde en renfort.","al:garde ho+1","Il vous juge trop frêle.",""],["Offrir vos services contre de l’or","💰","",0,"La paie est modeste : 6 pièces.","or+6"],["Passer","🚶","",0,"Vous traversez la place.",""]]],
+["Un voleur à la tire vise votre bourse.",[["L’attraper","🤚","ru",12,"Vous le plaquez au sol ; il avoue tout.","ho+1 or+3","Il file avec 5 pièces.","or-5"],["Le laisser faire","👀","",0,"Il disparaît avec 4 pièces.","or-4"],["Le recruter","🤝","es",13,"Il devient votre éclaireur.","al:eclaireur","Il rit et s’enfuit.",""]]],
+["Un érudit collectionne les reliques, dont un éclat d’aube.",[["Acheter l’éclat (15 or)","🪙","",0,"Marché conclu.","or-15 re+1","","","or15"],["Le convaincre","📖","es",14,"Il vous le confie pour la bonne cause.","re+1 ho+1","Il vous met à la porte.","","","carte"],["Le voler la nuit","🥷","ru",14,"Vous repartez avec l’éclat.","re+1 ho-2","La garde vous rattrape.","pv-4 or-5"]]]]},
+cote:{n:"Côte des Brumes",ic:"🌊",th:"cote",ev:[
+["Un pêcheur propose de vous mener en barque jusqu’à l’île aux Brumes.",[["Accepter (2 or)","⛵","",0,"La traversée est paisible.","or-2 pv+2","","","or2"],["Négocier le prix","💬","es",11,"Il vous emmène gratuitement.","pv+2","Il refuse net.",""],["Décliner","👣","",0,"Vous restez sur la rive.",""]]],
+["Des pirates échoués bradent leur butin.",[["Acheter une lame (8 or)","🗡️","",0,"La lame est excellente.","or-8 fo+1","","","or8"],["Les attaquer","⚔️","",0,"Ils dégainent !","or+10 ho-1 fi:brigand"],["Ignorer","🚶","",0,"Vous passez votre chemin.",""]]],
+["Une sirène garde une perle qui renferme un éclat d’aube.",[["La charmer","🎶","es",13,"Elle vous offre la perle.","re+1 ho+1","Elle vous noie à moitié.","pv-4"],["Plonger la prendre","🏊","ru",13,"Vous saisissez la perle.","re+1","Le courant vous épuise.","pv-3","","carte"],["Offrir 10 pièces","🪙","",0,"Elle accepte votre offrande.","or-10 re+1","","","or10"]]]]},
+crypte:{n:"Crypte oubliée",ic:"💀",th:"crypte",ev:[
+["Des squelettes sortent de leurs niches.",[["Les combattre","⚔️","",0,"Les os claquent !","fi:squelette"],["Les bénir","🙏","es",12,"Ils retombent en poussière. Vous ramassez 6 pièces.","or+6 ho+1","Ils ricanent d’un rire sec.","pv-3"],["Fuir","🏃","ru",11,"Vous courez sans vous retourner.","","Un squelette vous frappe.","pv-3"]]],
+["Un coffre piégé repose sur un autel.",[["Crocheter","🔧","ru",12,"Le coffre contient 12 pièces.","or+12","Le piège vous blesse.","pv-5"],["Forcer","💪","fo",12,"Le couvercle cède : 12 pièces.","or+12","Des dards empoisonnés vous touchent.","pv-5"],["Le laisser","🚶","",0,"La prudence l’emporte.",""]]],
+["Un spectre garde un sarcophage où luit un éclat.",[["Combattre le spectre","⚔️","",0,"Il hurle !","re+1 fi:spectre"],["L’apaiser","🙏","es",14,"Le spectre murmure un adieu et vous laisse l’éclat.","re+1 ho+1","Son cri glace votre sang.","pv-5"],["Subtiliser l’éclat","🥷","ru",14,"Vous prenez l’éclat sans bruit.","re+1 ho-1","Il se déchaîne.","re+1 fi:spectre","","carte"]]]]},
+camp:{n:"Camp des brigands",ic:"⛺",th:"camp",ev:[
+["Une bande de brigands fête un pillage autour d’un grand feu.",[["Infiltrer le camp","🥷","ru",12,"Vous repartez avec 10 pièces.","or+10","On vous repère !","fi:brigand"],["Parlementer","🤝","es",12,"Ils vous offrent 5 pièces pour passer.","or+5","Ils rient de vous.","pv-2"],["Attaquer","⚔️","",0,"Les brigands se ruent sur vous !","or+8 fi:brigand"]]],
+["Un prisonnier est enchaîné à un poteau.",[["Le libérer discrètement","🔓","ru",11,"Un éclaireur reconnaissant vous suit.","al:eclaireur ho+1","Les chaînes cliquettent.","pv-3"],["Négocier sa libération (5 or)","🤝","",0,"Les brigands acceptent.","or-5 al:eclaireur ho+1","","","or5"],["L’ignorer","🚶","",0,"Son regard vous suit.","ho-1"]]],
+["Le chef brigand porte un éclat d’aube en pendentif.",[["Le défier en duel","🪓","",0,"Il accepte !","re+1 fi:chef"],["Voler le pendentif","🥷","ru",14,"Il dort : l’éclat est à vous.","re+1 ho-1","Il vous surprend.","re+1 fi:chef","","carte"],["Marchander (10 or)","💬","",0,"Il vous le vend.","or-10 re+1","","","or10"]]]]}};
+const CAMP=["Vous dressez le camp. La nuit est fraîche.",[["Dormir profondément","😴","",0,"Vous reprenez des forces.|Vous rêvez d’un homme en larmes qui murmure son vrai nom : Aldric.|Une nuit agitée, mais réparatrice.","pv+6|pv+6 ix:nom|pv+4"],["Veiller et réviser vos plans","📖","",0,"Vous méditez sur votre quête.|Dans les étoiles, vous croyez voir la tour et une porte du côté du marais.|Un hibou vous réveille : vous apprenez à écouter la nuit.","pv+3 es+1|pv+3 ix:passage|pv+3 ru+1"],["Partager un repas avec vos compagnons","🍲","",0,"Le feu réchauffe les cœurs.|Un compagnon raconte : « On dit que Malgor craint la lumière pure des éclats. »|Vous riez ensemble et le moral remonte.","pv+4 ho+1|pv+4 ho+1 ix:faille|pv+5","","","al1"]]];
+const TWI={
+foret:[["carte","Un cerf blanc vous observe puis boit à la source. Les éclats, dit-on, brillent plus fort la nuit, près de l’eau et des pierres."],["nom","Une vieille elfe chuchote : « Malgor s’appelait Aldric avant la nuit. »"]],
+mont:[["faille","Un ermite grommelle : « Malgor tremble devant la lumière pure des éclats. »"],["passage","Une gravure sur un pic : « Sous la tour, côté marais, une porte oubliée. »"]],
+marais:[["passage","Un vieux pêcheur désigne une souche : « Par là, une porte que la tour croit oubliée. »"],["faille","Les feux follets dessinent un éclat en dansant : « Malgor craint la lumière des éclats. »"]],
+ruines:[["mot","Une inscription usée : « Le golem d’Orn s’endort au mot Aurore. »"],["nom","Un nom gratté sur un mur : « Aldric, mage du roi, futur Malgor. »"]],
+ville:[["nom","Au marché, une vieille dit : « Malgor s’appelait Aldric, jadis. »"],["carte","Un libraire vous glisse : « Les éclats brillent plus fort la nuit, près de l’eau et des pierres. »"]],
+cote:[["carte","Un marin marmonne : « Les éclats brillent plus fort la nuit, près de l’eau et des pierres. »"],["passage","Un pêcheur dessine dans le sable une porte et un marais : « C’est là que la tour est faible. »"]],
+crypte:[["faille","Sur un tombeau : « Malgor craint la lumière pure des éclats. »"],["mot","Sur un parchemin : « Pour éteindre le golem d’Orn, dites Aurore. »"]],
+camp:[["mot","Un brigand ivre se vante : « Le golem d’Orn s’endort au mot Aurore ! »"],["nom","Un prisonnier souffle : « Malgor s’appelait Aldric. »"]]};
+// ---------- images ----------
+const BG={foret:["#0e1a26","#1a2a22"],mont:["#1d2340","#3a3a4a"],marais:["#1a2a2a","#2a3a30"],ruines:["#1c2038","#2a2a38"],ville:["#101840","#3a3050"],cote:["#16263a","#2a4a6a"],crypte:["#0c0c14","#1c1c28"],camp:["#101820","#2a2418"],carte:["#2a2030","#4a3a40"],fin:["#ff9a4a","#ffe2a0"],mort:["#1a0808","#3a1010"]};
+const ST=[[30,20],[80,50],[130,15],[190,40],[250,22],[310,55],[370,18],[60,90],[220,80]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="${1+x%3*.4}" fill="#fff"><animate attributeName="opacity" values="1;.3;1" dur="${2+x%4}s" repeatCount="indefinite"/></circle>`).join("");
+const GR=c=>`<path d="M0 190Q100 178 200 192T400 186V240H0z" fill="${c}"/>`;
+const TRE=(x,y,s)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-4" y="-10" width="8" height="30" fill="#3b2818"/><path d="M-24 0L0-48L24 0z" fill="#1c4a2a"/><path d="M-20-18L0-64L20-18z" fill="#25613a"/><path d="M-15-36L0-78L15-36z" fill="#2e7a47"/></g>`;
+const COL=(x,y,h)=>`<rect x="${x}" y="${y}" width="22" height="${h}" fill="#9a9487"/><rect x="${x-4}" y="${y-6}" width="30" height="8" fill="#b5afa0"/>`;
+const HS=(x,y,w,h,c)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/><path d="M${x-6} ${y}L${x+w/2} ${y-h*.45}L${x+w+6} ${y}z" fill="#4a2a1c"/><rect x="${x+8}" y="${y+10}" width="10" height="13" fill="#ffd978"/>`;
+const FL=(x,y)=>`<circle cx="${x}" cy="${y-6}" r="40" fill="#ff9a2e" opacity=".3"/><path d="M${x} ${y-16}Q${x+8} ${y-4} ${x} ${y}Q${x-8} ${y-4} ${x} ${y-16}z" fill="#ff8a1e"/>`;
+const TH={
+foret:TRE(40,190,1.4)+TRE(110,200,1.1)+TRE(300,195,1.2)+TRE(370,190,1.5)+GR("#1a2e1a"),
+mont:`<path d="M0 190L70 90L120 150L200 60L280 150L330 100L400 190z" fill="#3a3d4a"/><path d="M200 60l-18 24 18-6 18 6zM70 90l-14 18 14-5 14 5z" fill="#fff"/>`+GR("#3a3d3a"),
+marais:GR("#2a3a30")+`<path d="M20 200v-40M28 200v-30M360 200v-44M370 200v-30M200 205v-26" stroke="#4f7a3a" stroke-width="3"/><ellipse cx="200" cy="200" rx="230" ry="14" fill="#dfeaf2" opacity=".14"/>`,
+ruines:COL(40,100,90)+COL(110,130,60)+COL(280,90,100)+COL(340,120,70)+GR("#3a4034"),
+ville:HS(20,140,60,50,"#7a4b32")+HS(310,130,70,60,"#6b3f2a")+`<rect x="170" y="70" width="40" height="120" fill="#4a4a5e"/><path d="M170 70v-10h8v10h8v-10h8v10h8v-10h8v10z" fill="#4a4a5e"/>`+GR("#2f4a2a"),
+cote:`<rect y="150" width="400" height="90" fill="#2e5d8a"/><path d="M0 160q50-10 100 0t100 0 100 0 100 0" stroke="#9fd0f0" fill="none"/><path d="M0 190V110l70 30v50z" fill="#4a4a40"/>`,
+crypte:`<rect width="400" height="190" fill="#14141c"/><path d="M30 200V110a40 40 0 0 1 80 0v90zM290 200V110a40 40 0 0 1 80 0v90z" fill="#050508"/>`+GR("#2a2a33"),
+camp:`<path d="M40 190l40-60 40 60zM290 190l40-60 40 60z" fill="#8a5a3a"/>`+FL(200,190)+GR("#2a2418"),
+carte:`<path d="M0 190L60 120L120 170L200 90L280 170L340 130L400 190z" fill="#4a4048"/><rect x="190" y="50" width="20" height="60" fill="#2a2030"/><path d="M190 50h20l-10-14z" fill="#8a1c1c"/>`+GR("#3a3a30"),
+fin:`<circle cx="200" cy="150" r="70" fill="#fff2b0" opacity=".6"/>`+GR("#3a5a2a"),
+mort:GR("#241010")};
+function img(th,big,opts,atk){
+ const n=opts.length,b=opts.map((o,i)=>{const x=Math.round((i+1)*400/(n+1)),l=o.l.split(" (")[0],s=l.length>15?l.slice(0,14)+"…":l;
+  return `<g class="z" data-i="${i}"><circle cx="${x}" cy="196" r="22" fill="#1b1410" stroke="#f5c542" stroke-width="2"/><text class="em" x="${x}" y="204">${o.ic}</text><text class="lb" x="${x}" y="236">${s}</text></g>`}).join("");
+ const g=BG[th]||BG.carte,bg=`<g ${atk?'class="z" data-i="0"':""}><circle cx="200" cy="100" r="46" fill="#000" opacity=".4"/><text class="bg" x="200" y="120">${big}</text></g>`;
+ return `<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x2="0" y2="1"><stop offset="0" stop-color="${g[0]}"/><stop offset="1" stop-color="${g[1]}"/></linearGradient></defs><rect width="400" height="240" fill="url(#g)"/>${th=="fin"||th=="crypte"?"":ST}${TH[th]||""}${bg}${b}</svg>`;}
+// ---------- moteur ----------
+const has=i=>G.inv.includes(i),bon=s=>G.al.filter(a=>AL[a]==s).length+(s=="es"&&has("talisman")?1:0);
+function need(c){if(!c)return true;const m=c.match(/^([a-z]{2})(\d+)$/),k=m[1],n=+m[2];return k=="or"?G.or>=n:k=="al"?G.al.length>=n:G[k]>=n}
+function fx(s){(s||"").split(" ").forEach(t=>{const m=t.match(/^([a-z]+)(?:([+-]\d+)|:(.+))$/);if(!m)return;const k=m[1],n=+m[2],v=m[3];
+ if(k=="pv")G.pv=Math.min(G.max,G.pv+n);else if(k=="or")G.or=Math.max(0,G.or+n);else if(k=="ho")G.ho=Math.max(-6,Math.min(6,G.ho+n));else if(k=="re")G.re+=n;
+ else if(k=="fo"||k=="ru"||k=="es")G[k]=Math.min(5,G[k]+n);else if(k=="it"){if(v=="potion"||!has(v))G.inv.push(v)}else if(k=="al"){if(!G.al.includes(v))G.al.push(v)}});}
+function init(){G={mode:"classe",pv:20,max:20,fo:0,ru:0,es:0,or:10,ho:0,re:0,day:0,inv:[],al:[],vis:[],cl:{},tq:TR.map((e,i)=>i).sort(()=>Math.random()-.5),q:[],log:"",en:null,after:"",cont:null,th:"carte",ic:"🏰",txt:"",steps:0};}
+function next(){G.log="";if(G.q.length){const s=G.q.shift();ev(s.e,s.th,s.ic)}else map()}
+function ev(e,th,ic){G.mode="ev";G.e=e;G.th=th;G.ic=ic;render()}
+function map(){G.day++;if(G.day>6)return finale();const left=Object.keys(RG).filter(k=>!G.vis.includes(k));G.offer=[];while(G.offer.length<3&&left.length)G.offer.push(left.splice(R(left.length),1)[0]);G.mode="map";render()}
+function go(k){G.vis.push(k);const r=RG[k];G.q=[{e:TR[G.tq.shift()],th:r.th,ic:"🧭"},...r.ev.map(e=>({e,th:r.th,ic:r.ic})),{e:CAMP,th:"camp",ic:"⛺"}];next()}
+function choose(c){let ok=true,t,f,tw=null;G.log="";
+ if(c[2]){const r=d(20),b=bon(c[2]),cb=c[9]&&G.cl[c[9]]?4:0,tot=r+G[c[2]]+b+cb;ok=tot>=c[3];G.log=`Dé ${r} + ${G[c[2]]+b+cb} (${NM[c[2]]}${cb?", indice utile":""}) = ${tot} contre ${c[3]} : ${ok?"réussite":"échec"}.`}
+ t=ok?c[4]:c[6];f=ok?c[5]:c[7];const ts=t.split("|"),i=R(ts.length);t=ts[i];f=(f.split("|")[i]||"").trim();
+ if(ok&&!/fi:|ix:/.test(f)&&Math.random()<.22){const w=(TWI[G.th]||[]).filter(x=>!G.cl[x[0]]);if(w.length){tw=pick(w);t+="\n\n"+tw[1];f=(f+" ix:"+tw[0]).trim()}}
+ const m=f.match(/ix:(\w+)/);if(m){if(!G.cl[m[1]])G.cl[m[1]]=tw?tw[1]:t;f=f.replace(m[0],"").trim()}
+ res(t,f)}
+function res(t,f,th){G.txt=t;f=f||"";const m=f.match(/fi:(\S+)/);
+ if(m){G.after=f.replace(m[0],"").trim();fight(m[1]);return}
+ fx(f);if(G.pv<=0)return die();G.mode="res";render()}
+function fight(k){G.en={k,pv:MON[k][2]};G.mode="fight";render()}
+function best(){return Math.max(G.fo,G.ru,G.es)}
+function attack(){const r=d(20),b=best();let m=`Dé ${r} + ${b}. `;
+ if(r+b>=11){const x=d(6)+b+Math.min(G.al.length,2);G.en.pv-=x;m+=`Touché : ${x} dégâts. `}else m+="Raté. ";
+ if(G.en.pv<=0){const n=MON[G.en.k][0];if(G.en.k=="boss")G.cont=()=>ending("v");G.en=null;G.log=m;const a=G.after;G.after="";return res(`${n} : vaincu !`,a)}
+ eturn(m)}
+function eturn(m){const mo=MON[G.en.k];if(d(20)>=12){const x=d(mo[3]);G.pv-=x;m+=`${mo[0]} vous touche : −${x} PV.`}else m+=`${mo[0]} vous rate.`;G.log=m;if(G.pv<=0)return die();render()}
+function flee(){const r=d(20),t=r+G.ru+bon("ru");if(t>=12){G.en=null;G.after="";G.log=`Dé ${r} + ${G.ru+bon("ru")} : fuite réussie.`;res("Vous échappez au combat de justesse.","")}else eturn(`Dé ${r} : fuite ratée. `)}
+function die(){G.mode="mort";G.en=null;G.txt="Vous tombez au combat. L’obscurité de Malgor gagne Eldoria…";render()}
+function finale(){G.mode="fin";G.th="tour";render()}
+function boss(w,pre){G.cont=null;G.after="";G.en={k:"boss",pv:MON.boss[2]-(w?10:0)-(G.cl.faille?8:0)};G.after="";G.log=(pre||"")+(G.cl.faille?" La lumière des éclats affaiblit Malgor.":"");G.mode="fight";render()}
+function ending(k){G.mode="end";const al=G.al.map(a=>AN[a]);let ti,t;
+ if(k=="v"){if(G.ho>=3){ti="Légende d’Eldoria";t="Malgor s’effondre. Vous brandissez l’Amulette et le peuple en larmes vous acclame comme une légende vivante."}else if(G.ho>=-1){ti="Le Héros du royaume";t="Malgor est vaincu. L’Amulette retrouve sa lumière et l’aube se lève enfin sur Eldoria."}else{ti="L’ombre du vainqueur";t="Malgor est vaincu, mais l’Amulette vous murmure à l’oreille. Vous la gardez. Le royaume est sauvé… et vous le tenez sous votre botte."}}
+ else if(k=="p"){ti="La paix d’Aube";t="Malgor, ébranlé par vos mots, rend l’Amulette et part en exil. Plus une goutte de sang ne coule."}
+ else if(k=="r"){if(G.re>=5){ti="L’Aube éclatante";t="Les éclats s’embrasent et reforment l’Amulette, plus pure encore. Malgor, purifié, tombe à genoux."}else{ti="L’Aube amère";t="Les éclats s’assemblent, mais il en manque. L’Amulette brille faiblement : l’aube reviendra, lentement, au prix de bien des sacrifices."}}
+ else if(k=="n"){ti="Le retour d’Aldric";t="Au nom d’Aldric, le sceptre de Malgor se brise. Le vieux mage pleure, l’Amulette se reforme entre vos mains et l’aube se lève sans combat."}
+ else{ti="Le règne des ombres";t="Vous offrez les éclats à Malgor. Ensemble, vous régnez sur une Eldoria plongée dans une nuit éternelle."}
+ if(al.length)t+=` ${al.join(", ")} ${al.length>1?"restent":"reste"} à vos côtés.`;if(G.or>=40)t+=" Votre bourse pleine fait de vous l’un des plus riches du royaume.";
+ G.txt=`★ ${ti} ★\n\n${t}\n\nÉclats rassemblés : ${G.re}. Honneur : ${G.ho}. Lieux visités : ${G.vis.map(k=>RG[k].n).join(", ")}.`;render()}
+function drink(){G.inv.splice(G.inv.indexOf("potion"),1);G.pv=Math.min(G.max,G.pv+8);if(G.mode=="fight")eturn("Vous buvez une potion. ");else{G.log="Vous récupérez des PV.";render()}}
+function stats(){const jo=$("jr").querySelector&&$("jr").querySelector("details"),op=jo&&jo.open,k=Object.keys(G.cl);$("jr").innerHTML=k.length?`<details ${op?"open":""}><summary># 📜 journal_indices (${k.length}/5)</summary>${Object.values(G.cl).map(x=>"<p>"+x.replace(/\n+/g," ")+"</p>").join("")}</details>`:"";$("st").innerHTML=`<span class="c"># état du joueur</span>`+[["pv",`${Math.max(G.pv,0)} / ${G.max}`],["force",G.fo],["ruse",G.ru],["esprit",G.es],["or",G.or],["honneur",G.ho],["eclats",G.re],["jour",`${Math.min(G.day,6)} / 6`],["sac",`[${G.inv.map(i=>'"'+i+'"').join(", ")}]`]].concat(G.al.length?[["allies",`[${G.al.map(a=>'"'+AN[a]+'"').join(", ")}]`]]:[]).map(([k,v])=>`<span><i class="k">${k}</i> = <b class="n">${v}</b></span>`).join("")}
+function render(){G.steps++;stats();let o=[],th=G.th,big=G.ic,t=G.txt,atk=0;const m=G.mode;
+ if(m=="classe"){th="carte";big="🏰";t="Le royaume d’Eldoria sombre dans la nuit : Malgor a brisé l’Amulette d’Aube. Ses éclats sont dispersés. Ramenez-les, ou trouvez un autre moyen de l’arrêter. Qui êtes-vous ?";
+  o=Object.values(CLS).map(c=>({l:c[0]+" (Force "+c[2]+", Ruse "+c[3]+", Esprit "+c[4]+")",ic:c[1],fn:()=>{G.fo=c[2];G.ru=c[3];G.es=c[4];G.pv=G.max=c[5];G.inv=[...c[6]];G.mode="comp";render()}}))}
+ else if(m=="comp"){th="carte";big="🧭";t="Voyagez-vous seul ?";
+  o=[["nain","⛏️"],["elfe","🧝"],["barde","🎻"],["","🚶"]].map(([a,ic])=>({l:a?"Partir avec "+AN[a]:"Partir seul (+10 pièces)",ic,fn:()=>{if(a)G.al.push(a);else G.or+=10;map()}}))}
+ else if(m=="map"){th="carte";big="🗺️";t=`Jour ${G.day} sur 6. Où allez-vous ?`;o=G.offer.map(k=>({l:RG[k].n,ic:RG[k].ic,fn:()=>go(k)}))}
+ else if(m=="ev"){t=G.e[0];o=G.e[1].filter(c=>need(c[8])).map(c=>({l:(c[9]&&G.cl[c[9]]?"💡 ":"")+c[0],ic:c[1],fn:()=>choose(c)}))}
+ else if(m=="res"){o=[{l:"Continuer",ic:"➡️",fn:()=>{const c=G.cont;G.cont=null;c?c():next()}}]}
+ else if(m=="fight"){const mo=MON[G.en.k];big=mo[1];t=`${mo[0]} (${G.en.pv} PV) vous fait face !`;atk=1;o=[{l:"Attaquer",ic:"⚔️",fn:attack}];if(G.en.k!="boss")o.push({l:"Fuir",ic:"🏃",fn:flee})}
+ else if(m=="fin"){th="tour";big="🗼";t="Six jours ont passé. La tour de Malgor se dresse devant vous, noire contre le ciel. Comment l’affronter ?";
+  o=[{l:"Assaut frontal",ic:"⚔️",fn:()=>{G.cont=()=>boss(0,"");res("Vous enfoncez les portes. Une garde noire vous barre la route.","fi:garde");G.cont=()=>boss(0,"")}}];
+  if(G.ru>=2)o.push({l:"S’infiltrer (Ruse)",ic:"🥷",fn:()=>{const r=d(20),tt=r+G.ru+bon("ru"),ok=tt>=13;G.log=`Dé ${r} + ${G.ru+bon("ru")} = ${tt} contre 13.`;if(ok){G.cont=()=>boss(1,"");res("Vous glissez dans l’ombre jusqu’au sommet. Malgor ne vous voit pas venir.","")}else{G.cont=()=>boss(0,"");res("Découvert !","pv-3 fi:garde");G.cont=()=>boss(0,"")}}});
+  if(G.es>=2)o.push({l:"Négocier (Esprit)",ic:"🕊️",fn:()=>{const r=d(20),tt=r+G.es+bon("es")+G.al.length,ok=tt>=14;G.log=`Dé ${r} + ${G.es+bon("es")+G.al.length} = ${tt} contre 14.`;if(ok)ending("p");else{G.cont=()=>boss(0,"");res("Malgor éclate de rire. « Assez parlé ! »","")}}});
+  if(G.cl.passage)o.push({l:"Passage des marais",ic:"🚪",fn:()=>{G.cont=()=>boss(1,"");res("Vous trouvez la porte oubliée sous la tour. Aucun garde ne vous voit.","")}});
+  if(G.cl.nom)o.push({l:"Prononcer le nom d’Aldric",ic:"📛",fn:()=>{const r=d(20),v=G.es+bon("es")+4,tt=r+v;G.log=`Dé ${r} + ${v} = ${tt} contre 12.`;if(tt>=12)ending("n");else{G.cont=()=>boss(0,"");res("Malgor rugit : « Ce nom est mort ! »","")}}});
+  if(G.re>=(G.cl.faille?2:3))o.push({l:"Rituel des éclats",ic:"✨",fn:()=>ending("r")});
+  if(G.ho<=-2)o.push({l:"Offrir les éclats à Malgor",ic:"🖤",fn:()=>ending("s")})}
+ else if(m=="end"){th="fin";big="🌅";o=[{l:"Nouvelle aventure",ic:"🔄",fn:()=>{init();render()}}]}
+ else{th="mort";big="🪦";o=[{l:"Recommencer l’aventure",ic:"🔄",fn:()=>{init();render()}}]}
+ if(has("potion")&&G.pv<G.max&&["ev","map","fight"].includes(m))o.push({l:"Boire une potion (+8 PV)",ic:"🧪",fn:drink});
+ G.opts=o;$("im").innerHTML=img(th,big,o,atk);$("tx").textContent=t;$("lg").textContent=G.log;
+ $("ch").innerHTML="";o.forEach((c,i)=>{const b=document.createElement("button");const p=document.createElement("span");p.className="fn";p.textContent=">>>";b.append(p," "+(i+1)+". "+c.ic+" "+c.l);b.onclick=c.fn;$("ch").appendChild(b)})}
+$("im").onclick=e=>{const z=e.target.closest("[data-i]");if(z&&G.opts[+z.dataset.i])G.opts[+z.dataset.i].fn()};
+init();render();
+</script>
+</body>
+</html>

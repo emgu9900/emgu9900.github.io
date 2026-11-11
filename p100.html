@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur de pourcentage</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#000;--pn:#101014;--ln:#2a2d35;--fg:#f8f8f2;--kw:#ff79c6;--st:#ffb86c;--fn:#50fa7b;--cl:#8be9fd;--nm:#bd93f9;--vr:#8be9fd;--cm:#6272a4;--op:#bd93f9;--er:#ff5555}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:#000;color:var(--fg);font-family:"JetBrains Mono","Fira Code",Menlo,Consolas,"DejaVu Sans Mono","Courier New",monospace;font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5}
+
+.frame{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6272a4;font-size:.9em}
+
+.pad{padding:16px 14px 24px}
+.pad::before{content:"#!/usr/bin/env python3\A # -*- coding: utf-8 -*-";white-space:pre;display:block;color:var(--cm);font-size:.8rem;margin:0 auto 14px;max-width:480px}
+a{color:var(--cl)}
+.home,.accueil{display:inline-block;margin:0 0 14px;padding:3px 12px;color:var(--cl);background:var(--pn);border:1px solid var(--ln);border-radius:4px;text-decoration:none;font:inherit}
+.home::before,.accueil::before{content:"import ";color:var(--kw)}
+.home:hover,.accueil:hover{border-color:var(--cl)}
+.home svg{display:none}
+h1,h2{color:var(--fn);line-height:1.25;font-weight:700}
+h1{margin:6px 0 10px;font-size:clamp(1.4rem,6vw,2rem)}
+h2{margin:0 0 10px;font-size:1.2rem}
+h1::before{content:"# ";color:var(--cm)}h2::before{content:"## ";color:var(--cm)}
+.sub,.subtitle,.hint,.bulle{color:var(--cm);font-weight:400}
+.sub::before,.subtitle::before,.hint::before,.bulle::before{content:"# "}
+label:not(.row){display:block;color:var(--vr);margin-bottom:4px}
+label:not(.row)::after{content:" =";color:var(--op)}
+input:not([type=range]):not([type=checkbox]),select{font:inherit;color:var(--st);background:var(--pn);border:1px solid var(--ln);border-radius:4px;padding:8px 10px;width:100%}
+input::placeholder{color:#5a6270}
+:focus-visible{outline:2px solid var(--op);outline-offset:2px}
+button,.btn,.chip,.tab{font:inherit;color:var(--op);background:var(--pn);border:1px solid var(--op);border-radius:4px;padding:8px 14px;cursor:pointer}
+button:hover:not(:disabled){background:#1c1f2b}
+button:disabled{color:#555;border-color:var(--ln);cursor:default}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:6px;padding:16px}
+
+main.card{max-width:480px;margin:0 auto;background:none;border:0;padding:0}
+.bulle{margin:10px 0 18px}
+.champ{margin-bottom:14px}
+#calculer{display:block;width:100%;margin-top:20px;color:var(--cl);border-color:var(--cl)}
+#message{min-height:1.4em;margin:14px 0 0;color:var(--er)}
+h2{margin:22px 0 10px}
+.resultats{display:grid;gap:10px}
+.res{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 12px;background:#000;border:1px solid var(--ln);border-left:3px solid var(--c);border-radius:4px}
+.res:nth-child(1){--c:#8be9fd}.res:nth-child(2){--c:#ff79c6}.res:nth-child(3){--c:#f1fa8c}.res:nth-child(4){--c:#bd93f9}
+.res output{flex-shrink:0;min-width:5.5em;text-align:right;color:var(--nm);font-weight:700}
+.res output.info{color:var(--cm);font-size:.85rem;font-weight:400}
+.pop{animation:pop .35s ease-out}@keyframes pop{0%{opacity:.2}100%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.pop{animation:none}}
+
+</style>
+</head>
+<body>
+<div class="frame"><div class="win"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="file">p100.py</span></div><div class="pad">
+
+<main class="card">
+  <a class="accueil" href="index.html">&#8962; Accueil</a>
+  <h1>Pourcent-o-matic !</h1>
+  <p class="bulle">Remplis la valeur 1, puis le pourcentage, la valeur 2 ou les deux.</p>
+
+  <div class="champ">
+    <label for="valeur1">Valeur 1 (obligatoire)</label>
+    <input type="number" id="valeur1" inputmode="decimal" step="any" placeholder="Ex : 100">
+  </div>
+  <div class="champ">
+    <label for="pourcentage">Pourcentage (%)</label>
+    <input type="number" id="pourcentage" inputmode="decimal" step="any" placeholder="Ex : 10 pour 10 %">
+  </div>
+  <div class="champ">
+    <label for="valeur2">Valeur 2</label>
+    <input type="number" id="valeur2" inputmode="decimal" step="any" placeholder="Ex : 200">
+  </div>
+
+  <button type="button" id="calculer">Calcule !</button>
+
+  <p id="message" role="status" aria-live="polite"></p>
+
+  <h2>Résultats</h2>
+  <div class="resultats">
+    <div class="res"><span>Valeur 1 augmentée</span><output id="augmentation">-</output></div>
+    <div class="res"><span>Valeur 1 diminuée</span><output id="diminution">-</output></div>
+    <div class="res"><span>Valeur 1 en % de valeur 2</span><output id="part1">-</output></div>
+    <div class="res"><span>Valeur 2 en % de valeur 1</span><output id="part2">-</output></div>
+  </div>
+</main>
+
+</div></div></div>
+<script>
+  const ids = ['augmentation', 'diminution', 'part1', 'part2'];
+  const el = id => document.getElementById(id);
+
+  function formater(n, suffixe) {
+    const t = n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return suffixe ? t + '\u00a0%' : t;
+  }
+
+  function afficher(id, texte, info) {
+    const o = el(id);
+    o.textContent = texte;
+    o.classList.toggle('info', !!info);
+    o.classList.remove('pop');
+    void o.offsetWidth; // relance l'animation
+    o.classList.add('pop');
+  }
+
+  function calculer() {
+    const v1 = parseFloat(el('valeur1').value);
+    const p = parseFloat(el('pourcentage').value);
+    const v2 = parseFloat(el('valeur2').value);
+    const msg = el('message');
+    msg.textContent = '';
+
+    ids.forEach(id => { el(id).textContent = '-'; el(id).classList.remove('info', 'pop'); });
+
+    if (isNaN(v1)) {
+      msg.textContent = 'Oups ! Saisis un nombre dans la valeur 1.';
+      el('valeur1').focus();
+      return;
+    }
+    if (isNaN(p) && isNaN(v2)) {
+      msg.textContent = 'Oups ! Remplis le pourcentage ou la valeur 2.';
+      el('pourcentage').focus();
+      return;
+    }
+
+    if (!isNaN(p)) {
+      afficher('augmentation', formater(v1 * (1 + p / 100)));
+      afficher('diminution', formater(v1 * (1 - p / 100)));
+    } else {
+      afficher('augmentation', 'N/A', true);
+      afficher('diminution', 'N/A', true);
+    }
+
+    if (!isNaN(v2)) {
+      if (v2 === 0) {
+        afficher('part1', 'Division par zéro', true);
+      } else {
+        afficher('part1', formater(v1 / v2 * 100, true));
+      }
+      if (v1 === 0) {
+        afficher('part2', 'Division par zéro', true);
+      } else {
+        afficher('part2', formater(v2 / v1 * 100, true));
+      }
+    } else {
+      afficher('part1', 'N/A', true);
+      afficher('part2', 'N/A', true);
+    }
+
+    if (isNaN(p)) msg.textContent = 'Pas de pourcentage : augmentation et diminution non calculées.';
+    else if (isNaN(v2)) msg.textContent = 'Pas de valeur 2 : proportions non calculées.';
+  }
+
+  el('calculer').addEventListener('click', calculer);
+  document.querySelectorAll('input').forEach(i =>
+    i.addEventListener('keydown', e => { if (e.key === 'Enter') calculer(); })
+  );
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Petits chevaux</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{
+  --kw:#ff79c6;--str:#f1fa8c;--fn:#50fa7b;--cy:#8be9fd;--pu:#bd93f9;--or:#ffb86c;--cm:#6272a4;--tx:#f8f8f2;
+  --red:#ff5555;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#000}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;min-height:100vh;background:#000;color:var(--tx);
+  font-family:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,Menlo,monospace;
+  font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5;
+}
+.wrap{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--cm);font-size:.9em}
+.plus-link{
+  flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  color:var(--fn);border:1px solid var(--cm);border-radius:8px;font-size:1.4rem;font-weight:700;line-height:1;text-decoration:none;
+}
+.plus-link:hover{background:#1c1f2b;border-color:var(--fn)}
+.plus-link:focus-visible,a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--cy);outline-offset:-2px}
+.code{padding:10px 0 16px;counter-reset:l}
+.row{
+  display:flex;align-items:baseline;gap:14px;margin:0;padding:3px 14px;
+  font:inherit;font-weight:400;color:var(--tx);text-decoration:none;overflow-wrap:anywhere;
+}
+.row::before{counter-increment:l;content:counter(l);flex:none;width:2ch;text-align:right;color:#4b5263;user-select:none}
+.src{min-width:0}
+.kw{color:var(--kw)}.fn{color:var(--fn)}.cy{color:var(--cy)}.pu{color:var(--pu)}.or{color:var(--or)}
+.cm{color:var(--cm);font-style:italic}.s{color:var(--str)}
+a.lnk{color:var(--fn);text-decoration:underline}
+a.lnk:hover{background:#1c1f2b}
+
+:root{--c0:#ff5555;--c1:#50fa7b;--c2:#f1fa8c;--c3:#8be9fd;--card:#1c1f2b;--line:#44475a;--fg:#f8f8f2}
+.pad{max-width:560px;margin:0 auto;padding:4px 14px 20px}
+#opts,#ctl{display:flex;gap:8px;align-items:center;justify-content:center;margin:8px 0}
+button,select{font:inherit;padding:10px 14px;border-radius:8px;border:1px solid var(--cm);background:#0b0b0d;color:var(--fn);cursor:pointer}
+button:hover:not(:disabled),select:hover{background:#1c1f2b;border-color:var(--fn)}
+button:disabled{opacity:.4;cursor:default}
+#dice{background:var(--fn);color:#000;font-weight:700;border-color:var(--fn)}
+#dice:hover:not(:disabled){background:var(--cy);border-color:var(--cy)}
+#dv{font-size:3rem;line-height:1;min-width:1.2em;text-align:center;color:var(--str)}
+#st{text-align:center;font-weight:700;min-height:1.5em}
+#msg{text-align:center;min-height:1.5em;margin:4px 0;color:var(--or)}
+svg{width:100%;height:auto;display:block;background:#0b0b0d;border:1px solid #2a2d35;border-radius:8px}
+.ok{animation:p .8s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes p{50%{transform:scale(1.2)}}
+details{margin-top:10px;font-size:.9em;line-height:1.5;color:var(--cm)}
+summary{color:var(--cm);font-style:italic;cursor:pointer}
+details p{color:var(--tx);margin:.5em 0}
+@media (prefers-reduced-motion:reduce){.ok{animation:none}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="win">
+    <div class="bar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="file">ptsche.py</span>
+      <a class="plus-link" href="index.html" aria-label="Retour à l’accueil" title="Accueil">←</a>
+    </div>
+    <div class="code">
+      <div class="row"><span class="src"><span class="kw">from</span> <span class="cy">index</span> <span class="kw">import</span> <a class="lnk" href="index.html">accueil</a></span></div>
+      <div class="row"><span class="src">&nbsp;</span></div>
+      <h1 class="row"><span class="src"><span class="kw">def</span> <span class="fn">petits_chevaux</span>():</span></h1>
+    </div>
+    <div class="pad">
+      <div id="opts"><select id="np"><option value="1">1 joueur</option><option value="2">2 joueurs</option><option value="3">3 joueurs</option><option value="4">4 joueurs</option></select><button id="new">Nouvelle partie</button></div>
+      <div id="st"></div>
+      <svg id="b" viewBox="0 0 15 15"></svg>
+      <div id="ctl"><span id="dv">🎲</span><button id="dice">Lancer le dé</button></div>
+      <p id="msg"></p>
+      <details><summary># Règles</summary>
+        <p>Chaque joueur a 4 chevaux. Les ordinateurs jouent les couleurs libres.</p>
+        <p>Il faut un 6 pour sortir un cheval de l’écurie. Un 6 permet de rejouer.</p>
+        <p>Poser son cheval sur un adversaire le renvoie à l’écurie.</p>
+        <p>Pour finir, il faut tomber pile sur la dernière case. Le premier qui rentre ses 4 chevaux gagne.</p>
+      </details>
+    </div>
+  </div>
+</div>
+
+<script>
+const N=['Rouge','Vert','Jaune','Bleu'],C=['var(--c0)','var(--c1)','var(--c2)','var(--c3)'];
+const rp=([x,y])=>[15-y,x];
+const rotN=([x,y],k)=>{for(let i=0;i<k;i++)[x,y]=[14-y,x];return[x,y]};
+const base=[[1,6],[2,6],[3,6],[4,6],[5,6],[6,5],[6,4],[6,3],[6,2],[6,1],[6,0],[7,0],[8,0]];
+const ring=[];for(let k=0;k<4;k++)base.forEach(c=>ring.push(rotN(c,k)));
+const lane=[1,2,3,4,5,6].map(x=>[x,7]),yard=[[1,1],[4,1],[1,4],[4,4]];
+const $=id=>document.getElementById(id);
+let P,turn,d,phase,H,over,msg='';
+function pos(k,p,i){if(p<0)return rotN(yard[i],k);if(p<=50)return ring[(13*k+p)%52];return rotN(lane[p-51],k)}
+function leg(){return[0,1,2,3].filter(i=>{const p=P[turn][i];return p<0?d==6:p+d<=56})}
+function cap(k,np){if(np>50)return false;const c=(13*k+np)%52;return P.some((a,o)=>o!=k&&a.some(q=>q>=0&&q<=50&&(13*o+q)%52==c))}
+function ai(L){let b=L[0],bs=-1e9;for(const i of L){const p=P[turn][i],n=p<0?0:p+d;let s=n*.1;if(cap(turn,n))s+=100;if(n==56)s+=90;if(p<0)s+=50;if(n>50&&p<=50)s+=40;if(s>bs){bs=s;b=i}}return b}
+function start(){const n=+$('np').value;H=[0,1,2,3].map(i=>i<n);P=[0,1,2,3].map(()=>[-1,-1,-1,-1]);turn=0;d=0;phase='roll';over=false;msg='';draw();after()}
+function after(){if(!over&&!H[turn])setTimeout(roll,700)}
+function roll(){if(over||phase!='roll')return;d=1+Math.floor(Math.random()*6);phase='move';const L=leg();
+if(!L.length){msg=N[turn]+' ne peut pas jouer.';draw();setTimeout(next,1000);return}
+msg='';draw();
+if(!H[turn])setTimeout(()=>mv(ai(L)),800);else if(L.length==1)setTimeout(()=>mv(L[0]),600)}
+function next(){turn=(turn+1)%4;phase='roll';msg='';draw();after()}
+function mv(i){if(phase!='move'||over||!leg().includes(i))return;phase='anim';
+const p=P[turn][i],n=p<0?0:p+d;let hit=false;
+if(n<=50){const c=(13*turn+n)%52;P.forEach((a,o)=>{if(o!=turn)a.forEach((q,j)=>{if(q>=0&&q<=50&&(13*o+q)%52==c){a[j]=-1;hit=true}})})}
+P[turn][i]=n;msg=hit?'Capture ! Un cheval retourne à l’écurie.':'';
+if(P[turn].every(q=>q==56)){over=true;msg=N[turn]+' gagne la partie ! 🏆';draw();return}
+draw();setTimeout(()=>{if(d==6){phase='roll';msg='';draw();after()}else next()},700)}
+function board(){let s='';
+for(let k=0;k<4;k++){const[x,y]=[[0,0],[9,0],[9,9],[0,9]][k];
+s+=`<rect x="${x}" y="${y}" width="6" height="6" rx=".6" style="fill:${C[k]};opacity:.28"/>`;
+yard.forEach(c=>{const[a,b]=rotN(c,k);s+=`<circle cx="${a+.5}" cy="${b+.5}" r=".5" style="fill:var(--card)"/>`})}
+ring.forEach(([x,y],i)=>{s+=`<rect x="${x}" y="${y}" width="1" height="1" style="fill:${i%13==0?C[i/13]:'var(--card)'};stroke:var(--line);stroke-width:.05"/>`});
+for(let k=0;k<4;k++)lane.slice(0,5).forEach(c=>{const[x,y]=rotN(c,k);s+=`<rect x="${x}" y="${y}" width="1" height="1" style="fill:${C[k]};opacity:.6;stroke:var(--line);stroke-width:.05"/>`});
+let a=[6,6],b=[6,9];for(let k=0;k<4;k++){s+=`<polygon points="${a} ${b} 7.5,7.5" style="fill:${C[k]}"/>`;a=rp(a);b=rp(b)}
+return s}
+function toks(){let s='';const L=H[turn]&&phase=='move'?leg():[],seen={};
+for(let k=0;k<4;k++)for(let i=0;i<4;i++){const p=P[k][i],[x,y]=pos(k,p,i),key=x+','+y,n=seen[key]=(seen[key]??-1)+1,ok=k==turn&&L.includes(i);
+const cx=x+.5+n*.2,cy=y+.5;
+s+=`<g ${ok?`class="ok" data-i="${i}"`:''} style="cursor:${ok?'pointer':'default'}"><circle cx="${cx}" cy="${cy}" r=".38" style="fill:${C[k]};stroke:var(--fg);stroke-width:${ok?.12:.05}"/><text x="${cx}" y="${cy+.2}" text-anchor="middle" font-size=".55" fill="#111">♞\uFE0E</text></g>`}
+return s}
+function draw(){$('b').innerHTML=board()+toks();
+$('st').innerHTML=over?'Partie terminée':`Tour : <span style="color:${C[turn]}">${N[turn]}</span>${H[turn]?'':' (ordinateur)'}`;
+$('dv').textContent=d?'⚀⚁⚂⚃⚄⚅'[d-1]:'🎲';
+$('dice').disabled=over||phase!='roll'||!H[turn];
+$('msg').textContent=msg}
+$('b').onclick=e=>{const g=e.target.closest('[data-i]');if(g&&H[turn])mv(+g.dataset.i)};
+$('dice').onclick=()=>{if(H[turn])roll()};
+$('new').onclick=start;
+start();
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Titre de la page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{
+  --kw:#ff79c6;--str:#f1fa8c;--fn:#50fa7b;--cy:#8be9fd;--pu:#bd93f9;--or:#ffb86c;--cm:#6272a4;--tx:#f8f8f2;
+  --red:#ff5555;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#000}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;min-height:100vh;background:#000;color:var(--tx);
+  font-family:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,Menlo,monospace;
+  font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5;
+}
+.wrap{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--cm);font-size:.9em}
+.plus-link{
+  flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  color:var(--fn);border:1px solid var(--cm);border-radius:8px;font-size:1.4rem;font-weight:700;line-height:1;text-decoration:none;
+}
+.plus-link:hover{background:#1c1f2b;border-color:var(--fn)}
+.plus-link:focus-visible,a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--cy);outline-offset:-2px}
+.code{padding:10px 0 16px;counter-reset:l}
+.row{
+  display:flex;align-items:baseline;gap:14px;margin:0;padding:3px 14px;
+  font:inherit;font-weight:400;color:var(--tx);text-decoration:none;overflow-wrap:anywhere;
+}
+.row::before{counter-increment:l;content:counter(l);flex:none;width:2ch;text-align:right;color:#4b5263;user-select:none}
+.src{min-width:0}
+.kw{color:var(--kw)}.fn{color:var(--fn)}.cy{color:var(--cy)}.pu{color:var(--pu)}.or{color:var(--or)}
+.cm{color:var(--cm);font-style:italic}.s{color:var(--str)}
+a.lnk{color:var(--fn);text-decoration:underline}
+a.lnk:hover{background:#1c1f2b}
+
+/* Éléments réutilisables pour les pages suivantes */
+.big .src{font-size:1.7em;line-height:1.35}
+.v{color:var(--cy)}.n{color:var(--pu)}
+button.row{
+  width:100%;background:none;border:0;border-left:3px solid transparent;text-align:left;cursor:pointer;
+  padding-top:8px;padding-bottom:8px;touch-action:manipulation;
+}
+button.row:hover,button.row:focus-visible{background:#1c1f2b;border-left-color:var(--fn)}
+.hide{display:none!important}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main class="win">
+    <div class="bar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="file">base.py</span>
+      <a class="plus-link" href="index.html" aria-label="Retour à l’accueil" title="Accueil">←</a>
+    </div>
+    <div class="code">
+      <div class="row"><span class="src"><span class="kw">from</span> <span class="cy">index</span> <span class="kw">import</span> <a class="lnk" href="index.html">accueil</a></span></div>
+      <div class="row"><span class="src">&nbsp;</span></div>
+      <div class="row"><span class="src cm"># Titre de la page</span></div>
+      <!-- Ajouter le contenu de la page ici : une ligne = un <div class="row"> -->
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  /* Code de la page ici */
+})();
+</script>
+</body>
+</html>

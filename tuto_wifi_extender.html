@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Répéteur Wi-Fi avec un Raspberry Pi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{
+  --kw:#ff79c6;--str:#f1fa8c;--fn:#50fa7b;--cy:#8be9fd;--pu:#bd93f9;--or:#ffb86c;--cm:#6272a4;--tx:#f8f8f2;
+  --red:#ff5555;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#000}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;min-height:100vh;background:#000;color:var(--tx);
+  font-family:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,Menlo,monospace;
+  font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5;
+}
+.wrap{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--cm);font-size:.9em}
+.plus-link{
+  flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  color:var(--fn);border:1px solid var(--cm);border-radius:8px;font-size:1.4rem;font-weight:700;line-height:1;text-decoration:none;
+}
+.plus-link:hover{background:#1c1f2b;border-color:var(--fn)}
+.plus-link:focus-visible,a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--cy);outline-offset:-2px}
+.code{padding:10px 0 16px;counter-reset:l}
+.row{
+  display:flex;align-items:baseline;gap:14px;margin:0;padding:3px 14px;
+  font:inherit;font-weight:400;color:var(--tx);text-decoration:none;overflow-wrap:anywhere;
+}
+.row::before{counter-increment:l;content:counter(l);flex:none;width:2ch;text-align:right;color:#4b5263;user-select:none}
+.src{min-width:0}
+.kw{color:var(--kw)}.fn{color:var(--fn)}.cy{color:var(--cy)}.pu{color:var(--pu)}.or{color:var(--or)}
+.cm{color:var(--cm);font-style:italic}.s{color:var(--str)}
+a.lnk{color:var(--fn);text-decoration:underline}
+a.lnk:hover{background:#1c1f2b}
+
+/* Éléments réutilisables pour les pages suivantes */
+.big .src{font-size:1.7em;line-height:1.35}
+.v{color:var(--cy)}.n{color:var(--pu)}
+button.row{
+  width:100%;background:none;border:0;border-left:3px solid transparent;text-align:left;cursor:pointer;
+  padding-top:8px;padding-bottom:8px;touch-action:manipulation;
+}
+button.row:hover,button.row:focus-visible{background:#1c1f2b;border-left-color:var(--fn)}
+.hide{display:none!important}
+.doc{padding:6px 18px 24px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:1rem;line-height:1.65;color:#d6d9e2}
+.doc h1{font-family:inherit;font-size:1.55em;line-height:1.25;margin:14px 0 6px;color:var(--tx)}
+.doc h2{font-size:1.2em;margin:28px 0 6px;color:var(--cy);border-bottom:1px solid #2a2d35;padding-bottom:4px}
+.doc h3{font-size:1.02em;margin:20px 0 4px;color:var(--fn)}
+.doc p{margin:8px 0}
+.doc ul{margin:8px 0;padding-left:22px}
+.doc li{margin:3px 0}
+.doc a{color:var(--cy)}
+.doc code.i{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:#16161a;border:1px solid #2a2d35;border-radius:4px;padding:1px 5px;color:var(--str)}
+.note{background:#14161d;border-left:3px solid var(--or);border-radius:6px;padding:8px 12px;margin:12px 0;font-size:.94em}
+.note.ok{border-left-color:var(--fn)}
+.meta{color:var(--cm);font-size:.88em}
+.cb{position:relative;margin:10px 0;background:#000;border:1px solid #2a2d35;border-radius:8px}
+.cb pre{margin:0;padding:12px 74px 12px 12px;overflow-x:auto;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.85rem;line-height:1.5;color:var(--fn);white-space:pre}
+.cp{position:absolute;top:8px;right:8px;font:inherit;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.75rem;color:var(--tx);background:#1c1f2b;border:1px solid var(--cm);border-radius:6px;padding:4px 9px;cursor:pointer}
+.cp:hover{border-color:var(--fn)}
+.cp.ok{color:#000;background:var(--fn);border-color:var(--fn)}
+.perso{display:grid;grid-template-columns:1fr;gap:8px;margin:10px 0}
+.perso label{display:flex;flex-direction:column;gap:3px;font-size:.88em;color:var(--cm)}
+.perso input{font:inherit;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.9rem;color:var(--or);background:#101014;border:1px solid #2a2d35;border-radius:6px;padding:8px 10px;min-width:0}
+@media(min-width:620px){.perso{grid-template-columns:repeat(3,1fr)}}
+.back{display:inline-block;margin:6px 0 0;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.85rem;color:var(--fn);border:1px solid var(--cm);border-radius:8px;padding:5px 12px;text-decoration:none}
+.back:hover{background:#1c1f2b;border-color:var(--fn)}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main class="win">
+    <div class="bar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="file">repeteur-wifi.md</span>
+      <a class="plus-link" href="index.html" aria-label="Retour à l’accueil" title="Accueil">←</a>
+    </div>
+    <article class="doc">
+      <a class="back" href="index.html">&larr; Accueil</a>
+      <h1>Répéteur Wi-Fi avec un Raspberry Pi</h1>
+      <p class="meta">Guide en français, sans publicité. Texte réécrit à partir du tutoriel de Pi My Life Up (testé sur Raspberry Pi 5, Raspberry Pi OS Bookworm, mis à jour en juin 2024). Ce n’est pas une traduction mot à mot. <a href="https://pimylifeup.com/raspberry-pi-wifi-extender/" target="_blank" rel="noopener noreferrer">Article original</a></p>
+
+      <h2>Le principe</h2>
+      <p>Le Raspberry Pi capte votre Wi-Fi avec un premier adaptateur et le rediffuse avec un second. Un répéteur est différent d’un <a href="https://pimylifeup.com/raspberry-pi-wireless-access-point/" target="_blank" rel="noopener noreferrer">point d’accès Wi-Fi</a> : il reçoit sa connexion par Wi-Fi, pas par un câble Ethernet.</p>
+      <p>Il faut donc deux adaptateurs Wi-Fi, dont un qui sait fonctionner en mode point d’accès. Sur un Pi avec Wi-Fi intégré (comme le Pi 3B+), le Wi-Fi intégré sert d’entrée et il suffit d’une clé USB compatible pour la sortie.</p>
+      <div class="note">Le débit sera réduit. Les données passent par deux liaisons Wi-Fi successives avant d’arriver à l’appareil.</div>
+
+      <h2>Matériel</h2>
+      <ul>
+        <li>Un Raspberry Pi, une carte microSD et une alimentation</li>
+        <li>Deux adaptateurs Wi-Fi (un seul à ajouter si le Pi a déjà le Wi-Fi intégré)</li>
+        <li>Un boîtier (facultatif)</li>
+      </ul>
+      <p>Il faut aussi Raspberry Pi OS Bookworm ou plus récent, qui utilise déjà <a href="https://pimylifeup.com/raspberry-pi-network-manager/" target="_blank" rel="noopener noreferrer">NetworkManager</a>. C’est cet outil qui fait tout le travail.</p>
+
+      <h2>Vos valeurs</h2>
+      <p>Remplissez ces champs : les commandes ci-dessous se mettent à jour toutes seules. Rien n’est envoyé ni enregistré.</p>
+      <div class="perso">
+        <label>Adaptateur de sortie<input id="f-dev" value="wlan1" autocomplete="off" spellcheck="false"></label>
+        <label>Nom du Wi-Fi étendu<input id="f-ssid" placeholder="MonWifi" autocomplete="off" spellcheck="false"></label>
+        <label>Mot de passe (8 caractères min.)<input id="f-pw" placeholder="motdepasse" autocomplete="off" spellcheck="false"></label>
+      </div>
+
+      <h2>Installation</h2>
+
+      <h3>1. Mettre le système à jour</h3>
+      <div class="cb"><pre>sudo apt update
+sudo apt upgrade</pre><button class="cp" type="button">Copier</button></div>
+
+      <h3>2. Connecter le Pi au Wi-Fi à étendre</h3>
+      <p>Si ce n’est pas déjà fait, suivez le guide <a href="https://pimylifeup.com/setting-up-raspberry-pi-wifi/" target="_blank" rel="noopener noreferrer">se connecter au Wi-Fi sur le Raspberry Pi</a>. Cet adaptateur (souvent <code class="i">wlan0</code>) reçoit le signal.</p>
+
+      <h3>3. Trouver le nom des adaptateurs</h3>
+      <div class="cb"><pre>iwconfig</pre><button class="cp" type="button">Copier</button></div>
+      <p>Vous verrez deux interfaces. L’une est déjà connectée à votre réseau, c’est l’entrée. L’autre est libre : c’est elle qui diffusera le Wi-Fi étendu. Dans cet exemple, elle s’appelle <code class="i">wlan1</code>. Si le vôtre est différent, changez-le dans le champ plus haut.</p>
+
+      <h3>4. Vérifier le mode point d’accès</h3>
+      <div class="cb"><pre>nmcli -f WIFI-PROPERTIES.AP device show <span data-v="dev">&lt;ADAPTATEUR&gt;</span></pre><button class="cp" type="button">Copier</button></div>
+      <p>La réponse doit contenir <code class="i">yes</code>. Sinon, cet adaptateur ne convient pas : il faut en changer.</p>
+
+      <h3>5. Activer le répéteur</h3>
+      <div class="cb"><pre>sudo nmcli d wifi hotspot ifname <span data-v="dev">&lt;ADAPTATEUR&gt;</span> ssid <span data-v="ssid">&lt;NOM_DU_WIFI&gt;</span> password <span data-v="pw">&lt;MOT_DE_PASSE&gt;</span></pre><button class="cp" type="button">Copier</button></div>
+      <p>Une seule commande suffit. NetworkManager gère le reste et partage la connexion déjà active.</p>
+
+      <h3>6. Contrôler que ça tourne</h3>
+      <div class="cb"><pre>nmcli con show</pre><button class="cp" type="button">Copier</button></div>
+      <p>Une ligne nommée <code class="i">Hotspot</code> doit apparaître, associée à votre adaptateur de sortie.</p>
+
+      <h3>7. Tester</h3>
+      <p>Connectez un téléphone ou un ordinateur au nouveau Wi-Fi. Si tout fonctionne, c’est terminé.</p>
+
+      <h2>En cas de problème</h2>
+      <p>Si l’appareil n’arrive pas à se connecter, désactivez les trames de gestion protégées. Certains adaptateurs ne les gèrent pas bien.</p>
+      <div class="cb"><pre>sudo nmcli con modify Hotspot wifi-sec.pmf disable</pre><button class="cp" type="button">Copier</button></div>
+      <p>Pour supprimer le répéteur et recommencer :</p>
+      <div class="cb"><pre>sudo nmcli con delete Hotspot</pre><button class="cp" type="button">Copier</button></div>
+
+      <h2>Avec un VPN</h2>
+      <p>Ce guide se combine avec le <a href="https://pimylifeup.com/raspberry-pi-vpn-access-point/" target="_blank" rel="noopener noreferrer">guide du point d’accès VPN</a> (en anglais). À l’étape 13 de ce guide, remplacez ses commandes par celles-ci. Le trafic de l’adaptateur de sortie passe alors dans le tunnel.</p>
+      <div class="cb"><pre>sudo iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
+sudo iptables -A FORWARD -i tun0 -o <span data-v="dev">&lt;ADAPTATEUR&gt;</span> -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i <span data-v="dev">&lt;ADAPTATEUR&gt;</span> -o tun0 -j ACCEPT</pre><button class="cp" type="button">Copier</button></div>
+      <p>Le reste du guide VPN ne change pas.</p>
+
+      <div class="note ok">Vous avez maintenant un répéteur Wi-Fi qui consomme peu. Pour d’autres projets, voir les <a href="https://pimylifeup.com/raspberry-pi-index/" target="_blank" rel="noopener noreferrer">guides Raspberry Pi de Pi My Life Up</a>.</div>
+      <a class="back" href="index.html">&larr; Accueil</a>
+    </article>
+  </main>
+</div>
+
+<script>
+(function(){
+  var F={dev:document.getElementById("f-dev"),ssid:document.getElementById("f-ssid"),pw:document.getElementById("f-pw")};
+  var DEF={dev:"<ADAPTATEUR>",ssid:"<NOM_DU_WIFI>",pw:"<MOT_DE_PASSE>"};
+  function q(v){ return /^[A-Za-z0-9_.\-]+$/.test(v) ? v : "'" + v.replace(/'/g,"'\\''") + "'"; }
+  function val(k){
+    var v=F[k].value.trim();
+    if(!v) return DEF[k];
+    if(k==="dev") return /^[A-Za-z0-9_.\-]+$/.test(v) ? v : DEF.dev;
+    return q(v);
+  }
+  function maj(){
+    var n=document.querySelectorAll("[data-v]"),i;
+    for(i=0;i<n.length;i++) n[i].textContent=val(n[i].getAttribute("data-v"));
+  }
+  Object.keys(F).forEach(function(k){ F[k].addEventListener("input",maj); });
+  maj();
+
+  function copier(t){
+    if(navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+    return new Promise(function(ok,ko){
+      var a=document.createElement("textarea"); a.value=t; a.style.position="fixed"; a.style.opacity="0";
+      document.body.appendChild(a); a.select();
+      try{ document.execCommand("copy")?ok():ko(); }catch(e){ ko(e); }
+      document.body.removeChild(a);
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".cp"),function(b){
+    b.addEventListener("click",function(){
+      var t=b.parentNode.querySelector("pre").textContent;
+      copier(t).then(function(){ b.textContent="Copié"; b.classList.add("ok"); },function(){ b.textContent="Échec"; })
+        .then(function(){ setTimeout(function(){ b.textContent="Copier"; b.classList.remove("ok"); },1600); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DOOM.html</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{--bg:#000;--fg:#f8f8f2;--bt:#101014;--bd:#2a2d35;--cl:#8be9fd;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{margin:0;min-height:100%;background:#000;color:var(--fg);font-family:"JetBrains Mono","Fira Code",Menlo,Consolas,"DejaVu Sans Mono","Courier New",monospace;font-size:15px;line-height:1.5;touch-action:none;user-select:none;-webkit-user-select:none}
+
+.frame{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6272a4;font-size:.9em}
+
+.pad{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px}
+canvas{width:min(100%,calc(60vh*1.6));aspect-ratio:8/5;image-rendering:pixelated;background:#000;border:1px solid var(--bd)}
+#pad{display:flex;justify-content:space-between;width:min(100%,520px);padding:0 4px;box-sizing:border-box}
+.g{display:grid;grid-template-columns:repeat(3,58px);grid-template-rows:repeat(2,58px);gap:6px}
+button{background:var(--bt);color:var(--cl);border:1px solid var(--bd);border-radius:4px;font:inherit;font-size:20px;touch-action:none}
+button:active{background:#1c1f2b}
+#f{width:120px;height:120px;border-radius:8px;font-size:18px;align-self:center}
+a.home{background:var(--bt);color:var(--cl);border:1px solid var(--bd);border-radius:4px;padding:6px 16px;font-size:15px;text-decoration:none}
+a.home::before{content:"import ";color:#ff79c6}
+a.home:active{background:#1c1f2b}
+p{margin:0;font-size:12px;line-height:1.3;color:#6272a4;text-align:center;padding:0 10px}
+p::before{content:"# "}
+@media (pointer:fine){#pad{display:none}}
+</style></head><body>
+<div class="frame"><div class="win"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="file">doom.py</span></div><div class="pad">
+<a class="home" href="index.html">Accueil</a>
+<canvas id="c" width="320" height="200"></canvas>
+<div id="pad">
+<div class="g"><span></span><button data-k="u">▲</button><span></span><button data-k="l">◀</button><button data-k="d">▼</button><button data-k="r">▶</button></div>
+<button id="f" data-k="f">TIR</button>
+</div>
+<p>Clavier : flèches ou ZQSD/WASD pour bouger, A/D pour les côtés, espace pour tirer.</p>
+</div></div></div>
+<script>
+const W=320,H=200,c=document.getElementById('c'),x=c.getContext('2d');
+const MAP=["1111111111111111","1000000000000001","1000220000003001","1000200000003001","1000000011000001","1111000010000001","1000000010002001","1000000000002001","1002200000000001","1000000011110001","1000000000000001","1033000000000001","1030000220000001","1000000200000001","1000000000000001","1111111111111111"].map(r=>[...r].map(Number));
+const COL={1:[130,115,100],2:[160,60,50],3:[50,100,140]};
+const K={},n=k=>K[k]?1:0;
+let p,E,st,zb=new Array(W),t0=0,shot=0,hurt=0,AC;
+function init(){
+p={x:1.5,y:1.5,dx:1,dy:0,px:0,py:.66,hp:100,ammo:60};
+E=[[13.5,1.5],[6.5,6.5],[13.5,8.5],[4.5,13.5],[12.5,12.5],[8.5,3.5]].map(a=>({x:a[0],y:a[1],hp:3,cd:0,fl:0}));
+st='play';}
+function snd(f,d,ty){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=ty||'square';o.frequency.value=f;g.gain.value=.08;g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
+const KM={ArrowLeft:'l',ArrowRight:'r',ArrowUp:'u',KeyW:'u',KeyZ:'u',ArrowDown:'d',KeyS:'d',KeyA:'sl',KeyQ:'sl',KeyD:'sr',Space:'f',ControlLeft:'f'};
+addEventListener('keydown',e=>{if(KM[e.code]){K[KM[e.code]]=1;e.preventDefault()}if(e.code=='Enter'&&st!='play')init()});
+addEventListener('keyup',e=>{if(KM[e.code])K[KM[e.code]]=0});
+c.onpointerdown=()=>{if(st!='play')init();else K.f=1;};c.onpointerup=()=>K.f=0;
+document.querySelectorAll('[data-k]').forEach(b=>{b.onpointerdown=e=>{e.preventDefault();K[b.dataset.k]=1;if(st!='play')init()};['pointerup','pointerleave','pointercancel'].forEach(t=>b['on'+t]=()=>K[b.dataset.k]=0)});
+function rot(a){const co=Math.cos(a),si=Math.sin(a);[p.dx,p.dy]=[p.dx*co-p.dy*si,p.dx*si+p.dy*co];[p.px,p.py]=[p.px*co-p.py*si,p.px*si+p.py*co]}
+function free(a,b){return MAP[b|0][a|0]==0}
+function move(o,dx,dy){if(free(o.x+dx*1.4,o.y))o.x+=dx;if(free(o.x,o.y+dy*1.4))o.y+=dy}
+function los(a,b){const d=Math.hypot(b.x-a.x,b.y-a.y),s=Math.ceil(d/.15);for(let i=1;i<s;i++){if(!free(a.x+(b.x-a.x)*i/s,a.y+(b.y-a.y)*i/s))return false}return true}
+function proj(e){const sx=e.x-p.x,sy=e.y-p.y,id=1/(p.px*p.dy-p.dx*p.py);return{tx:id*(p.dy*sx-p.dx*sy),ty:id*(-p.py*sx+p.px*sy)}}
+function update(dt){
+if(st!='play')return;
+rot((n('r')-n('l'))*2.3*dt);
+const m=(n('u')-n('d'))*3*dt,s=(n('sr')-n('sl'))*2.6*dt;
+move(p,p.dx*m-p.dy*s,p.dy*m+p.dx*s);
+shot-=dt;hurt-=dt;
+if(K.f&&shot<=-.28&&p.ammo>0){p.ammo--;shot=.12;snd(110,.15,'sawtooth');
+let best=null,bd=1e9;const wall=zb[W/2|0];
+E.forEach(e=>{if(e.hp<=0)return;const q=proj(e);if(q.ty>0&&Math.abs(q.tx)<.35&&q.ty<wall&&q.ty<bd){bd=q.ty;best=e}});
+if(best){best.hp--;best.fl=.1;snd(300,.08);if(best.hp<=0)snd(60,.3,'sawtooth')}}
+E.forEach(e=>{if(e.hp<=0)return;e.fl-=dt;e.cd-=dt;
+const d=Math.hypot(p.x-e.x,p.y-e.y);
+if(d<9&&los(e,p)){if(d>1.1)move(e,(p.x-e.x)/d*1.1*dt,(p.y-e.y)/d*1.1*dt);
+else if(e.cd<=0){e.cd=1;p.hp-=10;hurt=.2;snd(80,.2)}}});
+if(p.hp<=0){p.hp=0;st='dead'}
+else if(E.every(e=>e.hp<=0))st='win';}
+function draw(){
+x.fillStyle='#2a1e1e';x.fillRect(0,0,W,H/2);x.fillStyle='#3a3028';x.fillRect(0,H/2,W,H/2);
+for(let i=0;i<W;i++){
+const cam=2*i/W-1,rx=p.dx+p.px*cam,ry=p.dy+p.py*cam;
+let mx=p.x|0,my=p.y|0;const ddx=Math.abs(1/rx),ddy=Math.abs(1/ry);
+let sx=rx<0?-1:1,sy=ry<0?-1:1,sdx=(rx<0?p.x-mx:mx+1-p.x)*ddx,sdy=(ry<0?p.y-my:my+1-p.y)*ddy,side=0,h=0;
+while(!h){if(sdx<sdy){sdx+=ddx;mx+=sx;side=0}else{sdy+=ddy;my+=sy;side=1}h=MAP[my][mx]}
+const pw=side?sdy-ddy:sdx-ddx;zb[i]=pw;
+const lh=H/pw,f=(side?.7:1)*Math.max(.15,1-pw/14),cl=COL[h];
+x.fillStyle=`rgb(${cl[0]*f|0},${cl[1]*f|0},${cl[2]*f|0})`;
+x.fillRect(i,(H-lh)/2,1,lh);}
+E.filter(e=>e.hp>0||e.fl>0).map(e=>({e,q:proj(e)})).filter(o=>o.q.ty>.2).sort((a,b)=>b.q.ty-a.q.ty).forEach(({e,q})=>{
+const sz=H/q.ty,cx=W/2*(1+q.tx/q.ty),l=cx-sz/2,top=(H-sz)/2+sz*.1,fg=Math.max(.3,1-q.ty/12);
+for(let i=Math.max(0,l|0);i<Math.min(W,l+sz);i++){if(zb[i]<q.ty)continue;
+const u=(i-l)/sz,w=e.fl>0?'#fff':null,dead=e.hp<=0;
+const R=(u0,u1,y0,y1,col)=>{if(u>=u0&&u<u1){x.fillStyle=w||col;x.fillRect(i,top+sz*y0,1,sz*(y1-y0)+1)}};
+const r=200*fg|0;
+R(.28,.72,.4,.95,`rgb(${r*.8|0},${30*fg|0},${20*fg|0})`);
+R(.12,.28,.42,.75,`rgb(${r*.7|0},${50*fg|0},${30*fg|0})`);
+R(.72,.88,.42,.75,`rgb(${r*.7|0},${50*fg|0},${30*fg|0})`);
+R(.32,.68,.12,.42,`rgb(${r},${70*fg|0},${40*fg|0})`);
+R(.38,.46,.2,.26,'#ff0');R(.54,.62,.2,.26,'#ff0');
+R(.38,.62,.32,.37,'#200');}});
+if(hurt>0){x.fillStyle='rgba(200,0,0,.35)';x.fillRect(0,0,W,H)}
+x.fillStyle='#888';x.fillRect(W/2-10,H-34+(shot>0?4:0),20,34);x.fillStyle='#555';x.fillRect(W/2-5,H-46+(shot>0?4:0),10,14);
+if(shot>0){x.fillStyle='#ffb020';x.fillRect(W/2-9,H-62,18,16)}
+x.fillStyle='#fff';x.fillRect(W/2-1,H/2-5,2,10);x.fillRect(W/2-5,H/2-1,10,2);
+x.fillStyle='rgba(0,0,0,.6)';x.fillRect(0,0,W,14);
+x.fillStyle='#f2e6d0';x.font='10px monospace';
+x.fillText(`VIE ${p.hp}   MUNITIONS ${p.ammo}   DÉMONS ${E.filter(e=>e.hp>0).length}`,6,10);
+if(st!='play'){x.fillStyle='rgba(0,0,0,.7)';x.fillRect(0,70,W,60);x.fillStyle=st=='win'?'#6f6':'#f44';x.font='bold 18px monospace';x.textAlign='center';
+x.fillText(st=='win'?'NIVEAU TERMINÉ':'VOUS ÊTES MORT',W/2,98);x.fillStyle='#f2e6d0';x.font='10px monospace';x.fillText('Touchez ou Entrée pour rejouer',W/2,116);x.textAlign='left'}
+}
+function loop(t){const dt=Math.min(.05,(t-t0)/1000||0);t0=t;update(dt);draw();requestAnimationFrame(loop)}
+init();requestAnimationFrame(loop);
+</script></body></html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Générateur de mots de passe</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#000;--pn:#101014;--ln:#2a2d35;--fg:#f8f8f2;--kw:#ff79c6;--st:#ffb86c;--fn:#50fa7b;--cl:#8be9fd;--nm:#bd93f9;--vr:#8be9fd;--cm:#6272a4;--op:#bd93f9;--er:#ff5555}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:#000;color:var(--fg);font-family:"JetBrains Mono","Fira Code",Menlo,Consolas,"DejaVu Sans Mono","Courier New",monospace;font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5}
+
+.frame{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6272a4;font-size:.9em}
+
+.pad{padding:16px 14px 24px}
+.pad::before{content:"#!/usr/bin/env python3\A # -*- coding: utf-8 -*-";white-space:pre;display:block;color:var(--cm);font-size:.8rem;margin:0 auto 14px;max-width:560px}
+a{color:var(--cl)}
+.home,.accueil{display:inline-block;margin:0 0 14px;padding:3px 12px;color:var(--cl);background:var(--pn);border:1px solid var(--ln);border-radius:4px;text-decoration:none;font:inherit}
+.home::before,.accueil::before{content:"import ";color:var(--kw)}
+.home:hover,.accueil:hover{border-color:var(--cl)}
+.home svg{display:none}
+h1,h2{color:var(--fn);line-height:1.25;font-weight:700}
+h1{margin:6px 0 10px;font-size:clamp(1.4rem,6vw,2rem)}
+h2{margin:0 0 10px;font-size:1.2rem}
+h1::before{content:"# ";color:var(--cm)}h2::before{content:"## ";color:var(--cm)}
+.sub,.subtitle,.hint,.bulle{color:var(--cm);font-weight:400}
+.sub::before,.subtitle::before,.hint::before,.bulle::before{content:"# "}
+label:not(.row){display:block;color:var(--vr);margin-bottom:4px}
+label:not(.row)::after{content:" =";color:var(--op)}
+input:not([type=range]):not([type=checkbox]),select{font:inherit;color:var(--st);background:var(--pn);border:1px solid var(--ln);border-radius:4px;padding:8px 10px;width:100%}
+input::placeholder{color:#5a6270}
+:focus-visible{outline:2px solid var(--op);outline-offset:2px}
+button,.btn,.chip,.tab{font:inherit;color:var(--op);background:var(--pn);border:1px solid var(--op);border-radius:4px;padding:8px 14px;cursor:pointer}
+button:hover:not(:disabled){background:#1c1f2b}
+button:disabled{color:#555;border-color:var(--ln);cursor:default}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:6px;padding:16px}
+
+.wrap{max-width:560px;margin:0 auto}
+.card{margin-bottom:16px}
+.tabs{display:flex;gap:10px;margin-bottom:14px}
+.tab{flex:1;color:var(--fg);border-color:var(--ln)}.tab.on{color:var(--kw);border-color:var(--kw);background:#1a1320}
+.out{display:flex;align-items:center;gap:10px}.mascot{font-size:2.2rem;line-height:1;flex:none}
+#res{flex:1;min-height:64px;padding:10px;border:1px dashed var(--ln);border-radius:4px;background:#000;color:var(--st);font-weight:700;font-size:1.05rem;word-break:break-all;display:flex;align-items:center}
+.btns{display:flex;gap:10px;margin-top:12px}.btn{flex:1}.go{color:var(--cl);border-color:var(--cl)}
+.meter{height:12px;border:1px solid var(--ln);border-radius:4px;background:#000;overflow:hidden;margin-top:14px}
+#bar{height:100%;width:0;transition:width .3s,background .3s}
+#info{margin:6px 0 0;text-align:center;color:var(--cm)}
+label.row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0;color:var(--vr)}
+input[type=range]{flex:1;accent-color:var(--op)}
+.val{min-width:2.2em;text-align:center;border:1px solid var(--ln);border-radius:4px;color:var(--nm);padding:2px 6px}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--kw)}
+select{width:auto}
+.hide{display:none}
+.note{color:var(--cm);font-size:.8rem;margin:8px 0 0}.note::before{content:"# "}
+
+</style>
+</head>
+<body>
+<div class="frame"><div class="win"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="file">mdp.py</span></div><div class="pad">
+<div class="wrap">
+<a class="home" href="index.html">🏠 Accueil</a>
+<h1>🔐 Mots de passe 🔐</h1>
+
+<div class="card">
+  <div class="tabs">
+    <button class="tab on" id="tPw">Mot de passe</button>
+    <button class="tab" id="tPh">Phrase de passe</button>
+  </div>
+  <div class="out"><div class="mascot" id="face">😎</div><div id="res">Clique sur Générer</div></div>
+  <div class="btns">
+    <button class="btn go" id="gen">🎲 Générer</button>
+    <button class="btn cp" id="copy">📋 Copier</button>
+  </div>
+  <div class="meter"><div id="bar"></div></div>
+  <p id="info">Force : ...</p>
+</div>
+
+<div class="card" id="optPw">
+  <label class="row">Longueur <input type="range" id="len" min="8" max="64" value="20"><span class="val" id="lenV">20</span></label>
+  <label class="row">Minuscules (a-z) <input type="checkbox" id="lo" checked></label>
+  <label class="row">Majuscules (A-Z) <input type="checkbox" id="up" checked></label>
+  <label class="row">Chiffres (0-9) <input type="checkbox" id="di" checked></label>
+  <label class="row">Symboles (!@#...) <input type="checkbox" id="sy" checked></label>
+  <label class="row">Éviter les caractères ambigus (l 1 I O 0) <input type="checkbox" id="am"></label>
+</div>
+
+<div class="card hide" id="optPh">
+  <label class="row">Nombre de mots <input type="range" id="nw" min="3" max="10" value="6"><span class="val" id="nwV">6</span></label>
+  <label class="row">Séparateur
+    <select id="sep"><option value="-">Tiret -</option><option value=".">Point .</option><option value="_">Souligné _</option><option value=" ">Espace</option><option value="">Aucun</option></select>
+  </label>
+  <label class="row">Majuscule à chaque mot <input type="checkbox" id="cap" checked></label>
+  <label class="row">Ajouter un nombre à la fin <input type="checkbox" id="num"></label>
+  <p class="note">Les mots sont français, sans accent, tirés d'une liste de <span id="wc"></span> mots.</p>
+</div>
+
+<p class="note" style="text-align:center">Tout se passe dans ton navigateur. Rien n'est envoyé ni enregistré.</p>
+</div>
+
+</div></div></div>
+<script>
+const $=id=>document.getElementById(id);
+const WORDS=[...new Set(`chat chien maison arbre soleil lune nuage pluie vent neige riviere montagne foret plage ocean ile pont route train avion bateau velo voiture jardin fleur rose tulipe herbe pomme poire cerise fraise citron orange banane raisin prune melon tomate carotte poireau oignon ail radis salade champignon fromage beurre lait pain gateau tarte miel sucre sel poivre cafe the vin biere eau jus soupe riz pate poisson poulet canard lapin cheval vache mouton cochon chevre renard loup ours lion tigre singe girafe zebre panda koala dauphin baleine requin crabe homard huitre moule escargot abeille papillon fourmi araignee souris oiseau hibou aigle moineau pigeon corbeau cygne pingouin livre stylo crayon papier cahier table chaise lampe miroir fenetre porte mur toit escalier cuisine salon chambre bureau garage cave grenier couteau fourchette cuillere assiette verre tasse bol bouteille casserole poele four frigo horloge montre cle valise sac chapeau veste manteau chemise robe jupe pull echarpe gant botte soulier chaussette lunettes bague collier perle or argent bronze fer cuivre pierre sable terre feu glace brume orage eclair tonnerre arc ciel etoile comete planete fusee robot musique guitare piano violon flute tambour trompette chanson danse theatre cinema film photo peinture dessin statue musee chateau eglise village ville ruelle marche boutique cirque piscine stade ballon tennis rugby football judo course saut nage escrime voile ski luge patin jeu carte puzzle echec domino cube sourire rire reve secret mystere aventure voyage tresor pirate dragon sorcier fee gnome geant prince reine roi chevalier bouclier epee fleche cloche bougie lanterne miel pinceau ruban bonnet tricot laine coton soie velours tapis rideau coussin oreiller couette matelas armoire tiroir etagere balai seau arrosoir rateau pelle marteau tournevis clou vis scie echelle corde filet cage nid ruche etang lac cascade source grotte falaise colline vallee prairie champ verger vignoble moulin ferme grange puits fontaine bateau voilier phare port quai ancre rame radeau tunnel gare billet horaire peage carrefour sentier chemin tente hamac sifflet tonneau panier brouette cerf-volant toupie yoyo poupee peluche trottinette cartable gomme regle compas ciseaux colle`.split(/\s+/).filter(w=>/^[a-z]+$/.test(w)))];
+$('wc').textContent=WORDS.length;
+
+function rnd(n){const lim=Math.floor(4294967296/n)*n;let x;do{x=crypto.getRandomValues(new Uint32Array(1))[0]}while(x>=lim);return x%n}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+
+let mode='pw',cur='';
+
+function genPw(){
+  const amb=$('am').checked,strip=s=>amb?s.replace(/[l1IO0o|]/g,''):s;
+  const sets=[];
+  if($('lo').checked)sets.push(strip('abcdefghijklmnopqrstuvwxyz'));
+  if($('up').checked)sets.push(strip('ABCDEFGHIJKLMNOPQRSTUVWXYZ'));
+  if($('di').checked)sets.push(strip('0123456789'));
+  if($('sy').checked)sets.push('!@#$%&*?+-=_.,;:/()[]{}');
+  if(!sets.length)return null;
+  const len=+$('len').value,pool=sets.join('');
+  const out=sets.map(s=>s[rnd(s.length)]);
+  while(out.length<len)out.push(pool[rnd(pool.length)]);
+  return{txt:shuffle(out).slice(0,len).join(''),bits:len*Math.log2(pool.length)};
+}
+function genPh(){
+  const n=+$('nw').value,cap=$('cap').checked,w=[];
+  for(let i=0;i<n;i++){let x=WORDS[rnd(WORDS.length)];if(cap)x=x[0].toUpperCase()+x.slice(1);w.push(x)}
+  let txt=w.join($('sep').value),bits=n*Math.log2(WORDS.length);
+  if($('num').checked){txt+=$('sep').value+(10+rnd(90));bits+=Math.log2(90)}
+  return{txt,bits};
+}
+function show(r){
+  const res=$('res'),bar=$('bar'),face=$('face'),info=$('info');
+  if(!r){cur='';res.textContent='Choisis au moins un type de caractère !';bar.style.width='0';face.textContent='🤔';info.textContent='Force : ...';return}
+  cur=r.txt;res.textContent=r.txt;
+  const b=Math.round(r.bits);
+  let lab,col,f;
+  if(b<40){lab='Faible';col='#ff5d73';f='😱'}
+  else if(b<60){lab='Moyen';col='#ffb347';f='😐'}
+  else if(b<80){lab='Bon';col='#9be15d';f='🙂'}
+  else{lab='Excellent';col='#4cd964';f='😎'}
+  bar.style.width=Math.min(100,b/128*100)+'%';bar.style.background=col;face.textContent=f;
+  info.textContent='Force : '+lab+' (environ '+b+' bits)';
+}
+function gen(){show(mode==='pw'?genPw():genPh())}
+
+function setMode(m){
+  mode=m;
+  $('tPw').classList.toggle('on',m==='pw');$('tPh').classList.toggle('on',m==='ph');
+  $('optPw').classList.toggle('hide',m!=='pw');$('optPh').classList.toggle('hide',m!=='ph');
+  gen();
+}
+$('tPw').onclick=()=>setMode('pw');
+$('tPh').onclick=()=>setMode('ph');
+$('gen').onclick=gen;
+$('copy').onclick=async()=>{
+  if(!cur)return;
+  try{await navigator.clipboard.writeText(cur)}
+  catch(e){const t=document.createElement('textarea');t.value=cur;document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(_){}t.remove()}
+  const b=$('copy');b.textContent='✅ Copié !';setTimeout(()=>b.textContent='📋 Copier',1500);
+};
+$('len').oninput=e=>{$('lenV').textContent=e.target.value;gen()};
+$('nw').oninput=e=>{$('nwV').textContent=e.target.value;gen()};
+document.querySelectorAll('input[type=checkbox],select').forEach(el=>el.onchange=gen);
+gen();
+</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulateur programmes 2027 : RN et LFI</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f7f6f2;--cd:#fff;--tx:#1d1d1b;--mu:#66655f;--bd:#ddd9cf;--rn:#1f3a6e;--lf:#b3262e;--ok:#1b7a4b;--wa:#8a5d00}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#17171a;--cd:#212126;--tx:#ececea;--mu:#a3a2a0;--bd:#38383f;--rn:#8fb0f0;--lf:#f08a90;--ok:#6fd49c;--wa:#e8b64c}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#17171a;--cd:#212126;--tx:#ececea;--mu:#a3a2a0;--bd:#38383f;--rn:#8fb0f0;--lf:#f08a90;--ok:#6fd49c;--wa:#e8b64c}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:780px;margin:0 auto;padding:16px}
+h1{font-size:1.4rem;margin:.2em 0}h2{font-size:1.15rem;margin:1.4em 0 .5em}
+.note{color:var(--mu);font-size:.9rem}
+.box{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:12px 0}
+.warn{border-left:4px solid var(--wa)}
+form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:flex;flex-direction:column;font-size:.85rem;color:var(--mu);gap:3px}
+input,select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:8px;min-width:0}
+.ck{flex-direction:row;align-items:center;gap:8px}.ck input{width:auto}
+.full{grid-column:1/-1}
+button{font:inherit;background:var(--tx);color:var(--bg);border:0;border-radius:10px;padding:12px;font-weight:600;cursor:pointer}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:620px){.cols,form{grid-template-columns:1fr}}
+.cand h3{margin:0 0 6px}.rn h3{color:var(--rn)}.lf h3{color:var(--lf)}
+.it{border-top:1px solid var(--bd);padding:8px 0;font-size:.92rem}
+.v{font-weight:700}.pos{color:var(--ok)}.neg{color:var(--lf)}
+.b{display:inline-block;font-size:.7rem;border:1px solid var(--bd);border-radius:99px;padding:0 7px;margin-left:6px;color:var(--mu)}
+.tot{border-top:2px solid var(--bd);padding-top:8px;margin-top:6px;font-weight:700}
+.sc{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.88rem}td,th{border:1px solid var(--bd);padding:6px;text-align:left;vertical-align:top}
+a{color:var(--rn)}details{margin:8px 0}
+</style></head><body><main>
+<h1>Programmes 2027 : et pour mon foyer ?</h1>
+<p class="note">Comparaison RN (Marine Le Pen) et LFI (Jean-Luc Mélenchon). Mise à jour des sources : 9 novembre 2026.</p>
+<div class="box warn"><b>À lire d’abord.</b> Ceci est une estimation, pas un conseil de vote. Un programme n’est pas une loi. Seules les mesures avec un chiffre public ou un calcul simple sont chiffrées. Les autres sont marquées « non chiffrable » : je ne sais pas les calculer avec certitude. Le chiffrage complet de LFI est annoncé pour début 2027 et la réforme des retraites du RN reste à préciser.</div>
+
+<h2>1. Votre situation</h2>
+<form id="f" onsubmit="return false">
+<label>Situation familiale<select id="sit"><option value="seul">Seul(e)</option><option value="pacse">Pacsé(e)</option><option value="marie">Marié(e)</option><option value="veuf">Veuf / veuve</option><option value="div">Divorcé(e)</option></select></label>
+<label>Âge<input id="age" type="number" value="40" min="18" max="100"></label>
+<label>Enfants à charge<input id="kids" type="number" value="0" min="0" max="10"></label>
+<label class="ck"><input id="young" type="checkbox">Un enfant de moins de 6 ans</label>
+<label>Activité<select id="st"><option value="smic">Salarié(e) au SMIC</option><option value="sal">Salarié(e) au-dessus du SMIC</option><option value="indep">Indépendant(e)</option><option value="retraite">Retraité(e)</option><option value="sans">Étudiant(e) ou sans emploi</option></select></label>
+<label>Impôt sur le revenu payé par an (€)<input id="ir" type="number" value="0" min="0"></label>
+<label>Logement<select id="lg"><option value="loc">Locataire</option><option value="prop">Propriétaire (sans crédit)</option><option value="acc">Propriétaire (avec crédit)</option><option value="heb">Hébergé(e)</option></select></label>
+<label>APL reçue par mois (€)<input id="apl" type="number" value="0" min="0"></label>
+<label>Énergie du logement + carburant, par an, TTC (€)<input id="en" type="number" value="2500" min="0"></label>
+<label>Revenus du capital par an : intérêts, dividendes, plus-values (€)<input id="cap" type="number" value="0" min="0"></label>
+<label>Tranche marginale d’impôt<select id="tmi"><option value="0">0 % (non imposable)</option><option value="11">11 %</option><option value="30">30 %</option><option value="41">41 %</option><option value="45">45 %</option></select></label>
+<label>Patrimoine immobilier net (€)<input id="imm" type="number" value="0" min="0"></label>
+<label>Montant à transmettre (donation ou héritage) (€)<input id="tr" type="number" value="0" min="0"></label>
+<details class="full"><summary>Hypothèses modifiables</summary>
+<div class="cols" style="margin-top:8px">
+<label>Part de la baisse de TVA répercutée sur les prix (%)<input id="pt" type="number" value="100" min="0" max="100"></label>
+<label>SMIC net mensuel actuel (€)<input id="smic" type="number" value="1477.93" step="0.01"></label></div>
+<p class="note">Le SMIC net de 1 477,93 € vient de service-public.fr via Selectra. Le taux du prélèvement forfaitaire (30 %) est supposé inchangé. La dépense d’énergie par défaut (2 500 €) est un exemple : remplacez-la par la vôtre.</p></details>
+<button class="full" id="go">Calculer</button>
+</form>
+
+<div id="res" hidden>
+<h2>2. Effet estimé sur votre foyer</h2>
+<div class="cols" id="cols"></div>
+<p class="note">Badges : <b>Chiffré</b> = chiffre public du programme. <b>Estimé</b> = calcul simple avec une hypothèse. <b>Non chiffrable</b> = barème ou montant non publié. Les totaux n’incluent pas les effets sur l’emploi, l’inflation, les taux d’emprunt ni les hausses d’impôts payées par d’autres.</p>
+</div>
+
+<h2>3. Coût des programmes (chiffres annoncés)</h2>
+<div class="sc"><table>
+<tr><th></th><th>RN (Le Pen)</th><th>LFI (Mélenchon)</th></tr>
+<tr><td>Annonce</td><td>140 Md€ d’économies nettes d’ici 2032, déficit à 3 % en 2030, 30 Md€ de baisses d’impôts</td><td>Budget 2027 : 106,4 Md€ de recettes en plus, 81,7 Md€ de dépenses nouvelles, 25 Md€ pour la dette</td></tr>
+<tr><td>Mesures coûteuses citées</td><td>Retraite à 62 ans : environ 9 Md€ par an (estimation de presse)</td><td>SMIC à 1 700 € net, retraite à 60 ans, APL +10 % : pas encore chiffrées une à une</td></tr>
+<tr><td>Chiffrage indépendant 2027</td><td>Je ne sais pas : je n’en ai pas trouvé</td><td>Je ne sais pas : le chiffrage complet arrive début 2027</td></tr>
+<tr><td>Repère</td><td colspan="2">Budget de l’État 2027 en discussion : 548,9 Md€. Pour mémoire, en 2022 l’Institut Montaigne estimait le programme RN à 119,6 Md€ contre 68,3 Md€ annoncés (programme ancien, pas 2027).</td></tr>
+</table></div>
+<h2>4. Recettes fiscales annoncées</h2>
+<p class="note">Repère officiel : le projet de budget 2027 du gouvernement prévoit 375,7 Md€ de recettes fiscales nettes de l’État (+18 Md€ sur 2026). L’impôt sur les sociétés baisserait de 1,8 Md€. La surtaxe sur les grandes entreprises passerait à 5 Md€, contre 7,3 à 7,5 Md€ en 2026 selon les sources. Ce sont des montants annoncés par chaque camp, pas des recettes certaines.</p>
+<div class="sc"><table>
+<tr><th>LFI : nouvelles recettes 2027</th><th>Md€ annoncés</th></tr>
+<tr><td>Droits de succession</td><td>20</td></tr>
+<tr><td>Niches fiscales rabotées (crédit d’impôt recherche, pacte Dutreil, Cisap)</td><td>22</td></tr>
+<tr><td>Taxe Zucman (2 % au-delà de 100 M€ de patrimoine)</td><td>15</td></tr>
+<tr><td>ISF climatique (dès 400 000 € de patrimoine selon la presse)</td><td>10</td></tr>
+<tr><td>Fin de la flat tax</td><td>9</td></tr>
+<tr><td>Rachats d’actions et transactions financières</td><td>7,5</td></tr>
+<tr><td>Impôt sur les sociétés plus progressif</td><td>3</td></tr>
+<tr><td>Taxe sur les Gafam portée à 15 %, taxe cryptoactifs, taxe superprofits</td><td>Montant non trouvé</td></tr>
+<tr><td><b>Total annoncé</b></td><td><b>106,4</b> (mes lignes ci-dessus : 86,5. Le détail des environ 20 restants : je ne sais pas)</td></tr>
+</table></div>
+<p class="note">Réserves : l’économiste Alain Trannoy juge ces 106 Md€ « sur le papier », car les contribuables réagiraient (départs, optimisation). D’autres économistes jugent le chiffrage peu détaillé et optimiste. Les 15 Md€ de la taxe Zucman sont l’estimation de ses promoteurs (15 à 25 Md€ selon eux).</p>
+<div class="sc"><table>
+<tr><th>RN : recettes et économies annoncées</th><th>Md€ annoncés</th></tr>
+<tr><td>Taxe sur les rachats d’actions, la première année</td><td>11,4 (elle rapporte environ 0,2 aujourd’hui selon le gouvernement)</td></tr>
+<tr><td>Lutte contre la fraude</td><td>33 (très contesté)</td></tr>
+<tr><td>Impôt sur la fortune financière (version du contre-budget 2026)</td><td>4</td></tr>
+<tr><td>Taxe sur les superdividendes, taxe de 1 000 € par salarié hors UE</td><td>Montant non trouvé</td></tr>
+<tr><td>Économies : immigration (2027, puis 29 en année pleine)</td><td>15</td></tr>
+<tr><td>Économies : contribution à l’Union européenne</td><td>9 (exige l’accord de 26 pays)</td></tr>
+<tr><td>Économies : collectivités locales</td><td>8,2</td></tr>
+<tr><td>Économies : retraites, à terme</td><td>15 à 20</td></tr>
+<tr><td>Baisses d’impôts nettes (TVA énergie, jeunes, impôts de production, CFE)</td><td>30 au total. Coût de chaque mesure : je ne sais pas</td></tr>
+</table></div>
+<p class="note">Réserves : le gouvernement juge le budget RN irréaliste (croissance de 1,8 %, rachats d’actions : 11,4 Md€ représenteraient un tiers des rachats du CAC 40 de 2025, environ 35 Md€). Je n’ai pas trouvé d’expertise indépendante complète du budget RN 2027.</p>
+<h3>Repères officiels pour juger ces chiffres</h3>
+<div class="sc"><table>
+<tr><th>Donnée</th><th>Valeur</th><th>Lecture (mon calcul)</th></tr>
+<tr><td>Niches fiscales, coût total (annexe officielle Voies et moyens, PLF 2026)</td><td>89,4 Md€ en 2024, 91,8 en 2025, 88,3 attendus en 2026. 465 niches. Fiabilité : 189 très bonne, 83 bonne, 124 simple ordre de grandeur, 57 non chiffrables</td><td>LFI en attend 22 Md€ (environ un quart). Le document dit lui-même que la somme des coûts n’a pas de réelle signification : les niches interagissent et les chiffres ignorent les changements de comportement.</td></tr>
+<tr><td>Les trois niches citées ou visées (2026, même annexe)</td><td>Crédit d’impôt recherche 8,04 Md€. Emploi à domicile 7,21 Md€. Pacte Dutreil 4,00 Md€</td><td>Total 19,25 Md€, moins que les 22 Md€ attendus par LFI, même en les supprimant toutes (mon calcul). D’autres niches seraient donc touchées : je ne sais pas lesquelles. Je lis « Cisap » comme le crédit d’impôt services à la personne : à vérifier.</td></tr>
+<tr><td>Niches qui profitent aux ménages (2027)</td><td>Emploi à domicile 7,1 Md€ (5,2 millions de ménages), abattement de 10 % sur les pensions 4,7 Md€, garde d’enfant 1,8 Md€</td><td>Toucher à ces niches pèserait sur les ménages, pas seulement sur les entreprises.</td></tr>
+<tr><td>Impôt sur la fortune immobilière (DGFiP, 2025)</td><td>2,3 Md€, 193 600 foyers</td><td>Pour mémoire, l’ancien ISF rapportait 4,39 Md€ en 2017 (358 000 foyers). Les 10 Md€ d’ISF climatique de LFI représenteraient plus du double, avec un seuil à 400 000 €. Les 4 Md€ d’impôt sur la fortune financière du RN dépasseraient l’IFI actuel.</td></tr>
+<tr><td>Impôt sur les sociétés selon la taille (Conseil des prélèvements obligatoires, 2023, données 2019)</td><td>Les grandes entreprises payaient 38 % de l’impôt brut et recevaient 42 % des crédits d’impôt. Les microentreprises : 16 % et 9 %.</td><td>Le chiffre de 8 % d’impôt effectif pour le CAC 40 date de 2009. Selon l’iFRAP, citant le Conseil, les écarts se sont resserrés.</td></tr>
+<tr><td>Surtaxe sur les grandes entreprises</td><td>5 Md€ prévus en 2027, contre 7,5 Md€ en 2026</td><td>Le gouvernement réduit ce prélèvement, alors que LFI veut un barème d’impôt plus progressif (3 Md€).</td></tr>
+</table></div>
+<p class="note">Ces repères viennent de la DGFiP, du Conseil des prélèvements obligatoires et de l’annexe « Voies et moyens » du budget 2027, relayés par la presse. J’ai relu le document officiel Voies et moyens (édition PLF 2026) pour les niches. Je n’ai pas ouvert les jeux de données bruts de data.gouv.fr ni de l’Insee, ni l’édition 2027 de ce document : les chiffres 2027 de niches viennent de la presse.</p>
+
+<h2>5. Limites connues</h2>
+<ul class="note">
+<li>La liste des mesures RN vient d’un agrégateur qui cite rassemblementnational.fr. Elle mélange des textes anciens : la suppression de la redevance (138 €) n’est pas simulée car je pense qu’elle n’existe plus depuis 2022, à vérifier. Le minimum vieillesse à 1 000 € semble déjà dépassé par le montant actuel, à vérifier sur service-public.fr.</li>
+<li>Le SMIC de LFI est à 1 700 € net dans la nouvelle édition, contre 1 600 € dans l’édition 2025.</li>
+<li>La simulation du prélèvement forfaitaire ignore l’abattement sur les dividendes et la CSG déductible : ordre de grandeur seulement. Elle suppose que les foyers à faible tranche utilisent déjà l’option pour le barème, donc elle ne montre que des pertes.</li>
+<li>Les recettes sont celles annoncées par les partis, relayées par la presse. Elles ne tiennent pas compte des réactions des contribuables et des entreprises. Les totaux ne peuvent pas être additionnés avec certitude (risque de doublons entre lignes).</li>
+<li>Le chiffrage complet de LFI arrive début 2027 : ces chiffres peuvent changer.</li>
+<li>Les colonnes « Lecture » sont mes comparaisons, pas des conclusions officielles. Les niches et les impôts ne s’additionnent pas simplement : taxer plus peut rapporter moins (départs, optimisation).</li>
+</ul>
+
+<h2>6. Sources</h2>
+<ul class="note">
+<li><a href="https://www.boursorama.com/actualite-economique/actualites/presidentielle-marine-le-pen-promet-140-milliards-d-euros-nets-d-economies-d-ici-2032-70784e1d524f6a627b04d825118d0b51">RN : 140 Md€ d’économies (AFP, 6 oct. 2026)</a></li>
+<li><a href="https://votons-2027.fr/candidats/le-pen/programme/economie">RN : 37 mesures économiques (Votons, d’après rassemblementnational.fr)</a></li>
+<li><a href="https://fr.businessam.be/?p=286318">RN : coût de la retraite à 62 ans</a></li>
+<li><a href="https://www.boursorama.com/actualite-economique/actualites/presidentielle-lfi-promet-106-milliards-de-recettes-supplementaires-pour-2027-et-se-dit-raisonnable-24be0c29783e861f8fe15df09d44b5ee">LFI : budget 2027 (AFP, 14 oct. 2026)</a></li>
+<li><a href="https://lcp.fr/actualites/presidentielle-2027-ce-qui-change-dans-le-nouveau-programme-de-jean-luc-melenchon-444841">LFI : nouveau programme (LCP)</a></li>
+<li><a href="https://lessentieldeleco.fr/9345-ce-que-contient-vraiment-le-programme-de-melenchon-pour-2027/">LFI : flat tax, ISF, 14 tranches (L’Essentiel de l’Éco)</a></li>
+<li><a href="https://www.lapetiteboussole.com/candidats/jean-luc-melenchon/programme">LFI : quotient familial, taxe foncière (La Petite Boussole, d’après iFRAP)</a></li>
+<li><a href="https://www.journaldunet.com/business/1556985-experts-et-entrepreneurs-alertent-sur-le-risque-de-crise-lie-au-programme-de-la-france-insoumise/">Budget de l’État 2027 : 548,9 Md€ (JDN)</a></li>
+<li><a href="https://www.institutmontaigne.org/presidentielle-2022/marine-le-pen/synthese/">Institut Montaigne : chiffrage 2022 du RN</a></li>
+<li><a href="https://lcp.fr/actualites/contre-budget-lfi-propose-1064-milliards-d-euros-de-recettes-supplementaires-et-817">LFI : détail des recettes (LCP)</a> et <a href="https://www.france-epargne.fr/news/melenchon-presente-un-contre-budget-2027-1064-milliards-de-recettes-25-milliards-pour-la-dette">France Épargne</a></li>
+<li><a href="https://bourse.fortuneo.fr/actualites/des-economistes-jugent-peu-detaille-et-optimiste-le-contre-budget-de-lfi-9369230">Économistes sur le contre-budget LFI (AFP)</a> et <a href="https://basta.media/pouvoir-d-achat-impot-sur-la-fortune-mesures-alternatives-budget-2027-LFI-Ecologistes-Attac">estimation Zucman (Basta)</a></li>
+<li><a href="https://www.publicsenat.fr/actualites/politique/140-milliards-deuros-deconomies-dici-2032-leffort-radical-propose-par-marine-le-pen-pour-redresser-les-f">RN : détail des économies (Public Sénat)</a> et <a href="https://planetegrandesecoles.com/budget-rn-roland-lescure-marine-le-pen-milliards/">critiques du gouvernement</a></li>
+<li><a href="https://www.boursorama.com/actualite-economique/actualites/le-gouvernement-critique-un-budget-rn-en-carton-pate-qui-raserait-gratis-f817f6cbfa65152a899415a2b20890bb">RN : rachats d’actions 11 Md€ contre 0,2 aujourd’hui (AFP)</a></li>
+<li><a href="https://www.publicsenat.fr/actualites/economie/contre-budget-du-rn-des-propositions-qui-manquent-de-credibilite-economique-mais-trahissent-une-veritable-coherence-doctrinale">RN : impôt sur la fortune financière 4 Md€ (Public Sénat, contre-budget 2026)</a></li>
+<li><a href="https://www.moneyvox.fr/actu/110599/budget-2027-le-gouvernement-prevoit-des-recettes-en-hausse-sur-la-tva-et-impot-sur-le-revenu">PLF 2027 : recettes de l’État (MoneyVox, AFP)</a> et <a href="https://www.assemblee-nationale.fr/dyn/opendata/PRJLANR5L17B3210.html">texte du PLF 2027</a></li>
+<li><a href="https://www.impots.gouv.fr/dgfip-statistiques-limpot-sur-la-fortune-immobiliere-en-2025">DGFiP : l’IFI en 2025</a> et <a href="https://www.boursorama.com/impots/actualites-amp/impot-sur-la-fortune-immobiliere-ifi-une-gestion-perfectible-0379f2949d87cac9e15286e52b3db831">ISF 2017 : 4,39 Md€ (Cour des comptes, via Boursorama)</a></li>
+<li><a href="https://www.moneyvox.fr/votre-argent/actualites/110542/les-niches-fiscales-une-nebuleuse-de-pres-de-470-derogations-au-cout-eleve">Niches fiscales : coût total (MoneyVox, d’après le PLF)</a> et <a href="https://www.moneyvox.fr/impot/actualites/110670/impot-sur-le-revenu-le-top-7-des-niches-fiscales-les-plus-couteuses-pour-etat-en-2027">top 7 des niches en 2027 (d’après Voies et moyens)</a></li>
+<li><a href="https://www.assemblee-nationale.fr/dyn/dyn/contenu/visualisation/1087933/file/Voies_et_moyens_Tome_2_2026.pdf">Annexe officielle Voies et moyens, tome II, PLF 2026 (Assemblée nationale)</a></li>
+<li><a href="https://www.jechange.fr/banques/news/niches-fiscales-470-dispositifs-92-milliards-lesquelles-n-aident-pas-economie">Pacte Dutreil réévalué à 4 Md€, CIR 8,06 Md€ (Cour des comptes, via JeChange)</a></li>
+<li><a href="https://www.moneyvox.fr/actu/93523/les-credits-impot-profitent-plus-aux-grandes-entreprises-quaux-petites">Conseil des prélèvements obligatoires 2023 : crédits d’impôt et grandes entreprises (AFP)</a> et <a href="https://www.ifrap.org/emploi-et-politiques-sociales/niveau-de-taxation-des-entreprises-lanalyse-du-cpo">analyse iFRAP</a></li>
+</ul>
+</main>
+<script>
+const $=i=>document.getElementById(i),N=i=>Math.max(0,+$(i).value||0);
+const F=v=>Math.round(Math.abs(v)).toLocaleString('fr-FR')+' €';
+const LB={c:'Chiffré',e:'Estimé',n:'Non chiffrable'};
+function calc(){
+const s=$('sit').value,k=N('kids'),y=$('young').checked,a=Math.max(18,N('age')),st=$('st').value,ir=N('ir'),lg=$('lg').value,apl=N('apl'),en=N('en'),cap=N('cap'),tmi=N('tmi')/100,imm=N('imm'),tr=N('tr'),pt=Math.min(N('pt'),100)/100,sm=N('smic')||1477.93;
+const R=[],L=[],r=(t,v,c)=>R.push({t,v,c}),l=(t,v,c)=>L.push({t,v,c});
+const act=st!='retraite',sal=st=='smic'||st=='sal';
+if(en>0)r('TVA sur énergie et carburants : 20 % à 5,5 %, par an',en*(1-1.055/1.2)*pt,'e');
+if(a<30&&ir>0)r('Impôt sur le revenu supprimé jusqu’à 30 ans, par an',ir,'c');
+if(k>=2)r('Part fiscale complète dès le 2e enfant : gain selon taux marginal et plafonds',null,'n');
+if(s=='veuf')r('Demi-part fiscale des veufs rétablie',null,'n');
+if(a>=55&&act)r('Retraite à 60 ans si début avant 20 ans et 40 annuités',null,'n');
+if(!act)r('Retraites réindexées sur l’inflation',null,'n');
+if(tr>0)r('Donations exonérées jusqu’à 100 000 € par enfant tous les 10 ans, droits sur l’héritage direct supprimés pour les classes moyennes',null,'n');
+if(imm>1300000)r('IFI supprimé, impôt sur la fortune financière créé : barème non publié',null,'n');
+if(sal)r('Hausse de salaire de 10 % sans cotisations patronales : au choix de l’employeur',null,'n');
+if(y)r('Prêt à 0 % pour jeunes familles',null,'n');
+if(lg=='loc')r('100 000 logements sociaux par an, fin de la loi SRU',null,'n');
+r('Suppression de la TVA sur 100 produits de première nécessité : liste non publiée',null,'n');
+if(st=='smic')l('SMIC à 1 700 € net, par an, avant effets sur l’emploi et les prix',(1700-sm)*12,'e');
+if(st=='sal')l('SMIC à 1 700 € : effet sur les salaires proches du SMIC non précisé',null,'n');
+if(lg=='loc'&&apl>0)l('APL +10 %, par an',apl*12*.1,'e');
+if(lg=='loc')l('Encadrement et baisse des loyers : mécanisme non précisé',null,'n');
+if(a>=55&&act)l('Retraite à 60 ans à taux plein avec 40 annuités',null,'n');
+if(!act)l('Pensions de carrière complète portées au moins au SMIC',null,'n');
+if(cap>0)l('Fin de la flat tax : revenus du capital au barème, par an (ordre de grandeur). Aucun gain à attendre : l’option pour le barème existe déjà si votre tranche est faible',-cap*Math.max(0,tmi-0.128),'e');
+l('Impôt sur le revenu et CSG à 14 tranches : barème non publié',null,'n');
+if(imm>1000000)l('ISF avec volet climatique : seuil et barème non publiés',null,'n');
+if(k>0)l('Quotient familial remplacé par un crédit d’impôt par enfant : montant non publié',null,'n');
+if(s=='pacse'||s=='marie')l('Fin du quotient conjugal : impact sur l’impôt du couple non chiffré',null,'n');
+if(lg=='prop'||lg=='acc')l('Taxe foncière progressive : barème non publié',null,'n');
+if(st=='sans')l('Garantie d’autonomie au seuil de pauvreté (1 337 €)',null,'n');
+l('Blocage des prix des produits de première nécessité',null,'n');
+return{R,L}}
+function card(cls,nom,A){
+let tot=0,nn=0,h='<div class="box cand '+cls+'"><h3>'+nom+'</h3>';
+A.forEach(x=>{if(x.v===null)nn++;else tot+=x.v;
+h+='<div class="it">'+x.t+'<span class="b">'+LB[x.c]+'</span><br>'+(x.v===null?'<span class="note">Impact non calculable</span>':'<span class="v '+(x.v>=0?'pos':'neg')+'">'+(x.v>=0?'+':'−')+F(x.v)+'</span>')+'</div>'});
+return h+'<div class="tot">Total chiffrable : <span class="'+(tot>=0?'pos':'neg')+'">'+(tot>=0?'+':'−')+F(tot)+' / an</span><br><span class="note">+ '+nn+' mesure(s) non chiffrable(s)</span></div></div>'}
+$('go').onclick=()=>{const o=calc();$('cols').innerHTML=card('rn','RN (Le Pen)',o.R)+card('lf','LFI (Mélenchon)',o.L);$('res').hidden=false;$('res').scrollIntoView({behavior:'smooth'})};
+</script></body></html>

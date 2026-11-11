@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eau tiède : le calcul</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#000;--pn:#101014;--ln:#2a2d35;--fg:#f8f8f2;--kw:#ff79c6;--st:#ffb86c;--fn:#50fa7b;--cl:#8be9fd;--nm:#bd93f9;--vr:#8be9fd;--cm:#6272a4;--op:#bd93f9;--er:#ff5555}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:#000;color:var(--fg);font-family:"JetBrains Mono","Fira Code",Menlo,Consolas,"DejaVu Sans Mono","Courier New",monospace;font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5}
+
+.frame{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6272a4;font-size:.9em}
+
+.pad{padding:16px 14px 24px}
+.pad::before{content:"#!/usr/bin/env python3\A # -*- coding: utf-8 -*-";white-space:pre;display:block;color:var(--cm);font-size:.8rem;margin:0 auto 14px;max-width:980px}
+a{color:var(--cl)}
+.home,.accueil{display:inline-block;margin:0 0 14px;padding:3px 12px;color:var(--cl);background:var(--pn);border:1px solid var(--ln);border-radius:4px;text-decoration:none;font:inherit}
+.home::before,.accueil::before{content:"import ";color:var(--kw)}
+.home:hover,.accueil:hover{border-color:var(--cl)}
+.home svg{display:none}
+h1,h2{color:var(--fn);line-height:1.25;font-weight:700}
+h1{margin:6px 0 10px;font-size:clamp(1.4rem,6vw,2rem)}
+h2{margin:0 0 10px;font-size:1.2rem}
+h1::before{content:"# ";color:var(--cm)}h2::before{content:"## ";color:var(--cm)}
+.sub,.subtitle,.hint,.bulle{color:var(--cm);font-weight:400}
+.sub::before,.subtitle::before,.hint::before,.bulle::before{content:"# "}
+label:not(.row){display:block;color:var(--vr);margin-bottom:4px}
+label:not(.row)::after{content:" =";color:var(--op)}
+input:not([type=range]):not([type=checkbox]),select{font:inherit;color:var(--st);background:var(--pn);border:1px solid var(--ln);border-radius:4px;padding:8px 10px;width:100%}
+input::placeholder{color:#5a6270}
+:focus-visible{outline:2px solid var(--op);outline-offset:2px}
+button,.btn,.chip,.tab{font:inherit;color:var(--op);background:var(--pn);border:1px solid var(--op);border-radius:4px;padding:8px 14px;cursor:pointer}
+button:hover:not(:disabled){background:#1c1f2b}
+button:disabled{color:#555;border-color:var(--ln);cursor:default}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:6px;padding:16px}
+
+.page{max-width:980px;margin:0 auto}
+header{margin:6px 0 20px}
+.subtitle{margin:0}
+.grid{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:820px){.grid{grid-template-columns:1fr 1fr;align-items:start}}
+.field{margin-bottom:14px}
+label:not(.row){display:flex;align-items:center;gap:8px}
+label::before{content:"";flex:none;width:10px;height:10px;border-radius:2px;background:var(--dot)}
+.f-cold{--dot:#bd93f9}.f-hot{--dot:#ff5555}.f-goal{--dot:#f1fa8c}.f-vol{--dot:#8be9fd}
+input[aria-invalid="true"]{border-color:var(--er)}
+.buttons{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}.btn{flex:1 1 140px}
+.btn.go{color:var(--cl);border-color:var(--cl)}.btn.reset{color:var(--fg);border-color:var(--ln)}
+.result-text{margin:0 0 14px;min-height:3.2em}
+.result-text.error{padding:8px 12px;color:var(--er);border:1px solid var(--er);border-radius:4px;background:#1a0d0d}
+.pills{display:grid;gap:10px;margin:0 0 16px;padding:0;list-style:none}
+.pills li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:8px 12px;border:1px solid var(--ln);border-left:3px solid var(--c);border-radius:4px}
+.p-cold{--c:#bd93f9}.p-hot{--c:#ff5555}
+.pills strong{color:var(--nm);font-size:1.3rem}.pills small{color:var(--cm)}
+.glass-wrap{display:flex;justify-content:center}
+#glass{width:100%;max-width:230px;height:auto;overflow:visible}
+#glass.wobble{animation:wobble .7s ease-out;transform-origin:50% 100%}
+@keyframes wobble{0%{transform:rotate(0)}25%{transform:rotate(-5deg)}50%{transform:rotate(4deg)}75%{transform:rotate(-2deg)}100%{transform:rotate(0)}}
+@media(prefers-reduced-motion:reduce){#glass.wobble{animation:none}}
+#glass [stroke="#1b1b2f"]{stroke:#f8f8f2}
+#glass path[fill="#fff"]{fill:#101014}
+.note{max-width:980px;margin:18px auto 0;color:var(--cm);font-size:.85rem}.note::before{content:"# "}
+
+</style>
+</head>
+<body>
+<div class="frame"><div class="win"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="file">eau.py</span></div><div class="pad">
+<div class="page">
+
+  <a class="home" href="index.html">
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M4 16 L16 5 L28 16" fill="none" stroke="#1b1b2f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M7 15 V27 H25 V15 L16 7 Z" fill="#fff" stroke="#1b1b2f" stroke-width="3.5" stroke-linejoin="round"/>
+      <rect x="13" y="19" width="6" height="8" fill="#ff6b3d" stroke="#1b1b2f" stroke-width="3"/>
+    </svg>
+    Accueil
+  </a>
+
+  <header>
+    <h1>Eau tiède</h1>
+    <p class="subtitle">Combien d'eau chaude et d'eau froide faut-il mélanger ?</p>
+  </header>
+
+  <main class="grid">
+
+    <section class="card" aria-labelledby="titre-form">
+      <h2 id="titre-form">Tes données</h2>
+      <form id="formulaire" novalidate>
+        <div class="field">
+          <label class="f-cold" for="tempFroide">Température de l'eau froide (°C)</label>
+          <input type="number" id="tempFroide" step="0.1" placeholder="ex : 10" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label class="f-hot" for="tempChaude">Température de l'eau chaude (°C)</label>
+          <input type="number" id="tempChaude" step="0.1" placeholder="ex : 60" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label class="f-goal" for="tempSouhaitee">Température souhaitée (°C)</label>
+          <input type="number" id="tempSouhaitee" step="0.1" placeholder="ex : 37" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label class="f-vol" for="quantiteTotale">Quantité totale d'eau (L)</label>
+          <input type="number" id="quantiteTotale" step="0.1" placeholder="ex : 5" inputmode="decimal">
+        </div>
+
+        <div class="buttons">
+          <button type="submit" class="btn go">Calculer</button>
+          <button type="button" class="btn reset" id="btnReset">Réinitialiser</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="titre-res">
+      <h2 id="titre-res">Le mélange</h2>
+      <p id="resultat" class="result-text" aria-live="polite">Remplis les quatre champs, puis appuie sur Calculer.</p>
+
+      <ul id="pills" class="pills" hidden>
+        <li class="p-cold"><span>Eau froide</span><span><strong id="valFroide"></strong> <small id="pctFroide"></small></span></li>
+        <li class="p-hot"><span>Eau chaude</span><span><strong id="valChaude"></strong> <small id="pctChaude"></small></span></li>
+      </ul>
+
+      <div class="glass-wrap">
+        <svg id="glass" viewBox="0 0 220 280" role="img" aria-label="Un verre souriant qui montre les proportions d'eau froide en bleu et d'eau chaude en orange">
+          <defs>
+            <clipPath id="inside">
+              <path d="M38 40 L182 40 L162 242 Q160 256 146 256 L74 256 Q60 256 58 242 Z"/>
+            </clipPath>
+          </defs>
+
+          <path d="M38 40 L182 40 L162 242 Q160 256 146 256 L74 256 Q60 256 58 242 Z" fill="#fff"/>
+          <g clip-path="url(#inside)">
+            <rect id="coldRect" x="0" y="256" width="220" height="0" fill="#3ea6ff"/>
+            <rect id="hotRect" x="0" y="256" width="220" height="0" fill="#ff6b3d"/>
+            <line id="surface" x1="0" x2="220" y1="256" y2="256" stroke="#1b1b2f" stroke-width="4" opacity="0"/>
+          </g>
+
+          <!-- reflet -->
+          <path d="M56 62 L68 205" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+
+          <!-- contour -->
+          <path d="M38 40 L182 40 L162 242 Q160 256 146 256 L74 256 Q60 256 58 242 Z" fill="none" stroke="#1b1b2f" stroke-width="7" stroke-linejoin="round"/>
+
+          <!-- visage -->
+          <circle cx="92" cy="128" r="13" fill="#fff" stroke="#1b1b2f" stroke-width="4"/>
+          <circle cx="130" cy="128" r="13" fill="#fff" stroke="#1b1b2f" stroke-width="4"/>
+          <circle cx="95" cy="130" r="5.5" fill="#1b1b2f"/>
+          <circle cx="127" cy="130" r="5.5" fill="#1b1b2f"/>
+          <path d="M94 160 Q111 182 128 160" fill="#fff" stroke="#1b1b2f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </section>
+
+  </main>
+
+  <p class="note">Calcul simplifié : on suppose qu'aucune chaleur ne se perd dans le récipient ou dans l'air.</p>
+</div>
+
+</div></div></div>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const champs = ['tempFroide', 'tempChaude', 'tempSouhaitee', 'quantiteTotale'];
+  const MESSAGE_VIDE = 'Remplis les quatre champs, puis appuie sur Calculer.';
+  const reduireMouvement = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const nombre = (n) => n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const pourcent = (n) => n.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+
+  /* ---------- Verre ---------- */
+  const BAS = 256;        // fond du verre
+  const HAUTEUR = 194;    // hauteur d'eau maximale
+  let niveau = { f: 0, c: 0 };
+  let anim;
+
+  function dessiner(f, c) {
+    niveau = { f, c };
+    const hf = HAUTEUR * f / 100;
+    const hc = HAUTEUR * c / 100;
+    $('coldRect').setAttribute('y', BAS - hf);
+    $('coldRect').setAttribute('height', hf);
+    $('hotRect').setAttribute('y', BAS - hf - hc);
+    $('hotRect').setAttribute('height', hc);
+    const surface = $('surface');
+    const yHaut = BAS - hf - hc;
+    surface.setAttribute('y1', yHaut);
+    surface.setAttribute('y2', yHaut);
+    surface.setAttribute('opacity', hf + hc > 1 ? 1 : 0);
+  }
+
+  function animerVers(f, c) {
+    cancelAnimationFrame(anim);
+    if (reduireMouvement) { dessiner(f, c); return; }
+    const depart = { ...niveau };
+    const debut = performance.now();
+    const duree = 700;
+    function pas(t) {
+      const k = Math.min(1, (t - debut) / duree);
+      const e = 1 - Math.pow(1 - k, 3);
+      dessiner(depart.f + (f - depart.f) * e, depart.c + (c - depart.c) * e);
+      if (k < 1) anim = requestAnimationFrame(pas);
+    }
+    anim = requestAnimationFrame(pas);
+  }
+
+  function secouerVerre() {
+    const verre = $('glass');
+    verre.classList.remove('wobble');
+    void verre.getBoundingClientRect();
+    verre.classList.add('wobble');
+  }
+  $('glass').addEventListener('animationend', () => $('glass').classList.remove('wobble'));
+
+  /* ---------- Messages ---------- */
+  function afficherErreur(texte, ...idsInvalides) {
+    const zone = $('resultat');
+    zone.textContent = texte;
+    zone.className = 'result-text error';
+    $('pills').hidden = true;
+    idsInvalides.forEach((id) => $(id).setAttribute('aria-invalid', 'true'));
+    animerVers(0, 0);
+  }
+
+  function nettoyer() {
+    champs.forEach((id) => $(id).removeAttribute('aria-invalid'));
+    $('resultat').className = 'result-text';
+  }
+
+  /* ---------- Calcul ---------- */
+  function calculer() {
+    nettoyer();
+
+    const tf = parseFloat($('tempFroide').value);
+    const tc = parseFloat($('tempChaude').value);
+    const ts = parseFloat($('tempSouhaitee').value);
+    const q  = parseFloat($('quantiteTotale').value);
+
+    const manquants = champs.filter((id) => isNaN(parseFloat($(id).value)));
+    if (manquants.length) {
+      afficherErreur('Il manque un nombre. Remplis les champs marqués en rouge.', ...manquants);
+      return;
+    }
+    if (q <= 0) {
+      afficherErreur('La quantité d\'eau doit être plus grande que zéro.', 'quantiteTotale');
+      return;
+    }
+    if (tf >= tc) {
+      afficherErreur('L\'eau froide doit être moins chaude que l\'eau chaude. Vérifie les deux températures.', 'tempFroide', 'tempChaude');
+      return;
+    }
+    if (!(ts > tf && ts < tc)) {
+      afficherErreur('La température souhaitée doit être entre l\'eau froide et l\'eau chaude, sans être égale à l\'une des deux.', 'tempSouhaitee');
+      return;
+    }
+
+    const litresFroide = q * (tc - ts) / (tc - tf);
+    const litresChaude = q - litresFroide;
+    const pf = litresFroide / q * 100;
+    const pc = litresChaude / q * 100;
+
+    $('resultat').textContent = 'Pour obtenir ' + nombre(q) + ' L à ' + ts.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) + ' °C, verse :';
+    $('valFroide').textContent = nombre(litresFroide) + ' L';
+    $('valChaude').textContent = nombre(litresChaude) + ' L';
+    $('pctFroide').textContent = pourcent(pf);
+    $('pctChaude').textContent = pourcent(pc);
+    $('pills').hidden = false;
+
+    animerVers(pf, pc);
+    secouerVerre();
+  }
+
+  function reinitialiser() {
+    champs.forEach((id) => { $(id).value = ''; });
+    nettoyer();
+    $('resultat').textContent = MESSAGE_VIDE;
+    $('pills').hidden = true;
+    animerVers(0, 0);
+    $('tempFroide').focus();
+  }
+
+  $('formulaire').addEventListener('submit', (e) => { e.preventDefault(); calculer(); });
+  $('btnReset').addEventListener('click', reinitialiser);
+  dessiner(0, 0);
+</script>
+</body>
+</html>

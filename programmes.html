@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Programmes présidentielle 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{
+  --kw:#ff79c6;--str:#f1fa8c;--fn:#50fa7b;--cy:#8be9fd;--pu:#bd93f9;--or:#ffb86c;--cm:#6272a4;--tx:#f8f8f2;
+  --red:#ff5555;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:#000}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;min-height:100vh;background:#000;color:var(--tx);
+  font-family:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,Menlo,monospace;
+  font-size:clamp(.82rem,3.7vw,1.05rem);line-height:1.5;
+}
+.wrap{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--cm);font-size:.9em}
+.plus-link{
+  flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  color:var(--fn);border:1px solid var(--cm);border-radius:8px;font-size:1.4rem;font-weight:700;line-height:1;text-decoration:none;
+}
+.plus-link:hover{background:#1c1f2b;border-color:var(--fn)}
+.plus-link:focus-visible,a:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--cy);outline-offset:-2px}
+.code{padding:10px 0 16px;counter-reset:l}
+.row{
+  display:flex;align-items:baseline;gap:14px;margin:0;padding:3px 14px;
+  font:inherit;font-weight:400;color:var(--tx);text-decoration:none;overflow-wrap:anywhere;
+}
+.row::before{counter-increment:l;content:counter(l);flex:none;width:2ch;text-align:right;color:#4b5263;user-select:none}
+.src{min-width:0}
+.kw{color:var(--kw)}.fn{color:var(--fn)}.cy{color:var(--cy)}.pu{color:var(--pu)}.or{color:var(--or)}
+.cm{color:var(--cm);font-style:italic}.s{color:var(--str)}
+a.lnk{color:var(--fn);text-decoration:underline}
+a.lnk:hover{background:#1c1f2b}
+
+/* Éléments réutilisables pour les pages suivantes */
+.big .src{font-size:1.7em;line-height:1.35}
+.v{color:var(--cy)}.n{color:var(--pu)}
+button.row{
+  width:100%;background:none;border:0;border-left:3px solid transparent;text-align:left;cursor:pointer;
+  padding-top:8px;padding-bottom:8px;touch-action:manipulation;
+}
+button.row:hover,button.row:focus-visible{background:#1c1f2b;border-left-color:var(--fn)}
+.hide{display:none!important}
+.pad{padding:4px 14px 14px}
+.c{border:1px solid #2a2d35;border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#000}
+.c h2{margin:0 0 2px;font-size:1.1em;color:var(--fn)}
+.c .p{color:var(--cm);font-size:.85em;margin-bottom:6px}
+.c ul{margin:4px 0 6px;padding-left:18px}
+.c li{margin:3px 0;font-size:.92em}
+.c .s{color:var(--str);font-size:.85em}
+.c a{color:var(--cy)}
+.tw{overflow-x:auto;border:1px solid #2a2d35;border-radius:8px;background:#000}
+table{border-collapse:collapse;width:100%;font-size:.82em}
+th,td{padding:6px 10px;text-align:left;border-bottom:1px solid #2a2d35;vertical-align:top}
+th{color:var(--cy);background:#16161a;white-space:nowrap}
+td:first-child{color:var(--fn);white-space:nowrap}
+.nc{color:var(--cm)}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main class="win">
+    <div class="bar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="file">programmes.py</span>
+      <a class="plus-link" href="index.html" aria-label="Retour à l’accueil" title="Accueil">←</a>
+    </div>
+    <div class="code">
+      <div class="row"><span class="src"><span class="kw">from</span> <span class="cy">index</span> <span class="kw">import</span> <a class="lnk" href="index.html">accueil</a></span></div>
+      <div class="row"><span class="src">&nbsp;</span></div>
+      <div class="row"><span class="src cm"># Programmes, présidentielle 2027 (résumés)</span></div>
+      <div class="row"><span class="src cm"># Ordre alphabétique. Mis à jour le 07/11/2026.</span></div>
+      <div class="row"><span class="src cm"># Choix : Le Pen, Mélenchon, Glucksmann + Philippe, Attal, Retailleau.</span></div>
+    </div>
+    <div class="pad">
+      <div class="c"><h2>Gabriel Attal</h2><div class="p">Renaissance</div><div class="s">Candidat (candidature officialisée le 22 mai 2026). Programme complet non trouvé.</div><ul><li>Retraites : supprimer l’âge légal et se baser sur la durée de cotisation, avec une part de capitalisation.</li><li>Quatre priorités : salaires, école, frontières, intelligence artificielle.</li><li>École : retour du certificat d’études, revalorisation des salaires des enseignants.</li></ul><div class="p"><a href="https://lcp.fr/actualites/presidentielle-retour-du-certificat-d-etudes-revalorisation-des-salaires-ce-que-propose" target="_blank" rel="noopener noreferrer">Source : LCP, mesures pour l’école</a><br>Site officiel : adresse non vérifiée.</div></div>
+      <div class="c"><h2>Raphaël Glucksmann</h2><div class="p">Place publique, gauche sociale-démocrate</div><div class="s">Désigné candidat le 11 octobre 2026 (primaire, environ 66 % des voix). Programme détaillé : je ne sais pas s’il est publié.</div><ul><li>Retraites : un Haut Conseil où les partenaires sociaux seraient majoritaires, plus de cotisants (seniors en emploi, immigration légale de travail).</li><li>Autres mesures : je ne sais pas, non trouvées dans des sources fiables.</li></ul><div class="p"><a href="https://lcp.fr/actualites/primaire-socialiste-vainqueur-des-le-1er-tour-raphael-glucksmann-sera-le-candidat-de-la" target="_blank" rel="noopener noreferrer">Source : LCP, résultat de la primaire</a><br>Site non officiel de positions sourcées : <a href="https://wikiglucksmann.fr" target="_blank" rel="noopener noreferrer">wikiglucksmann.fr</a>. Site officiel : adresse non vérifiée.</div></div>
+      <div class="c"><h2>Marine Le Pen</h2><div class="p">Rassemblement national</div><div class="s">Candidate. Contre-budget présenté le 6 octobre 2026. Programme complet 2027 : je ne sais pas s’il est finalisé.</div><ul><li>Finances : 140 Md€ d’économies nettes d’ici 2032, déficit sous 3 % dès 2030, dépenses publiques sous 50 % du PIB, baisse d’impôts d’au moins 30 Md€ nets, règle d’or par référendum.</li><li>Liste du site du RN (à vérifier : certaines mesures semblent plus anciennes) : fin du droit du sol, TVA à 5,5 % sur l’énergie, minimum vieillesse à 1 000 €, retraite à 60 ans pour carrières longues.</li></ul><div class="p"><a href="https://www.journaldunet.com/business/action-publique/1555895-marine-le-pen-promet-140-milliards-d-euros-net-d-economies-d-ici-2032-dans-le-cadre-de-son-programme-presidentiel-pour-2027/" target="_blank" rel="noopener noreferrer">Source : Journal du Net, 6 octobre 2026</a><br>Site du RN : <a href="https://rassemblementnational.fr/22-mesures" target="_blank" rel="noopener noreferrer">rassemblementnational.fr/22-mesures</a></div></div>
+      <div class="c"><h2>Jean-Luc Mélenchon</h2><div class="p">La France insoumise</div><div class="s">Candidat. Nouvelle version de « L’Avenir en commun » publiée le 6 novembre 2026 (212 pages, 1 069 mesures selon LFI).</div><ul><li>Pouvoir d’achat : Smic à 1 700 € net, revalorisation du point d’indice et des APL de 10 %.</li><li>Retraites : droit à 60 ans à taux plein pour 40 annuités, à terme.</li><li>Écologie : baisse de 65 % des émissions d’ici 2033, sortie progressive du nucléaire.</li><li>Fiscalité : ISF avec volet climatique, impôt à 14 tranches, écart de salaires de 1 à 20.</li><li>International : sortie du commandement intégré de l’Otan, 6e République.</li></ul><div class="p"><a href="https://lcp.fr/actualites/presidentielle-2027-ce-qui-change-dans-le-nouveau-programme-de-jean-luc-melenchon-444841" target="_blank" rel="noopener noreferrer">Source : LCP, 6 novembre 2026</a><br>Programme officiel : <a href="https://melenchon2027.fr/programme/livre/" target="_blank" rel="noopener noreferrer">melenchon2027.fr/programme</a></div></div>
+      <div class="c"><h2>Édouard Philippe</h2><div class="p">Horizons</div><div class="s">Candidat. Principales mesures présentées le 8 octobre 2026 (France 2). Programme complet : je ne sais pas.</div><ul><li>Retraites : âge légal progressivement à 65 ans et 45 annuités, en moins de 10 ans.</li><li>Travail : deux heures de plus par semaine (gain annoncé : 1 000 € par an).</li><li>Familles : allocation unique de 350 € par mois dès le premier enfant.</li><li>Dépenses : chômage de 18 à 12 mois, deux départs sur trois non remplacés dans la fonction publique.</li><li>Immigration légale divisée par deux. Une vingtaine d’ordonnances en juillet 2027.</li></ul><div class="p"><a href="https://www.journaldunet.com/business/action-publique/1556123-edouard-philippe-presente-ses-principales-mesures-pour-la-presidentielle-de-2027/" target="_blank" rel="noopener noreferrer">Source : Journal du Net, 9 octobre 2026</a><br>Site officiel : adresse non vérifiée.</div></div>
+      <div class="c"><h2>Bruno Retailleau</h2><div class="p">Les Républicains</div><div class="s">Candidat désigné par les adhérents LR (73,8 %). Programme présenté par thèmes. Version complète : je ne sais pas.</div><ul><li>Travail : zéro charge sociale, pour l’employeur et le salarié, au-delà de la 36e heure.</li><li>Entreprises : 40 Md€ de cotisations et d’impôts rendus, « choc normatif ».</li><li>Constitution : effacer le principe de précaution.</li><li>Logement : simplification administrative, soutien à l’investissement locatif, accession à la propriété.</li></ul><div class="p"><a href="https://www.journaldunet.com/business/action-publique/1551677-bruno-retailleau-mise-sur-la-competitivite-pour-seduire-les-entrepreneurs-avant-2027/" target="_blank" rel="noopener noreferrer">Source : Journal du Net, 19 juin 2026</a><br>Site officiel : adresse non vérifiée.</div></div>
+    </div>
+    <div class="code" style="padding:0 0 4px">
+      <div class="row"><span class="src cm"># Comparatif des chiffres trouvés</span></div>
+    </div>
+    <div class="pad">
+      <div class="tw"><table>
+        <thead><tr><th>Candidat</th><th>Retraites</th><th>Travail, revenus</th><th>Finances publiques</th></tr></thead>
+        <tbody>
+          <tr><td>Attal</td><td>Âge légal supprimé</td><td><span class="nc">n/c</span></td><td><span class="nc">n/c</span></td></tr>
+          <tr><td>Glucksmann</td><td>Haut Conseil, âge non trouvé</td><td><span class="nc">n/c</span></td><td><span class="nc">n/c</span></td></tr>
+          <tr><td>Le Pen</td><td>60 ans carrières longues *</td><td>Minimum vieillesse 1 000 € *</td><td>−140 Md€ d’ici 2032</td></tr>
+          <tr><td>Mélenchon</td><td>60 ans, 40 annuités, à terme</td><td>Smic 1 700 € net</td><td>ISF, impôt à 14 tranches</td></tr>
+          <tr><td>Philippe</td><td>65 ans, 45 annuités</td><td>+2 h par semaine, allocation 350 €</td><td>Chômage 12 mois, 2 départs sur 3 non remplacés</td></tr>
+          <tr><td>Retailleau</td><td><span class="nc">n/c</span></td><td>0 charge après la 36e heure</td><td>40 Md€ rendus aux entreprises</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="code" style="padding-top:0">
+      <div class="row"><span class="src cm"># n/c : non communiqué ou non trouvé. * : liste du site du RN, à vérifier.</span></div>
+      <div class="row"><span class="src cm"># Résumés tirés de la presse, pas des programmes complets. Lire les sources.</span></div>
+    </div>
+  </main>
+</div>
+
+<script>
+</script>
+</body>
+</html>

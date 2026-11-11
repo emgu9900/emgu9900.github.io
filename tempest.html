@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tempest</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#000;--tube:#2f6bff;--claw:#ffe14a;--foe:#ff3d6e;--ok:#4dffb0;--fg:#f8f8f2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:"JetBrains Mono","Fira Code",Menlo,Consolas,"DejaVu Sans Mono","Courier New",monospace;font-size:15px;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+
+.frame{max-width:900px;margin:0 auto;padding:24px 14px 48px}
+.win{background:#0b0b0d;border:1px solid #2a2d35;border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(189,147,249,.2)}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#16161a;border-bottom:1px solid #2a2d35}
+.dot{flex:none;width:12px;height:12px;border-radius:50%}
+.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+.file{flex:1;min-width:0;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6272a4;font-size:.9em}
+
+.frame{height:100%;padding:12px 14px;display:flex}
+.win{flex:1;display:flex;flex-direction:column;min-height:0}
+.pad{flex:1;display:flex;flex-direction:column;min-height:0}
+#home{align-self:flex-start;margin:8px 12px 0;padding:6px 16px;border:1px solid var(--ok);border-radius:4px;color:var(--ok);text-decoration:none;background:#101014}
+#home::before{content:"import ";color:#ff79c6}
+#home:focus-visible{outline:2px solid var(--claw)}
+canvas{flex:1;min-height:0;width:100%;display:block}
+#pad{display:flex;gap:10px;padding:10px 12px 14px}
+button{flex:1;height:64px;border:1px solid var(--tube);border-radius:4px;background:#101014;color:var(--fg);font:inherit;font-size:18px;font-weight:700;touch-action:none}
+button:active{background:var(--tube)}
+#fire{flex:1.6;border-color:var(--claw);color:var(--claw)}
+#zap{border-color:var(--foe);color:var(--foe)}
+button:focus-visible{outline:2px solid var(--ok)}
+</style></head><body>
+<div class="frame"><div class="win"><div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="file">tempest.py</span></div><div class="pad">
+<a id="home" href="index.html">Accueil</a>
+<canvas id="c"></canvas>
+<div id="pad">
+<button id="l" aria-label="Tourner à gauche">◀</button>
+<button id="r" aria-label="Tourner à droite">▶</button>
+<button id="fire">Tir</button>
+<button id="zap">Zap</button>
+</div>
+</div></div></div>
+<script>
+const N=16,cv=document.getElementById('c'),g=cv.getContext('2d');
+let W,H,cx,cy,R,r,mode='start',S=null,overAt=0,last=0;
+function size(){const d=devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0);cx=W/2;cy=H/2;R=Math.min(W,H)*0.43;r=R*0.12}
+addEventListener('resize',size);size();
+const P=(x,d)=>{const a=x/N*Math.PI*2-Math.PI/2,k=r+(R-r)*Math.pow(Math.max(d,0),1.4);return[cx+Math.cos(a)*k,cy+Math.sin(a)*k]};
+const line=(a,b)=>{g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1])};
+function reset(){S={p:0,score:0,lives:3,level:1,en:[],bu:[],sp:.5,spawned:0,zap:1,flash:0,inv:0,fire:0};mode='play'}
+function start(){if(performance.now()-overAt>800)reset()}
+function mv(d){if(mode!=='play')return start();S.p=(S.p+d+N)%N}
+function shoot(){if(mode!=='play')return start();if(S.bu.length<6&&S.fire<=0){S.bu.push({l:S.p,d:1});S.fire=.16}}
+function zap(){if(mode!=='play')return start();if(!S.zap)return;S.zap=0;S.flash=.35;S.score+=S.en.length*50;S.en=[]}
+function hold(id,fn,ms){const el=document.getElementById(id);let t;
+el.addEventListener('pointerdown',e=>{e.preventDefault();fn();clearInterval(t);if(ms)t=setInterval(fn,ms)});
+['pointerup','pointerleave','pointercancel'].forEach(k=>el.addEventListener(k,()=>clearInterval(t)))}
+hold('l',()=>mv(-1),110);hold('r',()=>mv(1),110);hold('fire',shoot,170);hold('zap',zap,0);
+cv.addEventListener('pointerdown',()=>{if(mode!=='play')start()});
+addEventListener('keydown',e=>{const k=e.key;
+if(k==='ArrowLeft'||k==='a')mv(-1);else if(k==='ArrowRight'||k==='d')mv(1);
+else if(k===' '||k==='ArrowUp'){e.preventDefault();shoot()}else if(k==='z'||k==='Enter')zap()});
+function hit(){S.lives--;S.en=[];S.bu=[];S.inv=1.5;S.flash=.3;if(S.lives<=0){mode='over';overAt=performance.now()}}
+function update(dt){
+S.inv=Math.max(0,S.inv-dt);S.flash-=dt;S.fire-=dt;
+const q=6+3*S.level,v=.11+.02*S.level;
+S.sp-=dt;
+if(S.sp<=0&&S.spawned<q){S.en.push({l:Math.floor(Math.random()*N),d:0,rim:false,t:0});S.spawned++;S.sp=Math.max(.5,1.5-.1*S.level)}
+for(const e of S.en){
+if(!e.rim){e.d+=v*dt;if(e.d>=1){e.d=1;e.rim=true}}
+else{e.t+=dt;if(e.t>.3){e.t=0;const df=((S.p-e.l)%N+N)%N;if(df)e.l=(e.l+(df<=N/2?1:-1)+N)%N}
+if(e.l===S.p&&S.inv<=0){hit();return}}}
+for(const b of S.bu)b.d-=1.1*dt;
+S.bu=S.bu.filter(b=>b.d>0);
+for(const b of S.bu)for(const e of S.en)if(!b.x&&!e.x&&b.l===e.l&&Math.abs(b.d-e.d)<.07){b.x=e.x=1;S.score+=e.rim?150:100}
+S.bu=S.bu.filter(b=>!b.x);S.en=S.en.filter(e=>!e.x);
+if(S.spawned>=q&&!S.en.length){S.level++;S.spawned=0;S.zap=1;S.sp=1.2}}
+function draw(){
+g.fillStyle='#000';g.fillRect(0,0,W,H);
+g.lineWidth=1.5;g.shadowBlur=8;g.shadowColor='#2f6bff';g.strokeStyle='#2f6bff';
+const p=S?S.p:0;
+if(S){g.fillStyle='rgba(255,225,74,.14)';g.beginPath();const a=[P(p,0),P(p+1,0),P(p+1,1),P(p,1)];a.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.fill()}
+g.beginPath();for(let i=0;i<N;i++)line(P(i,0),P(i,1));g.stroke();
+for(const d of[0,.25,.5,.75,1]){g.beginPath();for(let i=0;i<=N;i++){const q=P(i,d);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])}g.stroke()}
+if(S){
+g.shadowColor='#ff3d6e';g.strokeStyle='#ff3d6e';g.lineWidth=2.5;g.beginPath();
+for(const e of S.en){const h=.07;line(P(e.l,e.d),P(e.l+1,e.d+h));line(P(e.l+1,e.d),P(e.l,e.d+h))}g.stroke();
+g.shadowColor='#4dffb0';g.strokeStyle='#4dffb0';g.lineWidth=3;g.beginPath();
+for(const b of S.bu)line(P(b.l+.5,b.d),P(b.l+.5,b.d+.05));g.stroke();
+if(mode==='play'&&(S.inv<=0||Math.floor(S.inv*10)%2)){
+g.shadowColor='#ffe14a';g.strokeStyle='#ffe14a';g.lineWidth=3.5;g.beginPath();
+g.moveTo(...P(p,1.08));g.lineTo(...P(p+.5,.9));g.lineTo(...P(p+1,1.08));g.lineTo(...P(p+.5,1.02));g.closePath();g.stroke()}
+if(S.flash>0){g.shadowBlur=0;g.fillStyle='rgba(255,255,255,'+Math.min(.5,S.flash)+')';g.fillRect(0,0,W,H)}}
+g.shadowBlur=0;g.fillStyle='#e8f0ff';g.textBaseline='top';
+const f=Math.max(14,Math.min(W,H)*.04);g.font='700 '+f+'px "JetBrains Mono",Menlo,Consolas,monospace';
+if(S){g.textAlign='left';g.fillText('Score '+S.score,12,10);g.textAlign='center';g.fillText('Niveau '+S.level,W/2,10);
+g.textAlign='right';g.fillText('Vies '+S.lives+(S.zap?'  Zap prêt':''),W-12,10)}
+if(mode!=='play'){g.fillStyle='rgba(0,0,0,.72)';g.fillRect(0,H*.3,W,H*.4);g.fillStyle='#ffe14a';g.textAlign='center';
+g.font='800 '+f*2.2+'px "JetBrains Mono",Menlo,Consolas,monospace';g.fillText(mode==='over'?'Partie terminée':'Tempest',W/2,H*.34);
+g.fillStyle='#e8f0ff';g.font='600 '+f*.95+'px "JetBrains Mono",Menlo,Consolas,monospace';
+if(mode==='over')g.fillText('Score final : '+S.score,W/2,H*.46);
+g.fillText('Touchez l’écran pour jouer',W/2,H*.54);
+g.fillText('Flèches ou ◀ ▶ : tourner. Espace ou Tir : tirer. Z ou Zap : tout détruire.',W/2,H*.6,W-20)}}
+function loop(t){const dt=Math.min(.05,(t-last)/1000||0);last=t;if(mode==='play')update(dt);draw();requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+</script></body></html>

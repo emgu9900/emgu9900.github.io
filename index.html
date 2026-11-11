@@ -1,49 +1,296 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mon site personnel</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>index.py</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-  color: #222;
-  margin: 0;
+:root{
+  --kw:#ff79c6;
+  --str:#f1fa8c;
+  --fn:#50fa7b;
+  --cy:#8be9fd;
+  --pu:#bd93f9;
+  --or:#ffb86c;
+  --cm:#6272a4;
+  --tx:#f8f8f2;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
 }
-header {
-  background: #202b3a;
-  color: white;
-  padding: 35px 15px;
-  text-align: center;
+
+html{
+  scroll-padding-top:env(safe-area-inset-top,0px);
+  background:#000;
 }
-main {
-  max-width: 800px;
-  margin: 25px auto;
-  padding: 15px;
+
+*,*::before,*::after{
+  box-sizing:inherit;
 }
-a {
-  display: block;
-  background: white;
-  color: #245b91;
-  padding: 20px;
-  margin: 12px 0;
-  border-radius: 8px;
-  text-decoration: none;
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#000;
+  color:var(--tx);
+  font-family:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,Menlo,monospace;
+  font-size:clamp(.82rem,3.7vw,1.05rem);
+  line-height:1.5;
+}
+
+.wrap{
+  max-width:900px;
+  margin:0 auto;
+  padding:24px 14px 48px;
+}
+
+/* FENÊTRE D'ÉDITEUR */
+
+.win{
+  background:#0b0b0d;
+  border:1px solid #2a2d35;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 12px 40px rgba(189,147,249,.2);
+}
+
+.bar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  background:#16161a;
+  border-bottom:1px solid #2a2d35;
+}
+
+.dot{
+  flex:none;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+}
+.d1{background:#ff5f56}
+.d2{background:#ffbd2e}
+.d3{background:#27c93f}
+
+.file{
+  flex:1;
+  min-width:0;
+  margin-left:8px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:var(--cm);
+  font-size:.9em;
+}
+
+/* BOUTON + (INFINITYFREE) */
+
+.plus-link{
+  flex:none;
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--fn);
+  border:1px solid var(--cm);
+  border-radius:8px;
+  font-size:1.4rem;
+  font-weight:700;
+  line-height:1;
+  text-decoration:none;
+}
+.plus-link:hover{
+  background:#1c1f2b;
+  border-color:var(--fn);
+}
+.plus-link:focus-visible,
+a.row:focus-visible{
+  outline:2px solid var(--cy);
+  outline-offset:-2px;
+}
+
+/* CODE */
+
+.code{
+  padding:10px 0 16px;
+  counter-reset:l;
+}
+
+.row{
+  display:flex;
+  gap:14px;
+  margin:0;
+  padding:3px 14px;
+  font:inherit;
+  font-weight:400;
+  color:var(--tx);
+  text-decoration:none;
+  overflow-wrap:anywhere;
+}
+
+.row::before{
+  counter-increment:l;
+  content:counter(l);
+  flex:none;
+  width:2ch;
+  text-align:right;
+  color:#4b5263;
+  user-select:none;
+}
+
+.src{
+  min-width:0;
+}
+
+a.row{
+  padding-top:8px;
+  padding-bottom:8px;
+  border-left:3px solid transparent;
+}
+
+a.row:hover,
+a.row:focus-visible{
+  background:#1c1f2b;
+  border-left-color:var(--fn);
+}
+
+a.row:hover .s,
+a.row:focus-visible .s{
+  text-decoration:underline;
+}
+
+/* COULEURS DE SYNTAXE */
+
+.kw{color:var(--kw)}
+.fn{color:var(--fn)}
+.cm{color:var(--cm);font-style:italic}
+.cy{color:var(--cy)}
+.s{color:var(--str)}
+
+a.row:nth-of-type(6n+1) .s{color:var(--str)}
+a.row:nth-of-type(6n+2) .s{color:var(--cy)}
+a.row:nth-of-type(6n+3) .s{color:var(--or)}
+a.row:nth-of-type(6n+4) .s{color:var(--kw)}
+a.row:nth-of-type(6n+5) .s{color:var(--pu)}
+a.row:nth-of-type(6n)   .s{color:var(--fn)}
+
+/* LIEN EN DÉGRADÉ */
+a.row .s.grad{
+  background:linear-gradient(90deg,var(--kw),var(--or),var(--str),var(--fn),var(--cy),var(--pu));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+}
+
+/* CURSEUR */
+
+.cur{
+  display:inline-block;
+  width:.6em;
+  height:1.1em;
+  vertical-align:text-bottom;
+  background:var(--tx);
+  animation:blink 1s steps(2,start) infinite;
+}
+@keyframes blink{
+  to{visibility:hidden}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .cur{animation:none}
 }
 </style>
 </head>
+
 <body>
-<header>
-<h1>Mon site personnel</h1>
-<p>Mes dossiers, articles et recherches</p>
-</header>
-<main>
-<h2>Mes rubriques</h2>
-<a href="politique/">Politique et société</a>
-<a href="radio/">Radio et ondes courtes</a>
-<a href="informatique/">Informatique et tutoriels</a>
-<a href="dossiers/">Dossiers et analyses</a>
-</main>
+
+<div class="wrap">
+  <div class="win">
+
+    <div class="bar">
+      <span class="dot d1"></span>
+      <span class="dot d2"></span>
+      <span class="dot d3"></span>
+      <span class="file">index.py</span>
+
+      <!-- BOUTON + : administration InfinityFree -->
+      <a class="plus-link"
+         href="https://dash.infinityfree.com"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Ouvrir InfinityFree"
+         title="Administration InfinityFree">+</a>
+
+      <!-- BOUTON # : chez.free.je -->
+      <a class="plus-link"
+         href="https://chez.free.je"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Ouvrir chez.free.je"
+         title="chez.free.je">#</a>
+    </div>
+
+    <div class="code">
+
+      <div class="row"><span class="src cm"># index.py</span></div>
+      <div class="row"><span class="src"><span class="kw">import</span> <span class="cy">page</span></span></div>
+      <div class="row"><span class="src">&nbsp;</span></div>
+
+      <h1 class="row"><span class="src"><span class="fn">print</span>(<span class="s">"Index"</span>)</span></h1>
+      <div class="row"><span class="src">&nbsp;</span></div>
+
+      <div class="row"><span class="src cm"># Choisis ton jeu :</span></div>
+
+      <a class="row" href="analyse_blocus_lyceen_2026.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"ANALYSE DES VIOLENCES POLICIÈRES RELATIVES AU BLOCUS LYCÉEN DE 2026"</span>)</span></a>
+      <a class="row" href="sondage.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"SONDAGES PRÉSIDENTIELLE 2027"</span>)</span></a>
+      <a class="row" href="programmes.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"PROGRAMMES PRÉSIDENTIELLE 2027"</span>)</span></a>
+      <a class="row" href="car.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"COMPTE À REBOURS"</span>)</span></a>
+      <a class="row" href="ptb.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"LE PETIT BAC"</span>)</span></a>
+      <a class="row" href="dat.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"ÇA S’EST PASSÉ UN :"</span>)</span></a>
+      <a class="row" href="p100.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"POURCENTAGE"</span>)</span></a>
+      <a class="row" href="dip.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"CALCUL D’UN DIPÔLE"</span>)</span></a>
+      <a class="row" href="eau.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"CALCUL TEMPÉRATURE D’EAU"</span>)</span></a>
+      <a class="row" href="pendu.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"JEU DU PENDU"</span>)</span></a>
+      <a class="row" href="mdp.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"MOT DE PASSE"</span>)</span></a>
+      <a class="row" href="tempest.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"TEMPEST"</span>)</span></a>
+      <a class="row" href="doom.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"DOOM"</span>)</span></a>
+      <a class="row" href="ptsche.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"LES PETITS CHEVAUX"</span>)</span></a>
+      <a class="row" href="jdr_amulette.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"JEU DE RÔLE : L’AMULETTE"</span>)</span></a>
+      <a class="row" href="foto.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"PHOTO"</span>)</span></a>
+      <a class="row" href="tuto_wifi_extender.html"><span class="src"><span class="fn">lancer</span>(<span class="s">"RÉPÉTEUR WI-FI RASPBERRY PI"</span>)</span></a>
+      <a class="row" href="https://floor796.com/" target="_blank" rel="noopener"><span class="src"><span class="fn">lancer</span>(<span class="s grad">"FLOOR796"</span>)</span></a>
+      <a class="row" href="https://globe.adsbexchange.com/" target="_blank" rel="noopener"><span class="src"><span class="fn">lancer</span>(<span class="s grad">"ADSB EXCHANGE"</span>)</span></a>
+
+      <div class="row"><span class="src">&nbsp;</span></div>
+      <div class="row"><span class="src"><span class="fn">&gt;&gt;&gt;</span> <span class="cur"></span></span></div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* Rafraîchissement automatique : à chaque arrivée sur la page, y compris par le bouton retour */
+(function(){
+  var done=false;
+  function fresh(){ if(done) return; done=true; location.reload(); }
+  window.addEventListener("pageshow",function(e){ if(e.persisted) fresh(); });
+  try{
+    var n=performance.getEntriesByType("navigation")[0];
+    if(n && n.type==="back_forward") fresh();
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
